@@ -1,0 +1,56 @@
+name: Publish to LinkedIn
+
+on:
+  push:
+    paths:
+      - 'approved/**.md'
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+
+      - name: Get newly added files in approved/
+        id: new_files
+        run: |
+          FILES=$(git diff --name-only --diff-filter=A HEAD~1 HEAD -- 'approved/*.md' | tr '\n' ' ')
+          echo "files=$FILES" >> $GITHUB_OUTPUT
+          echo "Found: $FILES"
+
+      - name: Set up Python
+        if: steps.new_files.outputs.files != ''
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install dependencies
+        if: steps.new_files.outputs.files != ''
+        run: pip install requests PyYAML
+
+      - name: Publish to LinkedIn
+        if: steps.new_files.outputs.files != ''
+        env:
+          LINKEDIN_ACCESS_TOKEN: ${{ secrets.LINKEDIN_ACCESS_TOKEN }}
+          LINKEDIN_PERSON_ID: ${{ secrets.LINKEDIN_PERSON_ID }}
+          NEW_FILES: ${{ steps.new_files.outputs.files }}
+        run: python scripts/publish.py
+
+      - name: Move published files
+        if: steps.new_files.outputs.files != ''
+        run: |
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git config user.name "GitHub Actions"
+          for f in ${{ steps.new_files.outputs.files }}; do
+            FILENAME=$(basename "$f")
+            git mv "approved/$FILENAME" "published/$FILENAME"
+            echo "Moved: $FILENAME → published/"
+          done
+          git commit -m "publish: moved to published/ [skip ci]"
+          git push
