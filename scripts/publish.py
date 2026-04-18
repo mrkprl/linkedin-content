@@ -1,11 +1,9 @@
 #!/usr/bin/env python3
 """
 Pubblica i post approvati su LinkedIn.
-Legge i file .md da approved/, esegue il post via LinkedIn API v2,
-poi il workflow sposta i file in published/.
-
-Richiede UN solo secret: LINKEDIN_ACCESS_TOKEN
-Il person ID viene recuperato automaticamente via /v2/userinfo.
+Secrets necessari:
+  - LINKEDIN_ACCESS_TOKEN (obbligatorio)
+  - LINKEDIN_PERSON_ID    (opzionale — se non impostato viene recuperato via API)
 """
 
 import os
@@ -19,17 +17,19 @@ LINKEDIN_USERINFO_API = "https://api.linkedin.com/v2/userinfo"
 LINKEDIN_VERSION = "202411"
 
 ACCESS_TOKEN = os.environ.get("LINKEDIN_ACCESS_TOKEN")
+PERSON_ID_OVERRIDE = os.environ.get("LINKEDIN_PERSON_ID", "").strip()
 NEW_FILES = os.environ.get("NEW_FILES", "").split()
 
 
 def get_person_id(access_token: str) -> str:
-    """Recupera il person ID dall'access token via /v2/userinfo."""
+    """Recupera il person ID via /v2/userinfo (richiede scope openid+profile)."""
     headers = {"Authorization": f"Bearer {access_token}"}
     response = requests.get(LINKEDIN_USERINFO_API, headers=headers, timeout=15)
     if response.status_code != 200:
         raise RuntimeError(
-            f"Impossibile recuperare il person ID: {response.status_code} {response.text}\n"
-            "Assicurati che il token abbia gli scope: openid profile w_member_social"
+            f"API userinfo fallita ({response.status_code}): {response.text}\n"
+            "→ Aggiungi il secret LINKEDIN_PERSON_ID con il tuo person ID numerico,\n"
+            "  oppure rigenera il token con scope: openid profile w_member_social"
         )
     return response.json()["sub"]
 
@@ -82,13 +82,18 @@ def main():
         print("Nessun file nuovo da pubblicare.")
         return
 
-    print("→ Recupero person ID dal token...")
-    try:
-        person_id = get_person_id(ACCESS_TOKEN)
-        print(f"  ✓ Person ID: {person_id}")
-    except RuntimeError as e:
-        print(f"  ✗ {e}")
-        sys.exit(1)
+    # Recupera person ID: prima dal secret, poi dall'API
+    if PERSON_ID_OVERRIDE:
+        person_id = PERSON_ID_OVERRIDE
+        print(f"→ Person ID da secret: {person_id}")
+    else:
+        print("→ Recupero person ID dal token...")
+        try:
+            person_id = get_person_id(ACCESS_TOKEN)
+            print(f"  ✓ Person ID: {person_id}")
+        except RuntimeError as e:
+            print(f"  ✗ {e}")
+            sys.exit(1)
 
     errors = []
     for filepath in NEW_FILES:
