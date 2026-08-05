@@ -17,8 +17,11 @@ GitHub Actions → pubblica su LinkedIn → sposta in published/
 - **Schedule**: `0 6 * * 1-5` UTC = 8:00 italiane (7:00 con ora legale) lun-ven
 - **Modello**: `claude-sonnet-5`
 - **Gestione**: https://claude.ai/code/routines
-- La policy editoriale (whitelist fonti Tier 1/2, community solo come segnale,
-  contestualizzazione Italia/EU, fonte citata nel post) vive nel prompt della routine.
+- La policy editoriale vive nel prompt della routine: whitelist fonti Tier 1/2
+  (community solo come segnale), contestualizzazione Italia/EU, fonte citata nel post,
+  stile senza segni tipici da AI (niente trattini lunghi né frecce), tono simpatico
+  e sfidante accessibile ai non addetti, specificità progressiva (divulgativo sotto
+  i 20 post pubblicati, poi via via più tecnico).
 
 ### 2. Pubblicazione — GitHub Actions
 - Workflow: `.github/workflows/publish-to-linkedin.yml` — trigger su push di `approved/**.md`
