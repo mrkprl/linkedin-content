@@ -14,7 +14,7 @@ import yaml
 
 LINKEDIN_POSTS_API = "https://api.linkedin.com/rest/posts"
 LINKEDIN_USERINFO_API = "https://api.linkedin.com/v2/userinfo"
-LINKEDIN_VERSION = "202411"
+LINKEDIN_VERSION = "202607"
 
 ACCESS_TOKEN = os.environ.get("LINKEDIN_ACCESS_TOKEN")
 PERSON_ID_OVERRIDE = os.environ.get("LINKEDIN_PERSON_ID", "").strip()
