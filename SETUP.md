@@ -23,7 +23,8 @@ GitHub Actions → pubblica su LinkedIn → sposta in published/
   e sfidante accessibile ai non addetti, voce in prima persona di Marco (senza
   aneddoti inventati), specificità progressiva (divulgativo sotto i 20 post
   pubblicati, poi via via più tecnico), formato confronto opzionale tra due
-  notizie quando il materiale lo permette.
+  notizie quando il materiale lo permette, emoji con misura (2-3 per post),
+  firma fissa "P.S. ... con il supporto del mio amico Claudio Code 🙂".
 
 ### 2. Pubblicazione — GitHub Actions
 - Workflow: `.github/workflows/publish-to-linkedin.yml` — trigger su push di `approved/**.md`
