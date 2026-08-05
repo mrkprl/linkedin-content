@@ -20,8 +20,10 @@ GitHub Actions → pubblica su LinkedIn → sposta in published/
 - La policy editoriale vive nel prompt della routine: whitelist fonti Tier 1/2
   (community solo come segnale), contestualizzazione Italia/EU, fonte citata nel post,
   stile senza segni tipici da AI (niente trattini lunghi né frecce), tono simpatico
-  e sfidante accessibile ai non addetti, specificità progressiva (divulgativo sotto
-  i 20 post pubblicati, poi via via più tecnico).
+  e sfidante accessibile ai non addetti, voce in prima persona di Marco (senza
+  aneddoti inventati), specificità progressiva (divulgativo sotto i 20 post
+  pubblicati, poi via via più tecnico), formato confronto opzionale tra due
+  notizie quando il materiale lo permette.
 
 ### 2. Pubblicazione — GitHub Actions
 - Workflow: `.github/workflows/publish-to-linkedin.yml` — trigger su push di `approved/**.md`
