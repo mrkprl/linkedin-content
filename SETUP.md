@@ -1,14 +1,20 @@
 # Setup e configurazione — linkedin-content
 
-Stato verificato il 2026-08-05.
+Stato verificato il 2026-08-07.
 
 ## Architettura
 
 ```
-Routine cloud Claude (lun-ven 8:00 IT) → genera bozza → pending/
-Tu approvi → sposti il file in approved/ → push
-GitHub Actions → pubblica su LinkedIn → sposta in published/
+Routine cloud Claude (lun-ven 8:00 IT) → genera il post in approved/ sul branch post/YYYY-MM-DD
+GitHub Action "Open Post PR" → apre la PR di approvazione (reviewer: mrkprl)
+Tu, da GitHub Mobile → Merge = pubblica · Close = scarta
+GitHub Actions "Publish to LinkedIn" (solo main) → pubblica → sposta in published/
 ```
+
+L'approvazione avviene dal telefono con l'app **GitHub Mobile**: la review request
+sulla PR genera una notifica push, il testo completo del post è nel body della PR.
+I post scartati o rimasti orfani finiscono in `archive/`. La cartella `pending/`
+non è più usata dal flusso (rimane solo per compatibilità storica).
 
 ## Componenti
 
@@ -26,8 +32,15 @@ GitHub Actions → pubblica su LinkedIn → sposta in published/
   notizie quando il materiale lo permette, emoji con misura (2-3 per post),
   firma fissa "P.S. ... con il supporto del mio amico Claudio Code 🙂".
 
-### 2. Pubblicazione — GitHub Actions
-- Workflow: `.github/workflows/publish-to-linkedin.yml` — trigger su push di `approved/**.md`
+### 2. PR di approvazione — GitHub Actions
+- Workflow: `.github/workflows/open-post-pr.yml` — trigger su push dei branch `post/**`
+- Apre la PR verso main con il testo del post nel body, assegna e richiede la
+  review a `mrkprl` (è la review request che fa scattare la notifica push su mobile)
+- Richiede l'impostazione repo "Allow GitHub Actions to create and approve pull
+  requests" (abilitata il 2026-08-07 via API); attivo anche il delete-branch-on-merge
+
+### 3. Pubblicazione — GitHub Actions
+- Workflow: `.github/workflows/publish-to-linkedin.yml` — trigger su push di `approved/**.md` **solo su main**
 - Script: `scripts/publish.py` — LinkedIn REST API `/rest/posts`
 - Secrets (repo → Settings → Secrets → Actions):
   - `LINKEDIN_ACCESS_TOKEN` — impostato 2026-08-05, **scade ~2026-10-05**
@@ -50,8 +63,13 @@ GitHub Actions → pubblica su LinkedIn → sposta in published/
 - **Token 60 giorni**: LinkedIn non dà refresh token alle app standard.
   Il rinnovo è manuale (procedura sopra).
 - **Rilevamento file approvati**: il workflow diffa `github.event.before..HEAD`
-  con `--no-renames`, quindi sia `git mv` da `pending/` sia file nuovi in
-  `approved/` vengono rilevati, anche in push multi-commit.
+  con `--no-renames`, quindi i file che arrivano in `approved/` col merge della PR
+  vengono rilevati come aggiunti, anche in push multi-commit e con squash merge.
+- **Filtro branch obbligatorio**: `publish-to-linkedin.yml` deve avere
+  `branches: [main]` nel trigger, altrimenti pubblica appena il generatore pusha
+  il branch `post/*`, prima dell'approvazione.
+- **Notifiche mobile**: servono l'app GitHub Mobile con le notifiche push attive
+  (Impostazioni profilo GitHub → Notifications → Mobile, incluse le review request).
 - **Smoke test versione API senza pubblicare**: `POST /rest/posts` con body `{}` —
   `422` = versione ok (fallisce solo la validazione campi), `426` = versione scaduta.
 - **Person ID**: è il `sub` di `GET https://api.linkedin.com/v2/userinfo` (richiede
