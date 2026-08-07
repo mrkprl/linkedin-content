@@ -1,0 +1,54 @@
+name: Open Post PR
+
+on:
+  push:
+    branches:
+      - 'post/**'
+
+permissions:
+  contents: read
+  pull-requests: write
+
+jobs:
+  open-pr:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Open approval PR
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          BRANCH="$GITHUB_REF_NAME"
+          POST_DATE="${BRANCH#post/}"
+          FILE="approved/${POST_DATE}.md"
+
+          if [ ! -f "$FILE" ]; then
+            echo "Nessun file $FILE su questo branch, niente da fare."
+            exit 0
+          fi
+
+          if [ "$(gh pr list --head "$BRANCH" --state open --json number --jq length)" != "0" ]; then
+            echo "PR già aperta per $BRANCH."
+            exit 0
+          fi
+
+          TOPIC=$(awk -F': *' '$1=="topic" {print $2; exit}' "$FILE")
+
+          {
+            echo "✅ **Merge** = pubblica su LinkedIn · ❌ **Close** = scarta il post"
+            echo
+            echo "---"
+            echo
+            awk 'fm>=2 {print} /^---[[:space:]]*$/ {fm++}' "$FILE"
+          } > /tmp/pr-body.md
+
+          gh pr create \
+            --base main \
+            --head "$BRANCH" \
+            --title "📱 Post LinkedIn ${POST_DATE} — ${TOPIC:-post}" \
+            --body-file /tmp/pr-body.md
+
+          gh pr edit "$BRANCH" --add-reviewer mrkprl --add-assignee mrkprl || true
