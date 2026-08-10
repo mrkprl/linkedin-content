@@ -1,0 +1,30 @@
+name: Smoke test commento
+
+# Verifica a mano che il token possa commentare (scope w_member_social_feed).
+# Crea un commento di prova su un post esistente e lo cancella subito.
+
+on:
+  workflow_dispatch:
+    inputs:
+      post_urn:
+        description: 'URN del post su cui provare (es. urn:li:share:123)'
+        required: true
+
+jobs:
+  smoke:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - run: pip install requests PyYAML
+
+      - name: Prova a commentare e cancella
+        env:
+          LINKEDIN_ACCESS_TOKEN: ${{ secrets.LINKEDIN_ACCESS_TOKEN }}
+          LINKEDIN_PERSON_ID: ${{ secrets.LINKEDIN_PERSON_ID }}
+          POST_URN: ${{ inputs.post_urn }}
+        run: python scripts/smoke_comment.py
