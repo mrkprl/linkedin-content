@@ -16,6 +16,7 @@ import requests
 from publish import (
     ACCESS_TOKEN,
     LINKEDIN_SOCIAL_ACTIONS_API,
+    LINKEDIN_SOCIAL_ACTIONS_V2,
     LINKEDIN_VERSION,
     PERSON_ID_OVERRIDE,
     get_person_id,
@@ -42,21 +43,28 @@ def main():
 
     print(f"  ✓ Commento creato: {comment_id}")
 
-    response = requests.delete(
-        f"{LINKEDIN_SOCIAL_ACTIONS_API}/{quote(post_urn, safe='')}/comments/{comment_id}",
-        headers={
+    cancellato = False
+    for base in (LINKEDIN_SOCIAL_ACTIONS_V2, LINKEDIN_SOCIAL_ACTIONS_API):
+        headers = {
             "Authorization": f"Bearer {ACCESS_TOKEN}",
-            "LinkedIn-Version": LINKEDIN_VERSION,
             "X-Restli-Protocol-Version": "2.0.0",
-        },
-        params={"actor": f"urn:li:person:{person_id}"},
-        timeout=30,
-    )
-    if response.status_code in (200, 204):
-        print("  ✓ Commento di prova cancellato")
-    else:
-        print(f"  ! Commento NON cancellato ({response.status_code}): {response.text}")
-        print(f"    Cancellalo a mano dal post.")
+        }
+        if base == LINKEDIN_SOCIAL_ACTIONS_API:
+            headers["LinkedIn-Version"] = LINKEDIN_VERSION
+        response = requests.delete(
+            f"{base}/{quote(post_urn, safe='')}/comments/{comment_id}",
+            headers=headers,
+            params={"actor": f"urn:li:person:{person_id}"},
+            timeout=30,
+        )
+        if response.status_code in (200, 204):
+            cancellato = True
+            print("  ✓ Commento di prova cancellato")
+            break
+        print(f"  · delete su {base}: {response.status_code}")
+
+    if not cancellato:
+        print("  ! Commento di prova NON cancellato: cancellalo a mano dal post.")
         return 1
 
     print("\nLo scope funziona: le fonti finiranno nel primo commento.")

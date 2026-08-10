@@ -17,6 +17,7 @@ import yaml
 LINKEDIN_POSTS_API = "https://api.linkedin.com/rest/posts"
 LINKEDIN_USERINFO_API = "https://api.linkedin.com/v2/userinfo"
 LINKEDIN_SOCIAL_ACTIONS_API = "https://api.linkedin.com/rest/socialActions"
+LINKEDIN_SOCIAL_ACTIONS_V2 = "https://api.linkedin.com/v2/socialActions"
 LINKEDIN_VERSION = "202607"
 COMMENTARY_MAX_CHARS = 3000
 
@@ -117,28 +118,34 @@ def source_comment(meta: dict) -> str:
 
 def publish_comment(text: str, post_urn: str, person_id: str, access_token: str) -> str:
     """Commenta un post appena pubblicato. Il campo message.text è testo semplice:
-    NON usa il formato little, quindi qui non va applicato nessun escaping."""
+    NON usa il formato little, quindi qui non va applicato nessun escaping.
+
+    L'endpoint versionato /rest/socialActions è riservato ai partner e risponde 403
+    (partnerApiSocialActions) con un'app standard, quindi si parte dal /v2 legacy,
+    che rientra nello scope w_member_social."""
     encoded = quote(post_urn, safe="")
-    headers = {
-        "Authorization": f"Bearer {access_token}",
-        "Content-Type": "application/json",
-        "LinkedIn-Version": LINKEDIN_VERSION,
-        "X-Restli-Protocol-Version": "2.0.0",
-    }
     payload = {
         "actor": f"urn:li:person:{person_id}",
         "object": post_urn,
         "message": {"text": text},
     }
-    response = requests.post(
-        f"{LINKEDIN_SOCIAL_ACTIONS_API}/{encoded}/comments",
-        headers=headers,
-        json=payload,
-        timeout=30,
-    )
-    if response.status_code not in (200, 201):
-        raise RuntimeError(f"LinkedIn API error {response.status_code}: {response.text}")
-    return response.headers.get("x-restli-id", "unknown")
+    errori = []
+    for base, versionato in ((LINKEDIN_SOCIAL_ACTIONS_V2, False),
+                             (LINKEDIN_SOCIAL_ACTIONS_API, True)):
+        headers = {
+            "Authorization": f"Bearer {access_token}",
+            "Content-Type": "application/json",
+            "X-Restli-Protocol-Version": "2.0.0",
+        }
+        if versionato:
+            headers["LinkedIn-Version"] = LINKEDIN_VERSION
+        response = requests.post(
+            f"{base}/{encoded}/comments", headers=headers, json=payload, timeout=30
+        )
+        if response.status_code in (200, 201):
+            return response.headers.get("x-restli-id", "unknown")
+        errori.append(f"{base}: {response.status_code} {response.text[:200]}")
+    raise RuntimeError("LinkedIn API error — " + " | ".join(errori))
 
 
 def main():
