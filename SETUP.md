@@ -57,6 +57,18 @@ non è più usata dal flusso (rimane solo per compatibilità storica).
 
 ## Gotcha noti
 
+- **Il commentary NON è testo semplice** (causa del post troncato il 2026-08-10):
+  il campo usa il [formato little](https://learn.microsoft.com/en-us/linkedin/marketing/community-management/shares/little-text-format)
+  e questi caratteri sono riservati: `| { } @ [ ] ( ) < > # \ * _ ~`.
+  Vanno escapati con backslash **anche quando non servono a nessun elemento**,
+  altrimenti LinkedIn tronca silenziosamente il post al primo carattere inatteso
+  e risponde comunque `201`. Il post del 10 agosto conteneva `(dovresti)` ed è
+  stato tagliato al carattere 281 su 1871. Se ne occupa `escape_little_text()` in
+  `scripts/publish.py`, che preserva gli hashtag `#parola` (elemento valido).
+  Il generatore può quindi scrivere liberamente: non serve evitare le parentesi.
+- **Il 201 non garantisce nulla**: l'API accetta il post e restituisce l'ID anche
+  quando il testo verrà troncato. Il workflow non può accorgersene dalla risposta,
+  per questo `scripts/test_publish.py` valida il commentary **prima** di pubblicare.
 - **LinkedIn-Version scade**: le versioni API LinkedIn valgono ~12 mesi. Se il
   workflow fallisce con `426 NONEXISTENT_VERSION`, aggiorna `LINKEDIN_VERSION`
   in `scripts/publish.py` a un `YYYYMM` recente. Verificato attivo: `202607`.

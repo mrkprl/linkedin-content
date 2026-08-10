@@ -15,6 +15,15 @@ import yaml
 LINKEDIN_POSTS_API = "https://api.linkedin.com/rest/posts"
 LINKEDIN_USERINFO_API = "https://api.linkedin.com/v2/userinfo"
 LINKEDIN_VERSION = "202607"
+COMMENTARY_MAX_CHARS = 3000
+
+# Il campo commentary usa il formato "little text": i caratteri riservati vanno
+# escapati con backslash, altrimenti il parser tronca il post al primo carattere
+# non atteso (es. "(" viene letto come inizio della URN di una mention).
+LITTLE_RESERVED = re.compile(r"([\\|{}@\[\]()<>#*_~])")
+# Un hashtag valido (#parola) è un elemento supportato e va lasciato intatto.
+HASHTAG = re.compile(r"(?<![\w#])#(\w+)", re.UNICODE)
+PLACEHOLDER = re.compile(r"\x00HT(\d+)\x00")
 
 ACCESS_TOKEN = os.environ.get("LINKEDIN_ACCESS_TOKEN")
 PERSON_ID_OVERRIDE = os.environ.get("LINKEDIN_PERSON_ID", "").strip()
@@ -48,8 +57,24 @@ def parse_post_file(filepath: str) -> dict:
     return {"meta": frontmatter, "text": post_text}
 
 
+def escape_little_text(text: str) -> str:
+    """Escapa i caratteri riservati del formato little, preservando gli hashtag."""
+    stashed = []
+
+    def stash(match):
+        stashed.append(match.group(1))
+        return f"\x00HT{len(stashed) - 1}\x00"
+
+    escaped = LITTLE_RESERVED.sub(r"\\\1", HASHTAG.sub(stash, text))
+    return PLACEHOLDER.sub(lambda m: "#" + stashed[int(m.group(1))], escaped)
+
+
 def publish_post(text: str, person_id: str, access_token: str) -> str:
     """Invia il post a LinkedIn API. Restituisce l'ID del post creato."""
+    if len(text) > COMMENTARY_MAX_CHARS:
+        raise ValueError(
+            f"Testo troppo lungo: {len(text)} caratteri, il massimo è {COMMENTARY_MAX_CHARS}"
+        )
     headers = {
         "Authorization": f"Bearer {access_token}",
         "Content-Type": "application/json",
@@ -58,7 +83,7 @@ def publish_post(text: str, person_id: str, access_token: str) -> str:
     }
     payload = {
         "author": f"urn:li:person:{person_id}",
-        "commentary": text,
+        "commentary": escape_little_text(text),
         "visibility": "PUBLIC",
         "distribution": {
             "feedDistribution": "MAIN_FEED",

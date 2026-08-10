@@ -40,6 +40,10 @@ jobs:
         if: steps.new_files.outputs.files != ''
         run: pip install requests PyYAML
 
+      - name: Validate commentary formatting
+        if: steps.new_files.outputs.files != ''
+        run: python scripts/test_publish.py
+
       - name: Publish to LinkedIn
         if: steps.new_files.outputs.files != ''
         env:
