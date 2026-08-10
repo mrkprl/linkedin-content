@@ -141,11 +141,19 @@ uniche fonti sono due blog SEO. Non inseguirle.
   `422` = versione ok (fallisce solo la validazione campi), `426` = versione scaduta.
 - **Person ID**: è il `sub` di `GET https://api.linkedin.com/v2/userinfo` (richiede
   scope `openid profile`). Non serve la console voyager.
-- **Il commento con le fonti richiede uno scope diverso dal post**: `/rest/posts`
-  vuole `w_member_social`, `/rest/socialActions/{urn}/comments` vuole
-  `w_member_social_feed`. Se il commento fallisce con `403`, il post resta comunque
-  pubblicato (per scelta: fallire dopo la pubblicazione sarebbe fuorviante) e il
-  workflow lo segnala. In quel caso rigenera il token aggiungendo lo scope.
+- **Per i commenti serve `/v2/socialActions`, non `/rest/socialActions`**
+  (verificato il 2026-08-10 con `scripts/smoke_comment.py`). L'endpoint versionato
+  è riservato ai partner e con un'app standard risponde
+  `403 ACCESS_DENIED: partnerApiSocialActions.CREATE`. Il `/v2` legacy funziona con
+  lo scope `w_member_social` che il token ha già: nel token generator quello scope
+  è descritto come "Create, modify, and delete posts, **comments**, and reactions".
+  La documentazione Microsoft Learn descrive solo la variante `/rest`, quindi qui
+  la doc è fuorviante. `publish_comment()` prova `/v2` e poi `/rest` come fallback.
+  Se un giorno fallisce, il post resta comunque pubblicato (fallire dopo la
+  pubblicazione sarebbe fuorviante) e il workflow lo segnala.
+- **Verificare i permessi senza sporcare un post**: `smoke-comment.yml` da
+  Actions → Run workflow, passando l'URN di un post. Crea un commento di prova e
+  lo cancella subito.
 - **Il testo del commento NON usa il formato little**: `message.text` è testo
   semplice, quindi lì non va applicato `escape_little_text()`. Le mention nei
   commenti usano `attributes` con indici start/length, un sistema del tutto diverso
