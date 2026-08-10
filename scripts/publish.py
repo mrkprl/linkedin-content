@@ -9,11 +9,14 @@ Secrets necessari:
 import os
 import sys
 import re
+from urllib.parse import quote
+
 import requests
 import yaml
 
 LINKEDIN_POSTS_API = "https://api.linkedin.com/rest/posts"
 LINKEDIN_USERINFO_API = "https://api.linkedin.com/v2/userinfo"
+LINKEDIN_SOCIAL_ACTIONS_API = "https://api.linkedin.com/rest/socialActions"
 LINKEDIN_VERSION = "202607"
 COMMENTARY_MAX_CHARS = 3000
 
@@ -99,6 +102,45 @@ def publish_post(text: str, person_id: str, access_token: str) -> str:
     return response.headers.get("x-restli-id", "unknown")
 
 
+def source_comment(meta: dict) -> str:
+    """Testo del primo commento: le fonti stanno qui, non nel post.
+    Un link nel corpo costa circa il 27% di impression sui profili personali."""
+    if meta.get("comment"):
+        return str(meta["comment"]).strip()
+    sources = meta.get("sources") or []
+    if not sources:
+        return ""
+    righe = ["Fonte:" if len(sources) == 1 else "Fonti:"]
+    righe += [str(s).strip() for s in sources if str(s).strip()]
+    return "\n".join(righe)
+
+
+def publish_comment(text: str, post_urn: str, person_id: str, access_token: str) -> str:
+    """Commenta un post appena pubblicato. Il campo message.text è testo semplice:
+    NON usa il formato little, quindi qui non va applicato nessun escaping."""
+    encoded = quote(post_urn, safe="")
+    headers = {
+        "Authorization": f"Bearer {access_token}",
+        "Content-Type": "application/json",
+        "LinkedIn-Version": LINKEDIN_VERSION,
+        "X-Restli-Protocol-Version": "2.0.0",
+    }
+    payload = {
+        "actor": f"urn:li:person:{person_id}",
+        "object": post_urn,
+        "message": {"text": text},
+    }
+    response = requests.post(
+        f"{LINKEDIN_SOCIAL_ACTIONS_API}/{encoded}/comments",
+        headers=headers,
+        json=payload,
+        timeout=30,
+    )
+    if response.status_code not in (200, 201):
+        raise RuntimeError(f"LinkedIn API error {response.status_code}: {response.text}")
+    return response.headers.get("x-restli-id", "unknown")
+
+
 def main():
     if not ACCESS_TOKEN:
         print("ERROR: LINKEDIN_ACCESS_TOKEN non impostato")
@@ -120,7 +162,7 @@ def main():
             print(f"  ✗ {e}")
             sys.exit(1)
 
-    errors = []
+    errors, warnings = [], []
     for filepath in NEW_FILES:
         filepath = filepath.strip()
         if not filepath or not filepath.endswith(".md"):
@@ -131,6 +173,19 @@ def main():
             post_id = publish_post(post["text"], person_id, ACCESS_TOKEN)
             print(f"  ✓ Pubblicato — LinkedIn post ID: {post_id}")
             print(f"  Topic: {post['meta'].get('topic', 'N/A')}")
+
+            # Il commento con le fonti è un extra: se fallisce il post resta online,
+            # quindi va segnalato senza far fallire la pubblicazione.
+            commento = source_comment(post["meta"])
+            if commento:
+                try:
+                    comment_id = publish_comment(commento, post_id, person_id, ACCESS_TOKEN)
+                    print(f"  ✓ Fonti nel primo commento — ID: {comment_id}")
+                except Exception as e:
+                    warnings.append(filepath)
+                    print(f"  ! Post pubblicato ma commento fallito: {e}")
+                    print("    → Aggiungi il commento a mano; se l'errore è 403, il token")
+                    print("      va rigenerato includendo lo scope w_member_social_feed.")
         except Exception as e:
             print(f"  ✗ Errore: {e}")
             errors.append(filepath)
@@ -138,6 +193,8 @@ def main():
     if errors:
         print(f"\nFalliti: {errors}")
         sys.exit(1)
+    if warnings:
+        print(f"\nPubblicati ma senza commento con le fonti: {warnings}")
     print("\nDone.")
 
 

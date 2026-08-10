@@ -17,6 +17,14 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install dependencies
+        run: pip install requests PyYAML
+
       - name: Open approval PR
         env:
           GH_TOKEN: ${{ github.token }}
@@ -43,6 +51,12 @@ jobs:
             echo "---"
             echo
             awk 'fm>=2 {print} /^---[[:space:]]*$/ {fm++}' "$FILE"
+            echo
+            echo "---"
+            echo
+            echo '```'
+            python scripts/readability.py "$FILE" 2>&1 || true
+            echo '```'
           } > /tmp/pr-body.md
 
           gh pr create \

@@ -24,13 +24,68 @@ non è più usata dal flusso (rimane solo per compatibilità storica).
 - **Modello**: `claude-sonnet-5`
 - **Gestione**: https://claude.ai/code/routines
 - La policy editoriale vive nel prompt della routine: whitelist fonti Tier 1/2
-  (community solo come segnale), contestualizzazione Italia/EU, fonte citata nel post,
-  stile senza segni tipici da AI (niente trattini lunghi né frecce), tono simpatico
-  e sfidante accessibile ai non addetti, voce in prima persona di Marco (senza
-  aneddoti inventati), specificità progressiva (divulgativo sotto i 20 post
-  pubblicati, poi via via più tecnico), formato confronto opzionale tra due
-  notizie quando il materiale lo permette, emoji con misura (2-3 per post),
+  (community solo come segnale), contestualizzazione Italia/EU, stile senza segni
+  tipici da AI, tono simpatico e sfidante accessibile ai non addetti, voce in prima
+  persona di Marco (senza aneddoti inventati), emoji con misura (2-3 per post),
   firma fissa "P.S. ... con il supporto del mio amico Claudio Code 🙂".
+  Le regole di forma sono verificabili e la routine le auto-controlla con
+  `scripts/readability.py` prima di aprire la PR (vedi sotto).
+
+## Policy di forma dei post (aggiornata il 2026-08-10)
+
+Ogni numero qui sotto viene da una misura, non da un'opinione. Le fonti sono in
+fondo alla sezione. `scripts/readability.py` implementa i controlli.
+
+| Regola | Valore | Perché |
+|---|---|---|
+| Lunghezza | 1.800-2.400 caratteri | Le impression mediane crescono con la lunghezza: 575 sotto i 400 caratteri, 1.106 tra 1.301 e 2.000, 1.400 tra 2.501 e 3.000. Accorciare costa portata. |
+| Hook (prima riga) | max 60 caratteri, meglio sotto 40 | Hook sotto i 40 caratteri battono quelli oltre i 200 di circa il 25% di engagement rate. |
+| Tipo di hook | affermazione o racconto, **mai domanda** | Su 309.614 post l'hook a domanda è ultimo dei cinque tipi (2,16% contro 2,60% dell'hook narrativo). |
+| Paragrafi | almeno 12, meglio 15-20, da 1-2 righe | Post con 20+ paragrafi: 1,13x reach. Con 0-5 paragrafi: 0,70x. È l'effetto di formattazione più forte e costa zero. |
+| Frasi | mai oltre 25 parole, media 12-18 | Direttiva sulla semplificazione del linguaggio dei testi amministrativi (8/5/2002), regola 1; Cortelazzo-Pellegrino regola 12. |
+| Gulpease | ≥ 60, target 70 | Sotto 60 il testo non è leggibile in autonomia da chi ha la licenza media. È l'indice tarato sull'italiano (Lucisano-Piemontese 1988), non Flesch. |
+| Link nel corpo | **nessuno** | Sui profili personali un link costa −27% impression e −20% interazioni. Sulle pagine aziendali l'effetto è opposto (+51%): da qui gran parte della confusione in circolazione. |
+| Fonti | nel primo commento, in automatico | Vedi `source_comment()` e `publish_comment()` in `publish.py`. |
+| Hashtag | 3, ultima riga, mai in apertura | L'effetto sulla portata è vicino a zero, ma un hashtag in prima riga rovina lo slug dell'URL. |
+| CTA | domanda che richiede esperienza personale | Le domande generiche ("Sei d'accordo?") sono engagement bait dichiarato e vengono ridotte. Una domanda specifica sposta l'engagement dai like ai commenti (+77% commenti), che pesano di più. |
+| Emoji | 2-3 | Da 0 a 1 emoji: +22% reach. Oltre, l'effetto è piatto. |
+
+**La prima riga diventa l'URL del post.** LinkedIn ricava lo slug di
+`linkedin.com/posts/<slug>-activity-<id>` dalla prima riga, ed è immutabile dopo la
+pubblicazione. È l'unica leva SEO deterministica disponibile: mettici le parole
+chiave del tema, mai un hashtag.
+
+**Cosa NON è SEO su LinkedIn.** La distribuzione non funziona per keyword matching:
+il feed usa dual encoder LLM che confrontano per similarità coseno l'embedding del
+post con quello del profilo di chi legge. Riempire il testo di parole chiave non
+serve. Serve la **coerenza tematica**: con pochi follower il post viene distribuito
+per argomento, non per rete sociale, quindi restare sempre sullo stesso perimetro
+(AI, coding, strumenti) è la leva di portata numero uno.
+
+**Da fare a mano, fuori dal sistema** (non automatizzabile, alto ritorno):
+1. Allineare headline, About e Skills del profilo al vocabolario dei post: il
+   profilo entra nell'embedding che decide a chi mostrare il post.
+2. Verificare che "Articoli e attività" sia su "Mostra" nelle impostazioni di
+   visibilità del profilo pubblico: è la condizione per l'indicizzazione dei post.
+3. Rispondere a ogni commento: +30% engagement misurato con regressione a effetti
+   fissi su 72.000 post. Le risposte dell'autore contano anche verso la soglia dei
+   10 commenti che LinkedIn indica come utile.
+
+Fonti dei numeri: [AuthoredUp](https://authoredup.com/blog/linkedin-character-limit)
+(372.126 post da profili personali, set 2025-feb 2026; hook su 309.614 post),
+[Metricool](https://metricool.com/linkedin-trends/) (673.658 post, link e hashtag),
+[Buffer](https://buffer.com/resources/linkedin-engagement-data/) (72.000 post,
+effetti fissi), [LinkedIn Engineering sul nuovo feed](https://www.linkedin.com/blog/engineering/feed/engineering-the-next-generation-of-linkedins-feed)
+e [LinkedIn Business Blog, 12/03/2026](https://www.linkedin.com/business/marketing/blog/content-marketing/how-to-leverage-linkedin-for-ai-visibility-in-2026)
+(slug URL, soglia dei 10 commenti), [Direttiva 8/5/2002](https://www.funzionepubblica.gov.it)
+e [Cortelazzo-Pellegrino, 30 regole](https://www.unifg.it/sites/default/files/2021-06/30_reg_txt_amm_chr_0.pdf)
+(frasi e leggibilità), [Vena 2022, Italiano LinguaDue](https://riviste.unimi.it/index.php/promoitals/article/download/18298/16262/54964)
+(formula e soglie Gulpease).
+
+Attenzione: molte cifre che circolano sull'algoritmo LinkedIn 2026 (penalità
+percentuali per contenuti AI, soglie di dwell time in secondi, "−60% per i link")
+non sono tracciabili a nessuna fonte primaria, incluso un articolo di Forbes le cui
+uniche fonti sono due blog SEO. Non inseguirle.
 
 ### 2. PR di approvazione — GitHub Actions
 - Workflow: `.github/workflows/open-post-pr.yml` — trigger su push dei branch `post/**`
@@ -86,3 +141,12 @@ non è più usata dal flusso (rimane solo per compatibilità storica).
   `422` = versione ok (fallisce solo la validazione campi), `426` = versione scaduta.
 - **Person ID**: è il `sub` di `GET https://api.linkedin.com/v2/userinfo` (richiede
   scope `openid profile`). Non serve la console voyager.
+- **Il commento con le fonti richiede uno scope diverso dal post**: `/rest/posts`
+  vuole `w_member_social`, `/rest/socialActions/{urn}/comments` vuole
+  `w_member_social_feed`. Se il commento fallisce con `403`, il post resta comunque
+  pubblicato (per scelta: fallire dopo la pubblicazione sarebbe fuorviante) e il
+  workflow lo segnala. In quel caso rigenera il token aggiungendo lo scope.
+- **Il testo del commento NON usa il formato little**: `message.text` è testo
+  semplice, quindi lì non va applicato `escape_little_text()`. Le mention nei
+  commenti usano `attributes` con indici start/length, un sistema del tutto diverso
+  da quello del `commentary`.
