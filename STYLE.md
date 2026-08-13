@@ -58,6 +58,19 @@ un'esperienza concreta di chi legge, non un'opinione generica.
 - tre hashtag, ultima riga
 - nessun link nel corpo: le fonti vanno nel primo commento, ci pensa `publish.py`
 
+## La lingua
+
+- Parole di tutti i giorni. "Usare", non "utilizzare". "Problema", non
+  "problematica". "Uso", non "implementazione".
+- Niente sostantivi in *-zione* e *-mento* dove c'è un verbo: non "la creazione
+  del file", ma "creare il file".
+- Voce attiva, sempre. Non "viene deciso", non "si può": di' chi fa la cosa.
+- La stessa parola per la stessa cosa, per tutto il post. Alternare "prompt",
+  "istruzione" e "richiesta" fa credere che siano tre cose diverse.
+- Massimo un termine tecnico nuovo ogni 150 parole. Quando serve, si chiarisce
+  con quello che fa, non con una definizione: «Un programma guarda ogni comando e
+  decide se è pericoloso. Si chiama classificatore.» E mai con un "cioè".
+
 ## Il post non è un notiziario
 
 È il difetto che resta anche quando tutte le soglie numeriche passano (post
