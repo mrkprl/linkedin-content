@@ -75,7 +75,7 @@ def run():
 
     # Casi reali: ogni post nel repo deve produrre un commentary valido.
     repo = Path(__file__).parent.parent
-    for folder in ("published", "approved", "pending", "archive"):
+    for folder in ("published", "approved", "pending", "archive", "examples"):
         for post in sorted((repo / folder).glob("*.md")):
             text = parse_post_file(str(post))["text"]
             problems = validate(escape_little_text(text))

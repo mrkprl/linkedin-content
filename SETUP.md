@@ -24,31 +24,36 @@ non è più usata dal flusso (rimane solo per compatibilità storica).
 - **Modello**: `claude-sonnet-5`
 - **Gestione**: https://claude.ai/code/routines
 - La policy editoriale vive nel prompt della routine: whitelist fonti Tier 1/2
-  (community solo come segnale), contestualizzazione Italia/EU, stile senza segni
-  tipici da AI, tono simpatico e sfidante accessibile ai non addetti, voce in prima
-  persona di Marco (senza aneddoti inventati), emoji con misura (2-3 per post),
-  firma fissa "P.S. ... con il supporto del mio amico Claudio Code 🙂".
+  (community solo come segnale), contestualizzazione Italia/EU, voce in prima
+  persona di Marco (senza aneddoti inventati).
+- **La voce e l'architettura del testo stanno in `STYLE.md`**, che è la parte
+  editoriale del prompt: se cambia lì, va ricopiata nel prompt della routine.
   Le regole di forma sono verificabili e la routine le auto-controlla con
-  `scripts/readability.py` prima di aprire la PR (vedi sotto).
+  `scripts/readability.py` prima di aprire la PR (esce con 1 se qualcosa non
+  passa). Esempio di riferimento in `examples/riscrittura-2026-08-10.md`.
 
-## Policy di forma dei post (aggiornata il 2026-08-10)
+## Policy di forma dei post (aggiornata il 2026-08-13)
 
 Ogni numero qui sotto viene da una misura, non da un'opinione. Le fonti sono in
-fondo alla sezione. `scripts/readability.py` implementa i controlli.
+fondo alla sezione. `scripts/readability.py` implementa i controlli; le regole di
+voce che i numeri non catturano stanno in `STYLE.md`.
 
 | Regola | Valore | Perché |
 |---|---|---|
 | Lunghezza | 1.800-2.400 caratteri | Le impression mediane crescono con la lunghezza: 575 sotto i 400 caratteri, 1.106 tra 1.301 e 2.000, 1.400 tra 2.501 e 3.000. Accorciare costa portata. |
 | Hook (prima riga) | max 60 caratteri, meglio sotto 40 | Hook sotto i 40 caratteri battono quelli oltre i 200 di circa il 25% di engagement rate. |
-| Tipo di hook | affermazione o racconto, **mai domanda** | Su 309.614 post l'hook a domanda è ultimo dei cinque tipi (2,16% contro 2,60% dell'hook narrativo). |
-| Paragrafi | almeno 12, meglio 15-20, da 1-2 righe | Post con 20+ paragrafi: 1,13x reach. Con 0-5 paragrafi: 0,70x. È l'effetto di formattazione più forte e costa zero. |
+| Tipo di hook | affermazione, fatto o confessione, **mai domanda** | Su 309.614 post l'hook a domanda è ultimo dei cinque tipi (2,16% contro 2,60% dell'hook narrativo). Bloccate anche le aperture da quiz ("Sai qual è…", "Ti sei mai chiesto…"). |
+| Paragrafi | almeno 20, da 1-3 righe, max 260 caratteri l'uno | Post con 20+ paragrafi: 1,13x reach. Con 0-5 paragrafi: 0,70x. È l'effetto di formattazione più forte e costa zero. Il limite per blocco evita il muro di testo sul telefono. |
 | Frasi | mai oltre 25 parole, media 12-18 | Direttiva sulla semplificazione del linguaggio dei testi amministrativi (8/5/2002), regola 1; Cortelazzo-Pellegrino regola 12. |
 | Gulpease | ≥ 60, target 70 | Sotto 60 il testo non è leggibile in autonomia da chi ha la licenza media. È l'indice tarato sull'italiano (Lucisano-Piemontese 1988), non Flesch. |
+| Glosse didascaliche | **zero** | "cioè", "ovvero", "in altre parole": presuppongono un lettore che non capisce e fanno suonare il testo come un tema di scuola. Al loro posto va un esempio concreto. |
+| Attenuatori | max 2 | "un po'", "forse", "onestamente": oltre due, il post non afferma più niente e la voce si sfalda. |
 | Link nel corpo | **nessuno** | Sui profili personali un link costa −27% impression e −20% interazioni. Sulle pagine aziendali l'effetto è opposto (+51%): da qui gran parte della confusione in circolazione. |
 | Fonti | nel primo commento, in automatico | Vedi `source_comment()` e `publish_comment()` in `publish.py`. |
 | Hashtag | 3, ultima riga, mai in apertura | L'effetto sulla portata è vicino a zero, ma un hashtag in prima riga rovina lo slug dell'URL. |
 | CTA | domanda che richiede esperienza personale | Le domande generiche ("Sei d'accordo?") sono engagement bait dichiarato e vengono ridotte. Una domanda specifica sposta l'engagement dai like ai commenti (+77% commenti), che pesano di più. |
-| Emoji | 2-3 | Da 0 a 1 emoji: +22% reach. Oltre, l'effetto è piatto. |
+| Emoji | 0-1, mai nell'hook | Da 0 a 1 emoji: +22% reach. Oltre, l'effetto è piatto, e in serie fanno registro adolescenziale. |
+| Nota sull'automazione | tra parentesi, in coda, senza faccine | Sostituisce il vecchio "P.S. … il mio amico Claudio Code 🙂". |
 
 **La prima riga diventa l'URL del post.** LinkedIn ricava lo slug di
 `linkedin.com/posts/<slug>-activity-<id>` dalla prima riga, ed è immutabile dopo la
