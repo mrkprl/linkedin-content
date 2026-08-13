@@ -27,6 +27,8 @@ PARAGRAFO_MAX_CHARS = 260  # oltre, il blocco è un muro di testo sul telefono
 EMOJI_MAX = 1              # da 0 a 1 emoji: +22% reach. Oltre, l'effetto è piatto
 HASHTAG_MAX = 3
 ATTENUATORI_MAX = 2        # oltre, il testo non afferma più niente
+RIGA_BREVE = 40            # una riga sotto i 40 caratteri è un colpo di ritmo
+QUOTA_RIGHE_BREVI = 0.15   # sotto: tutti i blocchi sono lunghi uguali, suona da notiziario
 
 # Costrutti che fanno "suonare" il testo come generato da un modello.
 STILEMI = [
@@ -91,6 +93,7 @@ def analizza(testo: str) -> dict:
         "gulpease": round(gulpease(testo), 1),
         "paragrafi": len(paragrafi),
         "paragrafi_lunghi": [p for p in paragrafi if len(p) > PARAGRAFO_MAX_CHARS],
+        "righe_brevi": [p for p in paragrafi if len(p) < RIGA_BREVE],
         "media_parole_frase": round(sum(per_frase) / len(per_frase), 1),
         "frase_piu_lunga": max(per_frase),
         "frasi_lunghe": [f for f, n in zip(frasi, per_frase) if n > PAROLE_PER_FRASE_MAX],
@@ -157,6 +160,9 @@ def avvisi(testo: str) -> list:
     if len(m["attenuatori"]) > ATTENUATORI_MAX:
         out.append(f"{len(m['attenuatori'])} attenuatori ({', '.join(m['attenuatori'][:5])}): "
                    f"il testo non afferma più niente")
+    if m["paragrafi"] and len(m["righe_brevi"]) / m["paragrafi"] < QUOTA_RIGHE_BREVI:
+        out.append(f"ritmo piatto: solo {len(m['righe_brevi'])} blocchi su {m['paragrafi']} "
+                   f"sotto i {RIGA_BREVE} caratteri. Senza righe corte il post è un notiziario")
     if CTA_GENERICA.search(testo):
         out.append("chiusura da engagement bait: la domanda deve chiedere un'esperienza specifica")
     if re.search(r"^\s*P\.?S\.?[ :]", testo, re.M):

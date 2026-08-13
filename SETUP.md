@@ -32,6 +32,23 @@ non è più usata dal flusso (rimane solo per compatibilità storica).
   `scripts/readability.py` prima di aprire la PR (esce con 1 se qualcosa non
   passa). Esempio di riferimento in `examples/riscrittura-2026-08-10.md`.
 
+### Parte editoriale del prompt della routine
+
+Da incollare nel prompt su https://claude.ai/code/routines al posto delle vecchie
+istruzioni di stile. Non duplica le regole: le fa leggere dal repo, così restano
+in un posto solo.
+
+```
+Prima di scrivere, leggi STYLE.md e la sezione "Policy di forma dei post" di
+SETUP.md. STYLE.md è vincolante sulla voce: architettura del testo, divieti,
+esempi in examples/.
+
+Dopo aver scritto il post, esegui `python scripts/readability.py <file>`.
+Se esce con 1, riscrivi il post e rilancia. Non aprire la PR finché il comando
+non esce con 0. Gli avvisi (righe che iniziano con "?") non bloccano, ma vanno
+letti: se puoi sistemarli senza forzare il testo, sistemali.
+```
+
 ## Policy di forma dei post (aggiornata il 2026-08-13)
 
 Ogni numero qui sotto viene da una misura, non da un'opinione. Le fonti sono in

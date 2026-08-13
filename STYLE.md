@@ -58,6 +58,34 @@ un'esperienza concreta di chi legge, non un'opinione generica.
 - tre hashtag, ultima riga
 - nessun link nel corpo: le fonti vanno nel primo commento, ci pensa `publish.py`
 
+## Il post non è un notiziario
+
+È il difetto che resta anche quando tutte le soglie numeriche passano (post
+dell'11 e del 13 agosto: hook corto, 21 paragrafi, Gulpease 73, e comunque
+suonano scolastici). Succede quando il testo è una fila di frasi informative
+tutte della stessa lunghezza, ognuna nel suo blocco:
+
+> Lo ha annunciato il 6 agosto sul suo blog ufficiale.
+>
+> Prima c'era un numero massimo di chat al giorno. Ora chi non paga può scrivere quanto vuole.
+>
+> Cambia anche il modello di base per chi non paga.
+
+Ogni riga informa, nessuna riga pensa. Il lettore riceve un bollettino.
+
+Tre correttivi:
+
+- **Alterna le lunghezze.** Se tutti i blocchi stanno fra 80 e 110 caratteri il
+  ritmo è piatto. Almeno un blocco su sei deve stare sotto i 40 caratteri: una
+  riga corta dopo tre lunghe è quello che fa alzare gli occhi dallo schermo.
+- **La notizia è il pretesto, non il contenuto.** I fatti servono a sostenere un
+  ragionamento tuo: quello che credevi, quello che hai scoperto sbagliando,
+  quello che cambia da domani. Se togliendo la notizia non resta niente, il post
+  non era un post.
+- **Chiudi il cerchio.** L'ultima riga riprende l'immagine o le parole
+  dell'hook. Non una morale nuova: la stessa frase dell'inizio, che ora significa
+  qualcosa di diverso perché nel frattempo hai raccontato i fatti.
+
 ## Cosa non si fa mai
 
 **La glossa didascalica.** «un classificatore, cioè un sistema che valuta ogni
@@ -106,4 +134,8 @@ Dopo (hook da 49 caratteri, 32 paragrafi, 0 emoji):
 > Pensavo fosse una mia sciatteria da fine giornata.
 > Invece è un fenomeno con un nome e dei numeri.
 
-Il testo completo dell'esempio è in `examples/riscrittura-2026-08-10.md`.
+Due esempi completi, con il post pubblicato accanto alla riscrittura:
+
+- `examples/riscrittura-2026-08-10.md` — hook, paragrafi, emoji
+- `examples/riscrittura-2026-08-13.md` — architettura: stessa notizia, ma come
+  ragionamento invece che come bollettino
