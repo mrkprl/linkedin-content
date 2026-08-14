@@ -53,10 +53,29 @@ Dopo la chiusura, una domanda sola, su una riga, senza emoji: deve chiedere
 un'esperienza concreta di chi legge, non un'opinione generica.
 
 **4. Coda.**
-- la nota sull'automazione, tra parentesi, asciutta:
-  `(Questo post l'ha scritto un agente Claude Code che ho programmato io. Fonti nel primo commento.)`
+- la nota sull'automazione, tra parentesi, asciutta, nella formulazione che Marco
+  usa quando corregge a mano:
+  `(Questo post l'ha scritto il mio agente di ricerca. Fonti nel primo commento.)`
 - tre hashtag, ultima riga
 - nessun link nel corpo: le fonti vanno nel primo commento, ci pensa `publish.py`
+
+## La tesi deve poter essere contestata
+
+Prima di scrivere, formula in una frase la cosa che il post sostiene. Poi chiediti
+se una persona competente potrebbe rispondere "no, non è vero". Se non può, non
+hai una tesi: hai un luogo comune, e nessuno commenta un luogo comune.
+
+«Non è quanto usi l'AI, è come la usi» (14 agosto) è un truismo: nessuno può
+dissentire, infatti il post ha raccolto zero reazioni. «Il controllo umano
+funziona benissimo per venti minuti, poi diventa un rito» è una tesi: si può
+essere in disaccordo, e chi lo è scrive perché.
+
+Vale anche per la scelta del tema. Se dalla ricerca esce solo una notizia di
+prodotto minore — una sezione aggiunta a un pannello, una feature per team
+aziendali, un cambio di prezzi — non c'è nessuna tesi da difendere e il post
+diventa un riassunto. In quel caso **cambia argomento**, e se nessun argomento
+regge, quel giorno non si pubblica: un post debole costa più di un giorno di
+silenzio, perché insegna all'algoritmo a mostrarti a meno gente.
 
 ## La lingua
 
@@ -88,13 +107,25 @@ Ogni riga informa, nessuna riga pensa. Il lettore riceve un bollettino.
 
 Tre correttivi:
 
-- **Alterna le lunghezze.** Se tutti i blocchi stanno fra 80 e 110 caratteri il
-  ritmo è piatto. Almeno un blocco su sei deve stare sotto i 40 caratteri: una
-  riga corta dopo tre lunghe è quello che fa alzare gli occhi dallo schermo.
+- **Alterna le lunghezze, in tutte e due le direzioni.** Se tutti i blocchi
+  stanno fra 80 e 110 caratteri il ritmo è piatto. Ma se ogni frase diventa un
+  blocco a sé il testo ansima, e il post si legge come un elenco puntato senza
+  punti: è il difetto del post del 14 agosto, dove il 59% dei blocchi era di una
+  riga sola. Nei post riusciti la quota sta intorno al 33%: due blocchi su tre
+  raggruppano 2-3 righe che portano avanti lo stesso pensiero, e la riga isolata
+  arriva ogni tanto, proprio perché è rara. Una riga sola vale come colpo di
+  ritmo solo se attorno c'è del testo che scorre.
 - **La notizia è il pretesto, non il contenuto.** I fatti servono a sostenere un
   ragionamento tuo: quello che credevi, quello che hai scoperto sbagliando,
   quello che cambia da domani. Se togliendo la notizia non resta niente, il post
-  non era un post.
+  non era un post. In pratica: **al massimo un quarto del testo sui fatti**, il
+  resto è ragionamento. Se la notizia occupa più spazio, o non avevi niente da
+  dire, o hai scelto la notizia sbagliata.
+- **Mai descrivere un'interfaccia.** Se il testo elenca cosa mostra un pannello,
+  quali colonne ha, dove sta il selettore, sei finito nel manuale utente. Il post
+  del 14 agosto spendeva un terzo dello spazio sul dashboard di Copilot, che chi
+  legge non aprirà mai. Dei fatti tieni solo quello che cambia qualcosa per il
+  lettore.
 - **Chiudi il cerchio.** L'ultima riga riprende l'immagine o le parole
   dell'hook. Non una morale nuova: la stessa frase dell'inizio, che ora significa
   qualcosa di diverso perché nel frattempo hai raccontato i fatti.

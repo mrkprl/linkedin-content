@@ -29,6 +29,8 @@ HASHTAG_MAX = 3
 ATTENUATORI_MAX = 2        # oltre, il testo non afferma più niente
 RIGA_BREVE = 40            # una riga sotto i 40 caratteri è un colpo di ritmo
 QUOTA_RIGHE_BREVI = 0.15   # sotto: tutti i blocchi sono lunghi uguali, suona da notiziario
+QUOTA_BLOCCHI_MONORIGA = 0.50  # sopra: una frase per blocco, cioè un elenco travestito da post
+BLOCCO = re.compile(r"\n\s*\n")  # su LinkedIn il blocco è ciò che sta fra due righe vuote
 
 # Costrutti che fanno "suonare" il testo come generato da un modello.
 STILEMI = [
@@ -84,6 +86,7 @@ def gulpease(testo: str) -> float:
 def analizza(testo: str) -> dict:
     righe = [r for r in testo.split("\n")]
     paragrafi = [r.strip() for r in righe if r.strip()]
+    blocchi = [b.strip() for b in BLOCCO.split(testo.strip()) if b.strip()]
     frasi = [f.strip() for f in re.split(r"[.!?;:\n]+", testo) if f.strip()]
     per_frase = [len(PAROLA.findall(f)) for f in frasi] or [0]
 
@@ -94,6 +97,8 @@ def analizza(testo: str) -> dict:
         "paragrafi": len(paragrafi),
         "paragrafi_lunghi": [p for p in paragrafi if len(p) > PARAGRAFO_MAX_CHARS],
         "righe_brevi": [p for p in paragrafi if len(p) < RIGA_BREVE],
+        "blocchi": blocchi,
+        "blocchi_monoriga": [b for b in blocchi if "\n" not in b],
         "media_parole_frase": round(sum(per_frase) / len(per_frase), 1),
         "frase_piu_lunga": max(per_frase),
         "frasi_lunghe": [f for f, n in zip(frasi, per_frase) if n > PAROLE_PER_FRASE_MAX],
@@ -160,6 +165,11 @@ def avvisi(testo: str) -> list:
     if len(m["attenuatori"]) > ATTENUATORI_MAX:
         out.append(f"{len(m['attenuatori'])} attenuatori ({', '.join(m['attenuatori'][:5])}): "
                    f"il testo non afferma più niente")
+    if m["blocchi"] and len(m["blocchi_monoriga"]) / len(m["blocchi"]) > QUOTA_BLOCCHI_MONORIGA:
+        quota = round(100 * len(m["blocchi_monoriga"]) / len(m["blocchi"]))
+        out.append(f"testo frammentato: {quota}% dei blocchi è di una riga sola "
+                   f"(nei post riusciti sta intorno al 33%). Raggruppa le frasi che "
+                   f"portano avanti lo stesso pensiero: la riga isolata pesa solo se è rara")
     if m["paragrafi"] and len(m["righe_brevi"]) / m["paragrafi"] < QUOTA_RIGHE_BREVI:
         out.append(f"ritmo piatto: solo {len(m['righe_brevi'])} blocchi su {m['paragrafi']} "
                    f"sotto i {RIGA_BREVE} caratteri. Senza righe corte il post è un notiziario")

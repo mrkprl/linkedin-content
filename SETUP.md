@@ -5,7 +5,7 @@ Stato verificato il 2026-08-07.
 ## Architettura
 
 ```
-Routine cloud Claude (lun-ven 8:00 IT) → genera il post in approved/ sul branch post/YYYY-MM-DD
+Routine cloud Claude (lun-mer-ven 8:00 IT) → genera il post in approved/ sul branch post/YYYY-MM-DD
 GitHub Action "Open Post PR" → apre la PR di approvazione (reviewer: mrkprl)
 Tu, da GitHub Mobile → Merge = pubblica · Close = scarta
 GitHub Actions "Publish to LinkedIn" (solo main) → pubblica → sposta in published/
@@ -20,7 +20,9 @@ non è più usata dal flusso (rimane solo per compatibilità storica).
 
 ### 1. Generazione contenuti — routine cloud Claude
 - **Routine**: `linkedin-content-generator` (`trig_01E1UaHdMXwNi3Z3QydKjoHg`)
-- **Schedule**: `0 6 * * 1-5` UTC = 8:00 italiane (7:00 con ora legale) lun-ven
+- **Schedule**: `0 6 * * 1,3,5` UTC = 8:00 italiane (7:00 con ora legale) lun-mer-ven
+  (era lun-ven fino al 2026-08-14: cinque post a settimana obbligavano a commentare
+  anche i giorni senza una notizia degna, e il generatore riempiva descrivendo prodotti)
 - **Modello**: `claude-sonnet-5`
 - **Gestione**: https://claude.ai/code/routines
 - La policy editoriale vive nel prompt della routine: whitelist fonti Tier 1/2
@@ -67,6 +69,9 @@ voce che i numeri non catturano stanno in `STYLE.md`.
 | Fonti | nel primo commento, in automatico | Vedi `source_comment()` e `publish_comment()` in `publish.py`. |
 | Hashtag | 3, ultima riga, mai in apertura | L'effetto sulla portata è vicino a zero, ma un hashtag in prima riga rovina lo slug dell'URL. |
 | CTA | domanda che richiede esperienza personale | Le domande generiche ("Sei d'accordo?") sono engagement bait dichiarato e vengono ridotte. Una domanda specifica sposta l'engagement dai like ai commenti (+77% commenti), che pesano di più. |
+| Blocchi da una riga sola | max 50%, meglio ~33% | Nei post riusciti due blocchi su tre raggruppano 2-3 righe. Sopra il 50% il testo ansima e si legge come un elenco puntato senza punti (post del 14-08: 59%, zero reazioni). |
+| Spazio dedicato ai fatti | max un quarto del testo | Il resto è il ragionamento. Se la notizia occupa di più, il tema era debole. Mai descrivere un'interfaccia: è manuale utente. |
+| Tesi | deve poter essere contestata | Un luogo comune ("non è quanto usi l'AI, è come la usi") non genera commenti. Se nessuno può dissentire, non c'è tesi: cambia tema, o quel giorno non si pubblica. |
 | Emoji | 0-1, mai nell'hook | Da 0 a 1 emoji: +22% reach. Oltre, l'effetto è piatto, e in serie fanno registro adolescenziale. |
 | Nota sull'automazione | tra parentesi, in coda, senza faccine | Sostituisce il vecchio "P.S. … il mio amico Claudio Code 🙂". |
 
