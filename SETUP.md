@@ -41,11 +41,19 @@ prompt non elenca più le regole di stile: fa aprire `STYLE.md`, la tabella qui
 sotto e un file di `examples/` a ogni esecuzione, così la fonte di verità resta
 una sola e cambiarla non richiede di toccare il prompt.
 
-Nel prompt restano solo i cinque punti da cui dipende il resto (hook affermativo,
-ragionamento invece che bollettino, blocchi di lunghezza diversa, niente
-glosse/attenuatori/emoji, chiusura che riprende l'hook), lo Step 5 che impone
-`scripts/readability.py` a 0 prima del push, e la distinzione fra violazioni
-(`!`, bloccano) e avvisi (`?`, da leggere).
+Nel prompt restano la tesi del profilo (in apertura, perché decide cosa si
+scrive e cosa si scarta), i cinque punti da cui dipende il resto (hook
+affermativo, ragionamento invece che bollettino, blocchi di lunghezza diversa,
+niente glosse/attenuatori/emoji, chiusura che riprende l'hook), lo Step 5 che
+impone `scripts/readability.py` a 0 prima del push, e la distinzione fra
+violazioni (`!`, bloccano) e avvisi (`?`, da leggere).
+
+**Dal 2026-08-14 i temi non sono più categorie di notizie ma angolazioni sulla
+tesi** (`DA_CERCARE_A_COSTRUIRE`, `UNO_VALE_UN_TEAM`, `LAVORO_RIPETITIVO`,
+`COSA_SI_ROMPE`, `LO_STRUMENTO`), e la notizia non è più il punto di partenza
+obbligatorio: si parte dall'angolo e si cerca semmai un fatto che lo sostenga.
+Un post può reggersi sul solo ragionamento, purché i fatti che cita siano
+verificati.
 
 Per rileggere o modificare il prompt: https://claude.ai/code/routines/trig_01E1UaHdMXwNi3Z3QydKjoHg
 

@@ -86,7 +86,10 @@ def gulpease(testo: str) -> float:
 def analizza(testo: str) -> dict:
     righe = [r for r in testo.split("\n")]
     paragrafi = [r.strip() for r in righe if r.strip()]
-    blocchi = [b.strip() for b in BLOCCO.split(testo.strip()) if b.strip()]
+    # La coda (nota fra parentesi, hashtag) è mono-riga per costruzione: contarla
+    # gonfierebbe la frammentazione di ogni post ben scritto.
+    blocchi = [b.strip() for b in BLOCCO.split(testo.strip()) if b.strip()
+               and not b.strip().startswith(("#", "("))]
     frasi = [f.strip() for f in re.split(r"[.!?;:\n]+", testo) if f.strip()]
     per_frase = [len(PAROLA.findall(f)) for f in frasi] or [0]
 

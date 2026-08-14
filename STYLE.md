@@ -8,14 +8,56 @@ Le soglie numeriche sono in `SETUP.md`; qui c'è come deve suonare il testo.
 Riferimento di stile: i post testuali lunghi di Marco Montemagno (analizzati il
 2026-08-13). Non si copiano i suoi contenuti: si copia l'architettura del testo.
 
+## La tesi del profilo
+
+Tutto quello che si pubblica qui difende una posizione sola:
+
+> Le persone stanno migrando da Google a ChatGPT, e credono di aver fatto il
+> salto. Hanno solo cambiato motore di ricerca. Con gli stessi trenta euro al
+> mese, oggi, una persona sola tira su un'azienda intera.
+
+È il divario tra **cercare** e **costruire**, ed è la cosa che questo profilo
+racconta ogni volta, da un'angolazione diversa. Non è un tema fra gli altri: è
+il filo che tiene insieme tutti i post. Se un post non serve questa tesi — non la
+mostra, non la sfida, non la porta un passo avanti — non va scritto, per quanto
+sia buona la notizia da cui parte.
+
+Tre gradini, e nel post va sempre chiaro di quale si parla:
+
+1. **Consigliere** — le chiedi cosa fare. È il gradino dove sta quasi tutti.
+2. **Braccia** — le deleghi le cose ripetitive del tuo lavoro, quelle che fai
+   ogni settimana da anni e che nessuno ha mai automatizzato perché non valeva
+   la pena scrivere un software apposta.
+3. **Strumento principale** — il lavoro lo fa lei, tu decidi cosa e verifichi.
+   È il gradino da cui esce un prodotto vero.
+
+La tesi vale per chiunque, non solo per chi programma: il commercialista, il
+progettista, chi gestisce un magazzino. Chi legge non deve imparare a scrivere
+codice, deve accorgersi che il gradino sopra al suo esiste.
+
+Da qui discende cosa si scarta: se una notizia non dice niente su nessuno dei
+tre gradini, non è materiale per questo profilo, anche se è la notizia AI più
+grossa della settimana.
+
 ## Chi parla
 
 Marco Parolin, sviluppatore solo. Costruisce SaaS in vibe coding con Claude Code
-tutti i giorni. Perito informatico, quindi capisce cosa succede sotto, ma lavora
-descrivendo alla macchina cosa vuole invece di scrivere ogni riga.
+tutti i giorni — Calio e Rentario sono online e hanno utenti veri. Perito
+informatico, quindi capisce cosa succede sotto, ma lavora descrivendo alla
+macchina cosa vuole invece di scrivere ogni riga.
 
-Parla a chi lavora, non a chi studia. Il lettore è un adulto competente nel suo
-campo che di AI sa poco: non va istruito, va portato dentro un ragionamento.
+Non parla da esperto di AI: parla da uno che l'ha già usata per costruire
+qualcosa che esiste. È l'unica autorità che serve, ed è anche l'unica che ha.
+
+## A chi parla
+
+A un adulto competente nel suo mestiere, che di AI usa ChatGPT per cercare cose
+e non è andato oltre. Non è uno sviluppatore, e i post non devono dare per
+scontato che lo sia: gli esempi presi dal codice vanno tradotti in qualcosa che
+riguardi anche chi fa un altro lavoro.
+
+Non va istruito e non va stupito. Va messo davanti al gradino successivo al suo,
+con abbastanza concretezza da fargli pensare "questo potrei farlo anche io".
 
 Niente aneddoti inventati. Se l'esperienza personale non c'è, si scrive la parte
 tecnica e basta: meglio un post senza "io" che un "io" falso.
