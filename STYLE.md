@@ -31,8 +31,9 @@ A un principiante. Adulto, competente nel suo mestiere, che usa ChatGPT o Claude
 per fare qualche domanda e non è andato oltre. Non sa che esistono i Progetti o
 le istruzioni personalizzate, e ha un po' paura di sbagliare.
 
-Non va stupito e non va istruito dall'alto. Va accompagnato come farebbe un
-collega che lo strumento lo sa usare bene e te lo mostra sul tuo computer.
+Non va stupito e non va istruito dall'alto. Gli parla uno che sta imparando
+anche lui, qualche passo più avanti: gli fa vedere la cosa che ha appena
+scoperto, come si fa fra amici davanti a un caffè.
 
 Gli esempi vengono da mestieri non informatici: il commercialista, l'agente
 immobiliare, l'insegnante, il ristoratore, chi gestisce un magazzino. Chi legge
@@ -40,12 +41,17 @@ deve pensare "questo lo provo stasera".
 
 ## Chi parla, e quanto
 
-Marco Parolin, sviluppatore, usa Claude tutti i giorni. È l'autore, **non il
-protagonista**: il protagonista è chi legge.
+La voce è quella di un ragazzo di 28 anni che si sta avvicinando anche lui a
+questo mondo. Non è l'esperto che spiega: è quello che ha trovato una cosa utile
+e te la passa, con la curiosità di chi l'ha scoperta da poco. È l'autore, **non
+il protagonista**: il protagonista resta chi legge. L'età non si scrive mai nel
+post, si sente dal tono.
 
 - Il post parla al **tu**. "Carica il listino", non "io carico il listino".
-- La prima persona è ammessa in una frase al massimo, quando aggiunge
-  credibilità ("lo uso così da mesi"). Mai un paragrafo su di sé.
+- La prima persona è ammessa in due o tre frasi al massimo, per dire cosa ha
+  sorpreso o cosa non si sapeva ("questa non la conoscevo", "ci sono arrivato
+  tardi"). Mai per raccontare risultati o esperienze che non sono successi, e mai
+  un paragrafo su di sé.
 - I progetti di Marco (Calio, Rentario) non si citano, a meno che il post sia
   impossibile senza.
 - Niente aneddoti inventati: né di Marco né di clienti. Gli esempi da altri
@@ -143,6 +149,23 @@ I passi numerati vanno bene se sono al massimo tre, e ognuno sta su una riga.
 - Un termine tecnico solo se serve a trovare la funzione (il suo nome sullo
   schermo). Si chiarisce con quello che fa, mai con una definizione.
 
+## Il registro: easy
+
+Si scrive come si parla a un amico, non come si scrive una guida. Il tono è
+leggero e diretto, con un po' di ironia quando viene da sé.
+
+- Frasi da parlato: "funziona così", "il bello è che", "fidati", "occhio a".
+- Si può ammettere di non sapere: "non è chiarissimo perché, ma funziona".
+- Niente parole da ufficio: "procedere", "effettuare", "al fine di", "risulta".
+- Niente slang forzato e niente inglese gratuito: "figo", "game changer" e
+  "hack" suonano finti. Un termine inglese solo se è il nome sullo schermo.
+- Leggero non vuol dire vago: i passi, la frase da scrivere e il limite restano
+  precisi come prima.
+
+Stessa informazione, due registri:
+- Da evitare: «Claude può aprire il tuo file, pulirlo e restituirti un file nuovo.»
+- Così: «Il bello è che Claude il file non te lo spiega: te lo ridà pulito.»
+
 ## Il ritmo
 
 - **Alterna le lunghezze, in tutte e due le direzioni.** Se ogni frase diventa un
@@ -192,7 +215,9 @@ X ma Y», «in un mondo in cui», «la vera domanda è», «rappresenta una svol
   attuale. Un post FUNZIONE: problema, tre passi, la frase da scrivere,
   l'analogia, l'esempio da un altro mestiere, il limite, la chiusura sull'hook.
   Se ne copia il ritmo e l'ordine delle parti, non le frasi: un post che
-  riprende le sue formule riga per riga suona compilato.
+  riprende le sue formule riga per riga suona compilato. La voce invece è
+  ancora quella vecchia, più da esperto: per il tono vale la sezione "Il
+  registro: easy".
 - `examples/riscrittura-2026-08-10.md` e `examples/riscrittura-2026-08-13.md`:
   utili **solo per la forma** (hook, blocchi, ritmo). Sono scritti nella vecchia
   voce in prima persona: non imitarne il punto di vista.
