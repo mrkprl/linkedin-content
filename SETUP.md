@@ -23,7 +23,8 @@ non è più usata dal flusso (rimane solo per compatibilità storica).
 - **Schedule**: `0 6 * * 1,3,5` UTC = 8:00 italiane (7:00 con ora legale) lun-mer-ven
   (era lun-ven fino al 2026-08-14: cinque post a settimana obbligavano a commentare
   anche i giorni senza una notizia degna, e il generatore riempiva descrivendo prodotti)
-- **Modello**: `claude-sonnet-5`
+- **Modello**: `claude-opus-5-5` (dal 2026-10-12; si imposta nella routine, non nel repo)
+- **Environment**: `LinkedInSearch`, con la rete Custom descritta in "Rete e fonti"
 - **Gestione**: https://claude.ai/code/routines
 - **Il prompt è copiato in `ROUTINE_PROMPT.md`**: se cambia lì, va reincollato
   nella routine. La parte editoriale invece sta in `STYLE.md`, che il prompt fa
@@ -172,7 +173,7 @@ uniche fonti sono due blog SEO. Non inseguirle.
 - Workflow: `.github/workflows/publish-to-linkedin.yml` — trigger su push di `approved/**.md` **solo su main**
 - Script: `scripts/publish.py` — LinkedIn REST API `/rest/posts`
 - Secrets (repo → Settings → Secrets → Actions):
-  - `LINKEDIN_ACCESS_TOKEN` — impostato 2026-08-05, **scade ~2026-10-05**
+  - `LINKEDIN_ACCESS_TOKEN` — impostato 2026-10-12, **scade ~2026-12-11**
   - `LINKEDIN_PERSON_ID` — `IJ0yQ3PjVm` (il claim `sub` di `/v2/userinfo`, stabile)
 
 ## Rinnovo token LinkedIn (ogni ~60 giorni!)
