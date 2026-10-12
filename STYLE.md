@@ -178,6 +178,11 @@ commenti». LinkedIn le classifica come esca e ne riduce la portata.
 **Le frasi da bigliettino.** «Fidarsi va bene, capire è meglio.» Se una frase
 suona bene ma non aggiunge niente da fare, si taglia.
 
+**Le righe che annunciano.** «Un esempio.», «Come si fa, in tre passi.», «C'è una
+strada più corta.», «Due cose da controllare.» Sono l'impalcatura del post rimasta
+in vista: chi legge capisce che è un esempio quando lo legge. Si entra subito nel
+contenuto («Un'agenzia immobiliare, per esempio, carica...»).
+
 **Gli stilemi da modello linguistico.** Trattino lungo, freccia `→`, «non è solo
 X ma Y», «in un mondo in cui», «la vera domanda è», «rappresenta una svolta».
 
@@ -186,6 +191,8 @@ X ma Y», «in un mondo in cui», «la vera domanda è», «rappresenta una svol
 - `examples/funzione-progetti.md`: **il modello di riferimento** per la linea
   attuale. Un post FUNZIONE: problema, tre passi, la frase da scrivere,
   l'analogia, l'esempio da un altro mestiere, il limite, la chiusura sull'hook.
+  Se ne copia il ritmo e l'ordine delle parti, non le frasi: un post che
+  riprende le sue formule riga per riga suona compilato.
 - `examples/riscrittura-2026-08-10.md` e `examples/riscrittura-2026-08-13.md`:
   utili **solo per la forma** (hook, blocchi, ritmo). Sono scritti nella vecchia
   voce in prima persona: non imitarne il punto di vista.

@@ -111,7 +111,7 @@ voce che i numeri non catturano stanno in `STYLE.md`.
 | Hook (prima riga) | max 60 caratteri, meglio sotto 40 | Hook sotto i 40 caratteri battono quelli oltre i 200 di circa il 25% di engagement rate. |
 | Tipo di hook | affermazione, fatto o confessione, **mai domanda** | Su 309.614 post l'hook a domanda è ultimo dei cinque tipi (2,16% contro 2,60% dell'hook narrativo). Bloccate anche le aperture da quiz ("Sai qual è…", "Ti sei mai chiesto…"). |
 | Paragrafi | almeno 20, da 1-3 righe, max 260 caratteri l'uno | Post con 20+ paragrafi: 1,13x reach. Con 0-5 paragrafi: 0,70x. È l'effetto di formattazione più forte e costa zero. Il limite per blocco evita il muro di testo sul telefono. |
-| Frasi | mai oltre 25 parole, media 12-18 | Direttiva sulla semplificazione del linguaggio dei testi amministrativi (8/5/2002), regola 1; Cortelazzo-Pellegrino regola 12. |
+| Frasi | mai oltre 25 parole, media 10-18 | Direttiva sulla semplificazione del linguaggio dei testi amministrativi (8/5/2002), regola 1; Cortelazzo-Pellegrino regola 12. La media si misura sulle frasi del corpo chiuse da punto o fine riga, senza la coda. Il minimo è tarato sui post: `examples/funzione-progetti.md` sta a 10,6, il post del 14-08 (zero reazioni) a 8,0. |
 | Gulpease | ≥ 60, target 70 | Sotto 60 il testo non è leggibile in autonomia da chi ha la licenza media. È l'indice tarato sull'italiano (Lucisano-Piemontese 1988), non Flesch. |
 | Glosse didascaliche | **zero** | "cioè", "ovvero", "in altre parole": presuppongono un lettore che non capisce e fanno suonare il testo come un tema di scuola. Al loro posto va un esempio concreto. |
 | Attenuatori | max 2 | "un po'", "forse", "onestamente": oltre due, il post non afferma più niente e la voce si sfalda. |
