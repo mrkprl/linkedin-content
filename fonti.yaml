@@ -1,0 +1,89 @@
+# Fonti che scripts/scout.py scansiona a ogni esecuzione della routine.
+# Per aggiungerne una basta una voce nuova; se il dominio non è nella lista
+# "Allowed domains" dell'environment cloud, lo script la segnala come non raggiungibile.
+#
+# ruolo:
+#   ufficiale  fonte primaria: un fatto di prodotto si cita solo da qui
+#   stampa     stampa tech di qualità: vale come fonte se il fatto non è un annuncio
+#   spunto     newsletter e community: danno idee e mostrano cosa interessa,
+#              ma nessun fatto può poggiare solo su di loro
+#
+# tipo:
+#   feed       RSS o Atom
+#   hn         ricerca Hacker News (url = parola da cercare)
+#   pagina     nessun feed: la routine la legge con WebFetch
+
+- nome: Anthropic News
+  url: https://www.anthropic.com/news
+  tipo: pagina
+  ruolo: ufficiale
+
+- nome: Blog di Claude
+  url: https://claude.com/blog
+  tipo: pagina
+  ruolo: ufficiale
+
+- nome: Release notes delle app Claude
+  url: https://support.claude.com/en/articles/12138966-release-notes
+  tipo: pagina
+  ruolo: ufficiale
+
+- nome: Changelog di Claude Code
+  url: https://code.claude.com/docs/en/changelog
+  tipo: pagina
+  ruolo: ufficiale
+
+- nome: Anthropic su YouTube
+  url: https://www.youtube.com/feeds/videos.xml?channel_id=UCrDwWp7EBBv4NwvScIpBDOA
+  tipo: feed
+  ruolo: ufficiale
+
+- nome: Google AI
+  url: https://blog.google/technology/ai/rss/
+  tipo: feed
+  ruolo: ufficiale
+
+- nome: GitHub Blog
+  url: https://github.blog/feed/
+  tipo: feed
+  ruolo: ufficiale
+
+- nome: The Verge AI
+  url: https://www.theverge.com/rss/ai-artificial-intelligence/index.xml
+  tipo: feed
+  ruolo: stampa
+
+- nome: Ars Technica AI
+  url: https://arstechnica.com/ai/feed/
+  tipo: feed
+  ruolo: stampa
+
+- nome: TechCrunch AI
+  url: https://techcrunch.com/category/artificial-intelligence/feed/
+  tipo: feed
+  ruolo: stampa
+
+- nome: Simon Willison
+  url: https://simonwillison.net/atom/everything/
+  tipo: feed
+  ruolo: stampa
+
+- nome: The Rundown AI
+  url: https://rss.beehiiv.com/feeds/2R3C6Bt5wj.xml
+  tipo: feed
+  ruolo: spunto
+
+- nome: Ben's Bites
+  url: https://bensbites.com/feed
+  tipo: feed
+  ruolo: spunto
+
+- nome: r/ClaudeAI, i più votati della settimana
+  url: https://www.reddit.com/r/ClaudeAI/top/.rss?t=week
+  tipo: feed
+  ruolo: spunto
+
+- nome: Hacker News su Claude
+  url: claude
+  tipo: hn
+  ruolo: spunto

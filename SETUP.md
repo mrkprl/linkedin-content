@@ -25,35 +25,76 @@ non è più usata dal flusso (rimane solo per compatibilità storica).
   anche i giorni senza una notizia degna, e il generatore riempiva descrivendo prodotti)
 - **Modello**: `claude-sonnet-5`
 - **Gestione**: https://claude.ai/code/routines
-- La policy editoriale vive nel prompt della routine: whitelist fonti Tier 1/2
-  (community solo come segnale), contestualizzazione Italia/EU, voce in prima
-  persona di Marco (senza aneddoti inventati).
-- **La voce e l'architettura del testo stanno in `STYLE.md`**, che è la parte
-  editoriale del prompt: se cambia lì, va ricopiata nel prompt della routine.
-  Le regole di forma sono verificabili e la routine le auto-controlla con
-  `scripts/readability.py` prima di aprire la PR (esce con 1 se qualcosa non
-  passa). Esempio di riferimento in `examples/riscrittura-2026-08-10.md`.
+- **Il prompt è copiato in `ROUTINE_PROMPT.md`**: se cambia lì, va reincollato
+  nella routine. La parte editoriale invece sta in `STYLE.md`, che il prompt fa
+  aprire a ogni esecuzione: cambiarla non richiede di toccare la routine.
+- Le regole di forma sono verificabili e la routine le auto-controlla con
+  `scripts/readability.py` prima di pushare (esce con 1 se qualcosa non passa).
+  Esempio di riferimento in `examples/funzione-progetti.md`.
 
-### Parte editoriale del prompt della routine
+### Linea editoriale (dal 2026-10-12)
 
-Aggiornata il 2026-08-13 via API (`RemoteTrigger`, action `update`). Lo Step 4 del
-prompt non elenca più le regole di stile: fa aprire `STYLE.md`, la tabella qui
-sotto e un file di `examples/` a ogni esecuzione, così la fonte di verità resta
-una sola e cambiarla non richiede di toccare il prompt.
+Il profilo insegna a usare Claude a chi parte da zero: ogni post lascia una cosa
+da provare oggi. Il post parla al "tu", Marco è l'autore e non il protagonista.
+Angoli: `TRUCCO`, `FUNZIONE`, `NOVITÀ`, `ERRORE_COMUNE`, `CASO_D_USO` (dettagli
+in `STYLE.md`). I test prima di scrivere sono "si può provare oggi?" ed "è nuovo
+per un principiante?".
 
-Nel prompt restano la tesi del profilo (in apertura, perché decide cosa si
-scrive e cosa si scarta), i cinque punti da cui dipende il resto (hook
-affermativo, ragionamento invece che bollettino, blocchi di lunghezza diversa,
-niente glosse/attenuatori/emoji, chiusura che riprende l'hook), lo Step 5 che
-impone `scripts/readability.py` a 0 prima del push, e la distinzione fra
-violazioni (`!`, bloccano) e avvisi (`?`, da leggere).
+Fino al 2026-10-09 la linea era un'altra: una tesi da difendere ("cercare contro
+costruire") raccontata in prima persona a partire dai progetti di Marco. È stata
+abbandonata perché troppo centrata su di lui; i 25 post scritti in quella voce
+(PR #1 e #7-#30) sono stati chiusi senza pubblicarli.
 
-**Dal 2026-08-14 i temi non sono più categorie di notizie ma angolazioni sulla
-tesi** (`DA_CERCARE_A_COSTRUIRE`, `UNO_VALE_UN_TEAM`, `LAVORO_RIPETITIVO`,
-`COSA_SI_ROMPE`, `LO_STRUMENTO`), e la notizia non è più il punto di partenza
-obbligatorio: si parte dall'angolo e si cerca semmai un fatto che lo sostenga.
-Un post può reggersi sul solo ragionamento, purché i fatti che cita siano
-verificati.
+### Rete e fonti
+
+La routine trova gli spunti con `scripts/scout.py`, che legge `IDEE.md` (le idee
+che Marco incolla dal telefono, con la precedenza) e poi le fonti in `fonti.yaml`
+(feed RSS/Atom, Hacker News, pagine ufficiali). Per aggiungere una fonte basta una
+voce in `fonti.yaml` **e** il suo dominio nella lista dell'environment.
+
+L'environment cloud della routine deve avere **Network access: Custom**, con
+"Also include default list of common package managers" spuntato e questi domini
+in **Allowed domains** (impostato il 2026-10-12):
+
+```
+*.anthropic.com
+*.claude.com
+*.openai.com
+blog.google
+deepmind.google
+github.blog
+simonwillison.net
+www.theverge.com
+arstechnica.com
+techcrunch.com
+venturebeat.com
+www.reddit.com
+old.reddit.com
+hn.algolia.com
+news.ycombinator.com
+www.youtube.com
+*.substack.com
+rss.beehiiv.com
+www.therundown.ai
+www.theneurondaily.com
+bensbites.com
+www.bensbites.com
+tldr.tech
+```
+
+Si cambia da claude.ai/code: icona a forma di nuvola sopra la casella dei
+messaggi, ingranaggio sull'environment, campo **Network access**. Con il livello
+**Trusted** di default le fonti non rispondono, e anche WebFetch passa da lì.
+Meglio Custom che Full: la routine legge testo scritto da sconosciuti senza
+nessuno che guardi, e una lista chiusa limita cosa può raggiungere.
+
+Verificato il 2026-10-12:
+- **Instagram non si legge**, nemmeno con Full: senza login non mostra i post, e
+  lo scraping viola i termini d'uso. Gli spunti da lì passano da `IDEE.md`.
+- **Reddit risponde vuoto agli user agent generici**: `scout.py` usa un nome
+  descrittivo (`linux:linkedin-content-scout:v1.0 (by /u/mrkprl)`).
+- **Bloccano i bot** l'help center di OpenAI (403), VentureBeat (429) e i feed di
+  The Neuron (403): per ora non sono in `fonti.yaml`.
 
 Per rileggere o modificare il prompt: https://claude.ai/code/routines/trig_01E1UaHdMXwNi3Z3QydKjoHg
 
@@ -78,8 +119,8 @@ voce che i numeri non catturano stanno in `STYLE.md`.
 | Hashtag | 3, ultima riga, mai in apertura | L'effetto sulla portata è vicino a zero, ma un hashtag in prima riga rovina lo slug dell'URL. |
 | CTA | domanda che richiede esperienza personale | Le domande generiche ("Sei d'accordo?") sono engagement bait dichiarato e vengono ridotte. Una domanda specifica sposta l'engagement dai like ai commenti (+77% commenti), che pesano di più. |
 | Blocchi da una riga sola | max 50%, meglio ~33% | Nei post riusciti due blocchi su tre raggruppano 2-3 righe. Sopra il 50% il testo ansima e si legge come un elenco puntato senza punti (post del 14-08: 59%, zero reazioni). |
-| Spazio dedicato ai fatti | max un quarto del testo | Il resto è il ragionamento. Se la notizia occupa di più, il tema era debole. Mai descrivere un'interfaccia: è manuale utente. |
-| Tesi | deve poter essere contestata | Un luogo comune ("non è quanto usi l'AI, è come la usi") non genera commenti. Se nessuno può dissentire, non c'è tesi: cambia tema, o quel giorno non si pubblica. |
+| Spazio dedicato alla notizia | max un quarto del testo | Quando il post parte da una novità, il resto è cosa farne. Dove si trova una funzione si dice in una riga: elencare menu e pulsanti è manuale utente (post del 14-08: un terzo dello spazio su un pannello). |
+| Utilità | chi legge può provarlo oggi, ed è nuovo per un principiante | Un luogo comune ("non è quanto usi l'AI, è come la usi") non lascia niente da fare: 15 impression, zero reazioni. Se lo spunto non passa, si cambia, o quel giorno non si pubblica. |
 | Emoji | 0-1, mai nell'hook | Da 0 a 1 emoji: +22% reach. Oltre, l'effetto è piatto, e in serie fanno registro adolescenziale. |
 | Nota sull'automazione | tra parentesi, in coda, senza faccine | Sostituisce il vecchio "P.S. … il mio amico Claudio Code 🙂". |
 
@@ -93,7 +134,7 @@ il feed usa dual encoder LLM che confrontano per similarità coseno l'embedding 
 post con quello del profilo di chi legge. Riempire il testo di parole chiave non
 serve. Serve la **coerenza tematica**: con pochi follower il post viene distribuito
 per argomento, non per rete sociale, quindi restare sempre sullo stesso perimetro
-(AI, coding, strumenti) è la leva di portata numero uno.
+(Claude e come usarlo) è la leva di portata numero uno.
 
 **Da fare a mano, fuori dal sistema** (non automatizzabile, alto ritorno):
 1. Allineare headline, About e Skills del profilo al vocabolario dei post: il
