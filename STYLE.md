@@ -1,227 +1,191 @@
 # Voce e stile dei post
 
-Questo file è la parte editoriale del prompt della routine `linkedin-content-generator`.
-Se lo cambi qui, ricopialo nel prompt su https://claude.ai/code/routines.
-Le soglie numeriche sono in `SETUP.md`; qui c'è come deve suonare il testo.
-`scripts/readability.py` verifica meccanicamente quasi tutto quello che segue.
+Questo file è la parte editoriale della routine `linkedin-content-generator`: il
+prompt (copia in `ROUTINE_PROMPT.md`) lo fa aprire a ogni esecuzione, quindi
+cambiarlo qui basta, senza toccare la routine.
+Le soglie numeriche sono in `SETUP.md`; qui c'è cosa si scrive e come deve suonare.
+`scripts/readability.py` verifica meccanicamente la forma.
 
-Riferimento di stile: i post testuali lunghi di Marco Montemagno (analizzati il
-2026-08-13). Non si copiano i suoi contenuti: si copia l'architettura del testo.
+Riferimento per l'architettura del testo: i post testuali lunghi di Marco
+Montemagno (analizzati il 2026-08-13). Non si copiano i contenuti, si copia il
+ritmo.
 
-## La tesi del profilo
+## La promessa del profilo
 
-Tutto quello che si pubblica qui difende una posizione sola:
+Ogni post lascia a chi legge **una cosa che può provare oggi con Claude**, in
+pochi minuti, senza saper programmare: un trucco, una funzione che non conosceva,
+un errore da evitare, un modo di usarla nel suo lavoro.
 
-> Le persone stanno migrando da Google a ChatGPT, e credono di aver fatto il
-> salto. Hanno solo cambiato motore di ricerca. Con gli stessi trenta euro al
-> mese, oggi, una persona sola tira su un'azienda intera.
+Chi chiude il post deve saper fare una cosa in più. Se non c'è niente da provare,
+non è un post per questo profilo, per quanto sia grossa la notizia.
 
-È il divario tra **cercare** e **costruire**, ed è la cosa che questo profilo
-racconta ogni volta, da un'angolazione diversa. Non è un tema fra gli altri: è
-il filo che tiene insieme tutti i post. Se un post non serve questa tesi — non la
-mostra, non la sfida, non la porta un passo avanti — non va scritto, per quanto
-sia buona la notizia da cui parte.
-
-Tre gradini, e nel post va sempre chiaro di quale si parla:
-
-1. **Consigliere** — le chiedi cosa fare. È il gradino dove sta quasi tutti.
-2. **Braccia** — le deleghi le cose ripetitive del tuo lavoro, quelle che fai
-   ogni settimana da anni e che nessuno ha mai automatizzato perché non valeva
-   la pena scrivere un software apposta.
-3. **Strumento principale** — il lavoro lo fa lei, tu decidi cosa e verifichi.
-   È il gradino da cui esce un prodotto vero.
-
-La tesi vale per chiunque, non solo per chi programma: il commercialista, il
-progettista, chi gestisce un magazzino. Chi legge non deve imparare a scrivere
-codice, deve accorgersi che il gradino sopra al suo esiste.
-
-Da qui discende cosa si scarta: se una notizia non dice niente su nessuno dei
-tre gradini, non è materiale per questo profilo, anche se è la notizia AI più
-grossa della settimana.
-
-## Chi parla
-
-Marco Parolin, sviluppatore solo. Costruisce SaaS in vibe coding con Claude Code
-tutti i giorni — Calio e Rentario sono online e hanno utenti veri. Perito
-informatico, quindi capisce cosa succede sotto, ma lavora descrivendo alla
-macchina cosa vuole invece di scrivere ogni riga.
-
-Non parla da esperto di AI: parla da uno che l'ha già usata per costruire
-qualcosa che esiste. È l'unica autorità che serve, ed è anche l'unica che ha.
+Il perimetro è Claude: l'app, i Progetti, gli strumenti che ci girano intorno, e
+Claude Code quando serve a chi parte da zero. ChatGPT e Gemini entrano quando il
+trucco vale per tutti. Fuori perimetro: politica, cause legali, drammi aziendali,
+carriera, la notizia AI generica. Con pochi follower LinkedIn distribuisce i post
+per argomento: restare sempre sullo stesso tema è la leva di portata più forte.
 
 ## A chi parla
 
-A un adulto competente nel suo mestiere, che di AI usa ChatGPT per cercare cose
-e non è andato oltre. Non è uno sviluppatore, e i post non devono dare per
-scontato che lo sia: gli esempi presi dal codice vanno tradotti in qualcosa che
-riguardi anche chi fa un altro lavoro.
+A un principiante. Adulto, competente nel suo mestiere, che usa ChatGPT o Claude
+per fare qualche domanda e non è andato oltre. Non sa che esistono i Progetti o
+le istruzioni personalizzate, e ha un po' paura di sbagliare.
 
-Non va istruito e non va stupito. Va messo davanti al gradino successivo al suo,
-con abbastanza concretezza da fargli pensare "questo potrei farlo anche io".
+Non va stupito e non va istruito dall'alto. Va accompagnato come farebbe un
+collega che lo strumento lo sa usare bene e te lo mostra sul tuo computer.
 
-Niente aneddoti inventati. Se l'esperienza personale non c'è, si scrive la parte
-tecnica e basta: meglio un post senza "io" che un "io" falso.
+Gli esempi vengono da mestieri non informatici: il commercialista, l'agente
+immobiliare, l'insegnante, il ristoratore, chi gestisce un magazzino. Chi legge
+deve pensare "questo lo provo stasera".
+
+## Chi parla, e quanto
+
+Marco Parolin, sviluppatore, usa Claude tutti i giorni. È l'autore, **non il
+protagonista**: il protagonista è chi legge.
+
+- Il post parla al **tu**. "Carica il listino", non "io carico il listino".
+- La prima persona è ammessa in una frase al massimo, quando aggiunge
+  credibilità ("lo uso così da mesi"). Mai un paragrafo su di sé.
+- I progetti di Marco (Calio, Rentario) non si citano, a meno che il post sia
+  impossibile senza.
+- Niente aneddoti inventati: né di Marco né di clienti. Gli esempi da altri
+  mestieri si presentano come esempi ("un'agenzia immobiliare carica..."), mai
+  come fatti successi davvero.
+
+## Gli angoli
+
+Ruotano: mai lo stesso angolo due volte di fila.
+
+- **TRUCCO**: un modo di usare Claude che cambia il risultato. Farti fare le
+  domande prima di scrivere, dare un esempio invece di una descrizione, chiedere
+  tre versioni e sceglierne una.
+- **FUNZIONE**: una funzione che esiste già e quasi nessuno apre. Progetti,
+  istruzioni personalizzate, caricare un file, la voce, la ricerca, gli
+  Artifacts. Spiegata a chi non l'ha mai vista.
+- **NOVITÀ**: una novità della settimana, da fonte ufficiale, tradotta in "cosa
+  puoi fare da oggi". La notizia per sé non basta mai.
+- **ERRORE_COMUNE**: lo sbaglio tipico di chi comincia e come evitarlo. Fidarsi di
+  un numero senza controllarlo, incollare dati sensibili, chiedere tutto in un
+  messaggio solo, rifare la stessa chat ogni giorno.
+- **CASO_D_USO**: un mestiere non informatico e un problema concreto, risolto
+  passo per passo.
+
+## I due test, prima di scrivere
+
+**Test 1: si può provare oggi?** Scrivi in una frase cosa farà chi legge, appena
+chiuso il post. Se la risposta è "ci rifletterà", il post non serve. Se è "apre
+Claude e fa questa cosa", passa.
+
+**Test 2: è nuovo per un principiante?** Se lo sa già chiunque usi l'AI da una
+settimana ("scrivi richieste chiare"), è un luogo comune e nessuno lo salva. Serve
+un dettaglio che chi legge non conosceva: il nome della funzione, la frase esatta
+da scrivere, il risultato che deve aspettarsi.
+
+Esempio fallito, post del 14 agosto: «Non è quanto usi l'AI, è come la usi».
+Niente da provare, niente di nuovo: 15 impression, zero reazioni.
+
+Esempio riuscito: «Prima di farti scrivere un testo, chiedi a Claude di farti lui
+tre domande». Si prova in cinque minuti, e quasi nessuno ci ha mai pensato.
 
 ## L'architettura del post
 
-**1. Hook — una o due righe, affermazione secca.**
-Tre forme che funzionano:
+**1. Hook: una riga, affermazione secca.** Tre forme che funzionano:
+- il fatto nudo: «Ogni chat nuova, Claude riparte da zero.»
 - l'antitesi: si nega la lettura comune e si mette accanto quella vera
-  («Non è X. È Y»)
-- il fatto nudo: un numero o un'azione concreta, senza aggettivi
-- la confessione: un errore proprio, dichiarato in prima persona
+- la promessa concreta: cosa otterrai, detto senza aggettivi
 
-Mai una domanda. Mai un'apertura da quiz («Sai qual è…», «Ti sei mai chiesto…»,
-«Cosa succede se…»). Mai un'emoji. La prima riga diventa lo slug dell'URL del
-post e non si può più cambiare: metti dentro le parole chiave del tema.
+Mai una domanda. Mai un'apertura da quiz («Sai qual è…», «Ti sei mai chiesto…»).
+Mai un'emoji. La prima riga diventa l'indirizzo del post su LinkedIn e non si può
+più cambiare: mettici le parole del tema.
 
-**2. Corpo — blocchi da una a tre righe, mai muri di testo.**
-Almeno 20 blocchi separati da riga vuota. Frasi corte, anche frammenti senza
-verbo. Le righe brevi in sequenza danno il ritmo; la ripetizione della stessa
-apertura su tre o quattro righe di fila è una figura, non un errore.
+**2. Corpo: blocchi da una a tre righe.** Ordine che funziona:
+- il problema, descritto in modo che chi legge ci si riconosca
+- cosa fare: i passi concreti, con la frase esatta da scrivere quando c'è
+- perché funziona, con un'analogia presa dalla vita di tutti i giorni
+- un esempio da un mestiere non informatico
+- il limite: quando non funziona o cosa controllare, in due righe
 
-Ordine che funziona:
-- quello che credevo / quello che fanno tutti
-- il fatto nuovo, con i numeri
-- il dettaglio che ribalta la lettura
-- l'analogia presa dalla vita di tutti i giorni
-- cosa cambia per chi legge
+Il limite non è facoltativo. È quello che separa un consiglio da una televendita.
 
-**3. Chiusura — si torna all'hook.**
-La frase finale riprende l'apertura e la chiude. Non una morale nuova, non una
-sentenza da calendario.
+**3. Chiusura: si torna all'hook.** L'ultima riga riprende l'apertura e la chiude,
+ora che chi legge sa cosa fare. Non una morale nuova.
 
-Dopo la chiusura, una domanda sola, su una riga, senza emoji: deve chiedere
-un'esperienza concreta di chi legge, non un'opinione generica.
+Dopo la chiusura, una domanda sola, su una riga, senza emoji: chiede
+un'esperienza concreta di chi legge ("Qual è il documento che incolli più spesso?"),
+non un'opinione.
 
 **4. Coda.**
-- la nota sull'automazione, tra parentesi, asciutta, nella formulazione che Marco
-  usa quando corregge a mano:
+- la nota sull'automazione, tra parentesi:
   `(Questo post l'ha scritto il mio agente di ricerca. Fonti nel primo commento.)`
-- tre hashtag, ultima riga
+- tre hashtag nell'ultima riga: `#AI #Claude` più uno sul tema del giorno
 - nessun link nel corpo: le fonti vanno nel primo commento, ci pensa `publish.py`
 
-## La tesi deve poter essere contestata
+## Come si spiega una funzione
 
-Prima di scrivere, formula in una frase la cosa che il post sostiene. Poi chiediti
-se una persona competente potrebbe rispondere "no, non è vero". Se non può, non
-hai una tesi: hai un luogo comune, e nessuno commenta un luogo comune.
+Dove si trova si dice in una riga, quanto basta per trovarla («dal menu a
+sinistra apri Progetti»). Poi si passa a cosa farci.
 
-«Non è quanto usi l'AI, è come la usi» (14 agosto) è un truismo: nessuno può
-dissentire, infatti il post ha raccolto zero reazioni. «Il controllo umano
-funziona benissimo per venti minuti, poi diventa un rito» è una tesi: si può
-essere in disaccordo, e chi lo è scrive perché.
+Non si elencano menu, pulsanti, colonne e impostazioni: chi legge non ha lo
+schermo davanti, e dopo tre righe di interfaccia smette di leggere. Il post del
+14 agosto spendeva un terzo dello spazio a descrivere un pannello.
 
-Vale anche per la scelta del tema. Se dalla ricerca esce solo una notizia di
-prodotto minore — una sezione aggiunta a un pannello, una feature per team
-aziendali, un cambio di prezzi — non c'è nessuna tesi da difendere e il post
-diventa un riassunto. In quel caso **cambia argomento**, e se nessun argomento
-regge, quel giorno non si pubblica: un post debole costa più di un giorno di
-silenzio, perché insegna all'algoritmo a mostrarti a meno gente.
+I passi numerati vanno bene se sono al massimo tre, e ognuno sta su una riga.
 
 ## La lingua
 
 - Parole di tutti i giorni. "Usare", non "utilizzare". "Problema", non
-  "problematica". "Uso", non "implementazione".
+  "problematica".
 - Niente sostantivi in *-zione* e *-mento* dove c'è un verbo: non "la creazione
   del file", ma "creare il file".
-- Voce attiva, sempre. Non "viene deciso", non "si può": di' chi fa la cosa.
+- Voce attiva, sempre. Di' chi fa la cosa: tu, Claude, il collega.
 - La stessa parola per la stessa cosa, per tutto il post. Alternare "prompt",
   "istruzione" e "richiesta" fa credere che siano tre cose diverse.
-- Massimo un termine tecnico nuovo ogni 150 parole. Quando serve, si chiarisce
-  con quello che fa, non con una definizione: «Un programma guarda ogni comando e
-  decide se è pericoloso. Si chiama classificatore.» E mai con un "cioè".
+- Un termine tecnico solo se serve a trovare la funzione (il suo nome sullo
+  schermo). Si chiarisce con quello che fa, mai con una definizione.
 
-## Il post non è un notiziario
+## Il ritmo
 
-È il difetto che resta anche quando tutte le soglie numeriche passano (post
-dell'11 e del 13 agosto: hook corto, 21 paragrafi, Gulpease 73, e comunque
-suonano scolastici). Succede quando il testo è una fila di frasi informative
-tutte della stessa lunghezza, ognuna nel suo blocco:
-
-> Lo ha annunciato il 6 agosto sul suo blog ufficiale.
->
-> Prima c'era un numero massimo di chat al giorno. Ora chi non paga può scrivere quanto vuole.
->
-> Cambia anche il modello di base per chi non paga.
-
-Ogni riga informa, nessuna riga pensa. Il lettore riceve un bollettino.
-
-Tre correttivi:
-
-- **Alterna le lunghezze, in tutte e due le direzioni.** Se tutti i blocchi
-  stanno fra 80 e 110 caratteri il ritmo è piatto. Ma se ogni frase diventa un
-  blocco a sé il testo ansima, e il post si legge come un elenco puntato senza
-  punti: è il difetto del post del 14 agosto, dove il 59% dei blocchi era di una
-  riga sola. Nei post riusciti la quota sta intorno al 33%: due blocchi su tre
-  raggruppano 2-3 righe che portano avanti lo stesso pensiero, e la riga isolata
-  arriva ogni tanto, proprio perché è rara. Una riga sola vale come colpo di
-  ritmo solo se attorno c'è del testo che scorre.
-- **La notizia è il pretesto, non il contenuto.** I fatti servono a sostenere un
-  ragionamento tuo: quello che credevi, quello che hai scoperto sbagliando,
-  quello che cambia da domani. Se togliendo la notizia non resta niente, il post
-  non era un post. In pratica: **al massimo un quarto del testo sui fatti**, il
-  resto è ragionamento. Se la notizia occupa più spazio, o non avevi niente da
-  dire, o hai scelto la notizia sbagliata.
-- **Mai descrivere un'interfaccia.** Se il testo elenca cosa mostra un pannello,
-  quali colonne ha, dove sta il selettore, sei finito nel manuale utente. Il post
-  del 14 agosto spendeva un terzo dello spazio sul dashboard di Copilot, che chi
-  legge non aprirà mai. Dei fatti tieni solo quello che cambia qualcosa per il
-  lettore.
-- **Chiudi il cerchio.** L'ultima riga riprende l'immagine o le parole
-  dell'hook. Non una morale nuova: la stessa frase dell'inizio, che ora significa
-  qualcosa di diverso perché nel frattempo hai raccontato i fatti.
+- **Alterna le lunghezze, in tutte e due le direzioni.** Se ogni frase diventa un
+  blocco a sé il testo ansima (post del 14 agosto: 59% di blocchi da una riga,
+  zero reazioni). Se tutti i blocchi sono lunghi uguali suona da notiziario. Nei
+  post riusciti due blocchi su tre raggruppano 2-3 righe che portano avanti lo
+  stesso pensiero, e la riga isolata arriva ogni tanto.
+- **La notizia è il pretesto.** Quando il post parte da una novità, la notizia
+  occupa al massimo un quarto del testo: il resto è cosa farne.
 
 ## Cosa non si fa mai
 
-**La glossa didascalica.** «un classificatore, cioè un sistema che valuta ogni
-azione al posto tuo». È il tratto che fa suonare il testo come un tema di scuola,
-perché presuppone un lettore che non capisce. Se un termine tecnico serve, si
-chiarisce con un esempio concreto o con quello che fa; se non serve, si toglie.
-Vietati: «cioè», «ovvero», «vale a dire», «in altre parole», «per intenderci».
+**La glossa didascalica.** «un classificatore, cioè un sistema che...». Presuppone
+un lettore che non capisce. Vietati: «cioè», «ovvero», «vale a dire», «in altre
+parole», «per intenderci». Al loro posto, un esempio.
 
-**L'attenuazione continua.** «un po' mi ci rivedo», «mi fa uno strano effetto»,
-«un filo di inquietudine». Massimo due attenuatori in tutto il post. Le
-affermazioni si fanno intere: «io la terrei accesa», non «forse la terrei accesa».
+**La promessa gonfiata.** «Questo trucco ti cambierà la vita», «10 volte più
+veloce», «nessuno te lo dice». Il principiante ha già visto cento reel così e ha
+imparato a non crederci. Si dice cosa succede, e basta.
 
-**Le emoji come punteggiatura.** Zero o una in tutto il post, mai nell'hook,
-mai a fine riga per addolcire una frase. Mai 👇.
+**Il tono da guru.** Niente «la maggior parte delle persone sbaglia», niente
+lettore trattato da ingenuo. Chi legge sta imparando, non sbagliando.
 
-**La CTA da bacheca.** «E tu che ne pensi?», «Sei d'accordo?», «Fammi sapere nei
-commenti». LinkedIn le classifica come engagement bait e ne riduce la portata.
+**L'attenuazione continua.** Massimo due attenuatori in tutto il post («un po'»,
+«forse», «magari»). Le istruzioni si danno intere: «carica il listino», non
+«potresti magari provare a caricare il listino».
 
-**Le firme affettuose.** Niente «il mio amico Claudio Code 🙂», niente
-diminutivi, niente faccine di complicità.
+**Le emoji come punteggiatura.** Zero o una in tutto il post, mai nell'hook. Mai 👇.
+
+**La CTA da bacheca.** «Che ne pensi?», «Sei d'accordo?», «Fammi sapere nei
+commenti». LinkedIn le classifica come esca e ne riduce la portata.
 
 **Le frasi da bigliettino.** «Fidarsi va bene, capire è meglio.» Se una frase
-suona bene ma non aggiunge un fatto, si taglia.
+suona bene ma non aggiunge niente da fare, si taglia.
 
 **Gli stilemi da modello linguistico.** Trattino lungo, freccia `→`, «non è solo
 X ma Y», «in un mondo in cui», «la vera domanda è», «rappresenta una svolta».
 
-## Prima e dopo
+## Esempi
 
-Stessa notizia, stessi numeri, due voci diverse.
-
-Prima (post del 2026-08-10, hook da 185 caratteri, 9 paragrafi, 3 emoji):
-
-> Ti sei mai chiesto quante volte hai cliccato "consenti" su Claude Code senza
-> leggere davvero cosa stava per fare? Anthropic se l'è chiesto per te, e i numeri
-> fanno un po' impressione. 😅
-
-Dopo (hook da 49 caratteri, 32 paragrafi, 0 emoji):
-
-> Non è l'AI che approva troppo in fretta. Sono io.
->
-> Uso Claude Code tutti i giorni.
-> Alla ventesima richiesta della sessione leggo i comandi con un occhio solo.
-> Alla cinquantesima non li leggo più: clicco.
->
-> Pensavo fosse una mia sciatteria da fine giornata.
-> Invece è un fenomeno con un nome e dei numeri.
-
-Due esempi completi, con il post pubblicato accanto alla riscrittura:
-
-- `examples/riscrittura-2026-08-10.md` — hook, paragrafi, emoji
-- `examples/riscrittura-2026-08-13.md` — architettura: stessa notizia, ma come
-  ragionamento invece che come bollettino
+- `examples/funzione-progetti.md`: **il modello di riferimento** per la linea
+  attuale. Un post FUNZIONE: problema, tre passi, la frase da scrivere,
+  l'analogia, l'esempio da un altro mestiere, il limite, la chiusura sull'hook.
+- `examples/riscrittura-2026-08-10.md` e `examples/riscrittura-2026-08-13.md`:
+  utili **solo per la forma** (hook, blocchi, ritmo). Sono scritti nella vecchia
+  voce in prima persona: non imitarne il punto di vista.

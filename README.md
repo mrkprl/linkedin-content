@@ -1,32 +1,21 @@
-# LinkedIn Content — AI, Claude Code & Vibe Coding
+# LinkedIn Content: Claude per chi parte da zero
 
-Post generati automaticamente da un agente Claude su temi AI, Claude Code e Vibe Coding.
+Post LinkedIn scritti da una routine Claude per il profilo di Marco Parolin. Ogni
+post lascia a chi legge una cosa da provare oggi con Claude: un trucco, una
+funzione, un errore da evitare, un caso d'uso da un mestiere non informatico.
 
-## Flusso di lavoro
+## Flusso
 
 ```
-pending/   → post generati dall'agente, in attesa di revisione
-approved/  → post approvati da te, pronti per la pubblicazione
-published/ → post già pubblicati su LinkedIn
+routine (lun-mer-ven) → scripts/scout.py raccoglie gli spunti → scrive approved/DATA.md
+→ push del branch post/DATA → la PR si apre da sola
+→ Marco dal telefono: Merge = pubblica su LinkedIn · Close = scarta
 ```
 
-## Come revisionare
+## File da conoscere
 
-1. Apri i file in `pending/` — ogni file è un post con data nel nome (es. `2026-04-17.md`)
-2. Se il post ti piace: spostalo in `approved/`
-3. Se vuoi modificarlo: editalo e poi spostalo in `approved/`
-4. Se non ti piace: cancellalo
-
-## Formato dei post
-
-Ogni file contiene:
-- **Topic**: argomento trattato
-- **Fonte**: link alla fonte della ricerca
-- **Post**: testo pronto per LinkedIn (con hashtag)
-
-## Temi ricorrenti
-
-- Novità AI / modelli / tool
-- Claude Code tips & tricks
-- Vibe Coding / Vibe Design — before/after
-- Riflessioni su come l'AI cambia lo sviluppo software
+- `IDEE.md`: dove incollare gli spunti (reel, video, trucchi). La routine li usa per primi.
+- `fonti.yaml`: le fonti che la routine scansiona.
+- `STYLE.md`: linea editoriale, voce, angoli, divieti.
+- `ROUTINE_PROMPT.md`: copia del prompt della routine.
+- `SETUP.md`: architettura, rete, soglie di forma, token LinkedIn, problemi noti.
