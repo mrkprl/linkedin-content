@@ -21,3 +21,4 @@ Esempi di righe valide:
 ## Da usare
 
 <!-- Scrivi le idee qui sotto, una per riga. -->
+OPENAI PORTA GPT-6 A TUTTI GLI UTENTI DI CHATGPT CON INTELLIGENT UI OpenAl ha avviato il 7 ottobre il rilascio globale di GPT-6 nella chat di ChatGPT con Intelligent UI, che compone risposte con grafici, pulsanti, form e strumenti interattivi. Gli abbonati Plus, Pro, Business ed Enterprise usano GPT-6 Sol, mentre dall'8 ottobre gli utenti Free e Go ricevono GPT-6 Luna, portando GPT-6 agli oltre 1,2 miliardi di utenti settimanali.
