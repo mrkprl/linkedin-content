@@ -36,12 +36,12 @@ Poi guarda i post recenti: `ls published/ archive/ approved/` e, per i branch `p
 
 ```bash
 pip install requests PyYAML 2>/dev/null
-python scripts/scout.py 7
+python scripts/scout.py 12
 ```
 
 Lo script stampa, in quest'ordine:
 1. le idee che Marco ha lasciato in `IDEE.md`, già ripulite di quelle usate. **Hanno sempre la precedenza**: se ce n'è una, il post del giorno nasce da lì (la prima della lista).
-2. le uscite degli ultimi 7 giorni delle fonti in `fonti.yaml`, divise per ruolo.
+2. le uscite degli ultimi 12 giorni delle fonti in `fonti.yaml`, divise per ruolo.
 3. le pagine ufficiali senza feed, da leggere con WebFetch.
 
 Se una fonte risulta "non raggiungibile", vai avanti con le altre. Se non ne risponde nessuna, la rete dell'environment è chiusa: esci senza creare il file e scrivilo nell'output finale.
@@ -54,13 +54,13 @@ Dove cercare cosa:
 
 Scegli l'angolo (TRUCCO, FUNZIONE, NOVITÀ, STRUMENTO, ERRORE_COMUNE, CASO_D_USO, vedi `STYLE.md`) e lo spunto.
 
-**Se lo spunto è un'idea di Marco**, il testo dell'idea è solo il punto di partenza: la ricerca la fai tu. Cerca la notizia o la funzione con WebSearch, apri la fonte ufficiale con WebFetch, verifica date, piani, nomi e numeri, e costruisci il post su quello che hai verificato, non sul testo dell'idea. I due test servono a scegliere il taglio, non a scartarla. Saltala solo se il fatto centrale non si trova su nessuna fonte ufficiale o è falso, se è già stata usata negli ultimi cinque post, o se è una NOVITÀ di più di 7 giorni che non regge come TRUCCO o FUNZIONE. In quel caso passa all'idea successiva o alle fonti, e scrivi il motivo nell'output finale.
+**Se lo spunto è un'idea di Marco**, il testo dell'idea è solo il punto di partenza: la ricerca la fai tu. Cerca la notizia o la funzione con WebSearch, apri la fonte ufficiale con WebFetch, verifica date, piani, nomi e numeri, e costruisci il post su quello che hai verificato, non sul testo dell'idea. I due test servono a scegliere il taglio, non a scartarla. Saltala solo se il fatto centrale non si trova su nessuna fonte ufficiale o è falso, se è già stata usata negli ultimi cinque post, o se è una NOVITÀ di più di 12 giorni che non regge come TRUCCO o FUNZIONE. In quel caso passa all'idea successiva o alle fonti, e scrivi il motivo nell'output finale.
 
 **Regole sulle fonti** (il ruolo di ogni fonte è in `fonti.yaml`):
 - **ufficiale**: blog, release notes e documentazione di Anthropic, OpenAI, Google, GitHub. Ogni fatto su una funzione o un prodotto (che esiste, dove si trova, chi può usarla, quanto costa) si cita SOLO da qui. Aprila e leggila: non basta il titolo.
 - **stampa**: The Verge, Ars Technica, TechCrunch, Simon Willison. Vale per fatti che non sono annunci; servono due fonti indipendenti.
 - **spunto**: newsletter, Reddit, Hacker News, le idee di Marco, Instagram. Danno l'idea, mai il fatto. Se un trucco visto lì si appoggia su una funzione, verifica la funzione sulla fonte ufficiale.
-- Una novità deve essere degli ultimi 7 giorni: controlla la data. Un trucco o una funzione già esistente non ha scadenza, ma deve funzionare ancora oggi.
+- Una novità deve essere degli ultimi 12 giorni: controlla la data. Un trucco o una funzione già esistente non ha scadenza, ma deve funzionare ancora oggi.
 - NON inventare dati, numeri, citazioni o nomi di menu. Se non trovi dove si trova una funzione, non dirlo.
 
 **I due test, obbligatori:**

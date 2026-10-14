@@ -5,7 +5,7 @@ Stato verificato il 2026-08-07.
 ## Architettura
 
 ```
-Routine cloud Claude (lun-mer-ven 8:00 IT) → genera il post in approved/ sul branch post/YYYY-MM-DD
+Routine cloud Claude (ogni giorno 8:00 IT) → genera il post in approved/ sul branch post/YYYY-MM-DD
 GitHub Action "Open Post PR" → apre la PR di approvazione (reviewer: mrkprl)
 Tu, da GitHub Mobile → Merge = pubblica · Close = scarta
 GitHub Actions "Publish to LinkedIn" (solo main) → pubblica → sposta in published/
@@ -20,7 +20,7 @@ non è più usata dal flusso (rimane solo per compatibilità storica).
 
 ### 1. Generazione contenuti — routine cloud Claude
 - **Routine**: `linkedin-content-generator` (`trig_01E1UaHdMXwNi3Z3QydKjoHg`)
-- **Schedule**: `0 6 * * 1,3,5` UTC = 8:00 italiane (7:00 con ora legale) lun-mer-ven
+- **Schedule**: `0 6 * * *` UTC = 8:00 italiane (7:00 con ora legale) ogni giorno (fino al 2026-10-14 lun-mer-ven)
   (era lun-ven fino al 2026-08-14: cinque post a settimana obbligavano a commentare
   anche i giorni senza una notizia degna, e il generatore riempiva descrivendo prodotti)
 - **Modello**: `claude-opus-5-5` (dal 2026-10-12; si imposta nella routine, non nel repo)

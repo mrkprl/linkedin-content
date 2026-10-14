@@ -9,7 +9,7 @@ cambia per lui.
 ## Flusso
 
 ```
-routine (lun-mer-ven) → scripts/scout.py raccoglie gli spunti → scrive approved/DATA.md
+routine (ogni giorno) → scripts/scout.py raccoglie gli spunti → scrive approved/DATA.md
 → push del branch post/DATA → la PR si apre da sola
 → Marco dal telefono: Merge = pubblica su LinkedIn · Close = scarta
 ```

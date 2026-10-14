@@ -13,7 +13,8 @@ ritmo.
 ## La promessa del profilo
 
 Linea in vigore dal 2026-10-14. Dove il prompt della routine parla solo di
-Claude, vale questo file.
+Claude, vale questo file. Le novità valgono fino a 12 giorni: se il prompt dice
+`scout.py 7`, lancia `scout.py 12`.
 
 Il profilo racconta il mondo AI a chi parte da zero: **gli strumenti che si
 usano** (Claude, ChatGPT, Gemini, Copilot e gli altri), **le ultime notizie dai
@@ -45,7 +46,7 @@ scegliere il taglio. Se l'idea è una notizia, il post spiega cosa cambia per ch
 legge e cosa può provare. Un'idea si salta solo se:
 - il fatto centrale non si trova su nessuna fonte ufficiale, o risulta falso;
 - è già stata usata negli ultimi cinque post;
-- è una NOVITÀ uscita da più di 7 giorni e non regge come TRUCCO o FUNZIONE.
+- è una NOVITÀ uscita da più di 12 giorni e non regge come TRUCCO o FUNZIONE.
 
 Quando ne salti una, scrivi il motivo nell'output finale, così Marco lo legge.
 
@@ -88,7 +89,7 @@ Ruotano: mai lo stesso angolo due volte di fila.
   istruzioni personalizzate, caricare un file, la voce, la ricerca, gli
   Artifacts, o l'equivalente in ChatGPT e Gemini. Spiegata a chi non l'ha mai
   vista.
-- **NOVITÀ**: una notizia della settimana da un produttore AI (modello nuovo,
+- **NOVITÀ**: una notizia degli ultimi 12 giorni da un produttore AI (modello nuovo,
   funzione nuova, piani e prezzi), da fonte ufficiale. Si spiega cosa cambia per
   chi legge: chi può usarla, da quando, cosa può provarci. Se non può provarla
   (solo a pagamento, solo in America), lo si dice e si dice cosa fare intanto.
