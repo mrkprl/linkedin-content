@@ -38,6 +38,11 @@
   tipo: feed
   ruolo: ufficiale
 
+- nome: OpenAI News
+  url: https://openai.com/news/rss.xml
+  tipo: feed
+  ruolo: ufficiale
+
 - nome: Google AI
   url: https://blog.google/technology/ai/rss/
   tipo: feed

@@ -33,13 +33,18 @@ non è più usata dal flusso (rimane solo per compatibilità storica).
   `scripts/readability.py` prima di pushare (esce con 1 se qualcosa non passa).
   Esempio di riferimento in `examples/funzione-progetti.md`.
 
-### Linea editoriale (dal 2026-10-12)
+### Linea editoriale (dal 2026-10-14)
 
-Il profilo insegna a usare Claude a chi parte da zero: ogni post lascia una cosa
-da provare oggi. Il post parla al "tu", Marco è l'autore e non il protagonista.
-Angoli: `TRUCCO`, `FUNZIONE`, `NOVITÀ`, `ERRORE_COMUNE`, `CASO_D_USO` (dettagli
-in `STYLE.md`). I test prima di scrivere sono "si può provare oggi?" ed "è nuovo
-per un principiante?".
+Il profilo racconta il mondo AI a chi parte da zero: gli strumenti che si usano
+(Claude, ChatGPT, Gemini, Copilot...), le ultime notizie dai produttori e le idee
+di Marco in `IDEE.md`, che hanno sempre la precedenza e che la routine verifica e
+sviluppa da sola. Il post parla al "tu", Marco è l'autore e non il protagonista.
+Angoli: `TRUCCO`, `FUNZIONE`, `NOVITÀ`, `STRUMENTO`, `ERRORE_COMUNE`,
+`CASO_D_USO` (dettagli in `STYLE.md`).
+
+Dal 2026-10-12 al 2026-10-13 il perimetro era solo Claude: allargato il 14
+ottobre su richiesta di Marco, perché le idee su altri strumenti (GPT-6 in
+ChatGPT) venivano scartate.
 
 Fino al 2026-10-09 la linea era un'altra: una tesi da difendere ("cercare contro
 costruire") raccontata in prima persona a partire dai progetti di Marco. È stata
@@ -60,6 +65,7 @@ in **Allowed domains** (impostato il 2026-10-12):
 ```
 *.anthropic.com
 *.claude.com
+openai.com
 *.openai.com
 blog.google
 deepmind.google

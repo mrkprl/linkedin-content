@@ -5,9 +5,10 @@ un trucco visto da un amico. Si modifica anche dal telefono, dall'app GitHub
 (apri il file, matita, scrivi, Commit changes direttamente su main).
 
 Una riga per idea, con il trattino davanti, scritta come viene. Se c'è un link
-mettilo, se non c'è va bene lo stesso. La routine pesca da qui prima che dalle
-fonti automatiche, e verifica comunque ogni fatto sulla fonte ufficiale: un reel
-non è una fonte.
+mettilo, se non c'è va bene lo stesso. Se c'è un'idea non ancora usata, il post
+del giorno nasce da qui: la routine cerca da sola la notizia o la funzione,
+verifica ogni fatto sulla fonte ufficiale (un reel non è una fonte) e costruisce
+il post. Se deve saltare un'idea, scrive il motivo nell'output della routine.
 
 La routine non modifica mai questo file. Quando usa un'idea ne copia la riga nel
 campo `idea:` del post, e da lì in poi `scripts/scout.py` la salta. Le righe le
