@@ -18,6 +18,7 @@ HASHTAG_RE = re.compile(r"#\w+")
 GULPEASE_MIN = 60          # sotto: non leggibile in autonomia con la licenza media
 PAROLE_PER_FRASE_MAX = 25  # Direttiva 8/5/2002 regola 1; Cortelazzo regola 12
 MEDIA_PAROLE_MAX = 18
+MEDIA_PAROLE_MIN = 10      # sotto: frasi a singhiozzo. Tarato su examples/funzione-progetti.md (10,3)
 HOOK_MAX_CHARS = 60        # la prima riga è anche lo slug dell'URL del post
 HOOK_CONSIGLIATO = 40      # sotto i 40 caratteri l'engagement rate è ~25% più alto
 CARATTERI_MIN = 1600       # target di scrittura 1800-2400, qui la banda di tolleranza
@@ -31,6 +32,14 @@ RIGA_BREVE = 40            # una riga sotto i 40 caratteri è un colpo di ritmo
 QUOTA_RIGHE_BREVI = 0.15   # sotto: tutti i blocchi sono lunghi uguali, suona da notiziario
 QUOTA_BLOCCHI_MONORIGA = 0.50  # sopra: una frase per blocco, cioè un elenco travestito da post
 BLOCCO = re.compile(r"\n\s*\n")  # su LinkedIn il blocco è ciò che sta fra due righe vuote
+
+# Righe che annunciano la parte successiva senza dire niente: sono l'impalcatura
+# del modello rimasta in vista («Un esempio.», «Come si fa, in tre passi.»).
+RIGA_ANNUNCIO = re.compile(
+    r"^(?:(?:ecco )?un esempio(?: concreto| pratico)?|ecco come|come si fa\b[^.]*|"
+    r"(?:bastano |in )?(?:due|tre|quattro) (?:passi|cose|regole)\b[^.]*|"
+    r"c'è una strada [^.]*|(?:la )?(?:parte|cosa) (?:più )?importante[^.]*|"
+    r"l'ultima parte della frase conta|attenzione però)[.:]?$", re.I)
 
 # Costrutti che fanno "suonare" il testo come generato da un modello.
 STILEMI = [
@@ -92,6 +101,12 @@ def analizza(testo: str) -> dict:
                and not b.strip().startswith(("#", "("))]
     frasi = [f.strip() for f in re.split(r"[.!?;:\n]+", testo) if f.strip()]
     per_frase = [len(PAROLA.findall(f)) for f in frasi] or [0]
+    # La media si misura sulle frasi vere del corpo: chiuse da . ! ? o dal fine riga,
+    # senza la coda. Contare i due punti e gli hashtag la abbassava di 3-4 parole.
+    corpo = "\n".join(re.sub(r"^\d+\.\s*", "", r) for r in paragrafi
+                      if not r.startswith(("#", "(")))
+    frasi_corpo = [f for f in re.split(r"[.!?\n]+", corpo) if PAROLA.findall(f)]
+    per_frase_corpo = [len(PAROLA.findall(f)) for f in frasi_corpo] or [0]
 
     return {
         "caratteri": len(testo),
@@ -102,7 +117,8 @@ def analizza(testo: str) -> dict:
         "righe_brevi": [p for p in paragrafi if len(p) < RIGA_BREVE],
         "blocchi": blocchi,
         "blocchi_monoriga": [b for b in blocchi if "\n" not in b],
-        "media_parole_frase": round(sum(per_frase) / len(per_frase), 1),
+        "media_parole_frase": round(sum(per_frase_corpo) / len(per_frase_corpo), 1),
+        "righe_annuncio": [p for p in paragrafi if RIGA_ANNUNCIO.match(p)],
         "frase_piu_lunga": max(per_frase),
         "frasi_lunghe": [f for f, n in zip(frasi, per_frase) if n > PAROLE_PER_FRASE_MAX],
         "hook": righe[0].strip() if righe else "",
@@ -176,6 +192,12 @@ def avvisi(testo: str) -> list:
     if m["paragrafi"] and len(m["righe_brevi"]) / m["paragrafi"] < QUOTA_RIGHE_BREVI:
         out.append(f"ritmo piatto: solo {len(m['righe_brevi'])} blocchi su {m['paragrafi']} "
                    f"sotto i {RIGA_BREVE} caratteri. Senza righe corte il post è un notiziario")
+    if 0 < m["media_parole_frase"] < MEDIA_PAROLE_MIN:
+        out.append(f"media di {m['media_parole_frase']} parole per frase: sotto {MEDIA_PAROLE_MIN} "
+                   f"il testo va a singhiozzo. Unisci le frasi che dicono la stessa cosa")
+    for r in m["righe_annuncio"]:
+        out.append(f"riga che annuncia invece di dire: «{r[:50]}». Tagliala o mettici "
+                   f"dentro il contenuto")
     if CTA_GENERICA.search(testo):
         out.append("chiusura da engagement bait: la domanda deve chiedere un'esperienza specifica")
     if re.search(r"^\s*P\.?S\.?[ :]", testo, re.M):

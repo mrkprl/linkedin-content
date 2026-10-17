@@ -72,7 +72,7 @@ Se lo spunto non passa, cambialo e ricomincia lo Step 3. Dopo tre tentativi fall
 Segui `STYLE.md` alla lettera. I punti da cui dipende tutto il resto:
 
 1. **Hook**: un'affermazione. Massimo 60 caratteri, meglio sotto 40, con dentro le parole del tema. Mai una domanda, mai un'emoji.
-2. **Parla al tu.** Al massimo una frase in prima persona. Niente Calio o Rentario. Niente aneddoti inventati.
+2. **Parla al tu, in modo easy**, con la voce di un ragazzo di 28 anni che sta imparando anche lui (vedi `STYLE.md`). Al massimo due o tre frasi in prima persona. Niente Calio o Rentario. Niente aneddoti inventati.
 3. **Cosa fare, in concreto**: i passi (massimo tre) e, se c'è, la frase esatta da scrivere a Claude, fra virgolette. Dove si trova una funzione si dice in una riga, poi basta interfaccia.
 4. **Un esempio da un mestiere non informatico**, presentato come esempio e non come fatto accaduto.
 5. **Il limite**: quando non funziona o cosa controllare, in due righe.
