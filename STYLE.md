@@ -12,24 +12,50 @@ ritmo.
 
 ## La promessa del profilo
 
-Ogni post lascia a chi legge **una cosa che può provare oggi con Claude**, in
-pochi minuti, senza saper programmare: un trucco, una funzione che non conosceva,
-un errore da evitare, un modo di usarla nel suo lavoro.
+Linea in vigore dal 2026-10-14. Dove il prompt della routine parla solo di
+Claude, vale questo file. Le novità valgono fino a 12 giorni: se il prompt dice
+`scout.py 7`, lancia `scout.py 12`.
 
-Chi chiude il post deve saper fare una cosa in più. Se non c'è niente da provare,
-non è un post per questo profilo, per quanto sia grossa la notizia.
+Il profilo racconta il mondo AI a chi parte da zero: **gli strumenti che si
+usano** (Claude, ChatGPT, Gemini, Copilot e gli altri), **le ultime notizie dai
+produttori** (Anthropic, OpenAI, Google, Microsoft, Meta e gli altri) e **le
+idee che Marco lascia in `IDEE.md`**.
 
-Il perimetro è Claude: l'app, i Progetti, gli strumenti che ci girano intorno, e
-Claude Code quando serve a chi parte da zero. ChatGPT e Gemini entrano quando il
-trucco vale per tutti. Fuori perimetro: politica, cause legali, drammi aziendali,
-carriera, la notizia AI generica. Con pochi follower LinkedIn distribuisce i post
-per argomento: restare sempre sullo stesso tema è la leva di portata più forte.
+Ogni post lascia a chi legge una cosa concreta: un trucco da provare oggi, una
+funzione che non conosceva, un errore da evitare, oppure una notizia spiegata in
+modo che sappia cosa cambia per lui. Chi chiude il post deve sapere qualcosa in
+più che gli serve, non solo che "è uscito qualcosa".
+
+Dentro il perimetro: modelli nuovi, funzioni nuove, prezzi e piani, regole che
+cambiano l'uso degli strumenti, confronti utili fra strumenti, trucchi che valgono
+per uno o per tutti. Fuori: cronaca nera e gossip aziendale (arresti, liti fra
+dirigenti), politica, cause legali che non cambiano niente per chi usa gli
+strumenti, carriera.
+
+## Le idee di Marco
+
+Le idee in `IDEE.md` hanno **sempre la precedenza**: se ce n'è una non ancora
+usata, il post del giorno nasce da lì. L'idea è un testo grezzo, a volte solo un
+titolo o un reel: **il lavoro di ricerca lo fa la routine**. Cerca la notizia o la
+funzione sulle fonti ufficiali (WebSearch e WebFetch), verifica date, piani,
+nomi e numeri, e costruisce il post sulle fonti verificate, non sul testo
+dell'idea.
+
+I due test qui sotto non servono a scartare un'idea di Marco: servono a
+scegliere il taglio. Se l'idea è una notizia, il post spiega cosa cambia per chi
+legge e cosa può provare. Un'idea si salta solo se:
+- il fatto centrale non si trova su nessuna fonte ufficiale, o risulta falso;
+- è già stata usata negli ultimi cinque post;
+- è una NOVITÀ uscita da più di 12 giorni e non regge come TRUCCO o FUNZIONE.
+
+Quando ne salti una, scrivi il motivo nell'output finale, così Marco lo legge.
 
 ## A chi parla
 
-A un principiante. Adulto, competente nel suo mestiere, che usa ChatGPT o Claude
-per fare qualche domanda e non è andato oltre. Non sa che esistono i Progetti o
-le istruzioni personalizzate, e ha un po' paura di sbagliare.
+A un principiante. Adulto, competente nel suo mestiere, che usa ChatGPT, Claude o
+Gemini per fare qualche domanda e non è andato oltre. Sente parlare di modelli
+nuovi ogni settimana e non sa quali lo riguardano. Non sa che esistono i
+Progetti o le istruzioni personalizzate, e ha un po' paura di sbagliare.
 
 Non va stupito e non va istruito dall'alto. Va accompagnato come farebbe un
 collega che lo strumento lo sa usare bene e te lo mostra sul tuo computer.
@@ -40,8 +66,8 @@ deve pensare "questo lo provo stasera".
 
 ## Chi parla, e quanto
 
-Marco Parolin, sviluppatore, usa Claude tutti i giorni. È l'autore, **non il
-protagonista**: il protagonista è chi legge.
+Marco Parolin, sviluppatore, usa l'AI tutti i giorni, Claude più di tutti. È
+l'autore, **non il protagonista**: il protagonista è chi legge.
 
 - Il post parla al **tu**. "Carica il listino", non "io carico il listino".
 - La prima persona è ammessa in una frase al massimo, quando aggiunge
@@ -56,14 +82,19 @@ protagonista**: il protagonista è chi legge.
 
 Ruotano: mai lo stesso angolo due volte di fila.
 
-- **TRUCCO**: un modo di usare Claude che cambia il risultato. Farti fare le
-  domande prima di scrivere, dare un esempio invece di una descrizione, chiedere
-  tre versioni e sceglierne una.
+- **TRUCCO**: un modo di usare un assistente AI che cambia il risultato. Farti
+  fare le domande prima di scrivere, dare un esempio invece di una descrizione,
+  chiedere tre versioni e sceglierne una.
 - **FUNZIONE**: una funzione che esiste già e quasi nessuno apre. Progetti,
   istruzioni personalizzate, caricare un file, la voce, la ricerca, gli
-  Artifacts. Spiegata a chi non l'ha mai vista.
-- **NOVITÀ**: una novità della settimana, da fonte ufficiale, tradotta in "cosa
-  puoi fare da oggi". La notizia per sé non basta mai.
+  Artifacts, o l'equivalente in ChatGPT e Gemini. Spiegata a chi non l'ha mai
+  vista.
+- **NOVITÀ**: una notizia degli ultimi 12 giorni da un produttore AI (modello nuovo,
+  funzione nuova, piani e prezzi), da fonte ufficiale. Si spiega cosa cambia per
+  chi legge: chi può usarla, da quando, cosa può provarci. Se non può provarla
+  (solo a pagamento, solo in America), lo si dice e si dice cosa fare intanto.
+- **STRUMENTO**: uno strumento AI che si usa davvero (NotebookLM, Copilot,
+  Perplexity, la voce di ChatGPT...), cosa fa meglio degli altri e quando sceglierlo.
 - **ERRORE_COMUNE**: lo sbaglio tipico di chi comincia e come evitarlo. Fidarsi di
   un numero senza controllarlo, incollare dati sensibili, chiedere tutto in un
   messaggio solo, rifare la stessa chat ogni giorno.
@@ -72,9 +103,10 @@ Ruotano: mai lo stesso angolo due volte di fila.
 
 ## I due test, prima di scrivere
 
-**Test 1: si può provare oggi?** Scrivi in una frase cosa farà chi legge, appena
+**Test 1: cosa ci fa chi legge?** Scrivi in una frase cosa farà chi legge, appena
 chiuso il post. Se la risposta è "ci rifletterà", il post non serve. Se è "apre
-Claude e fa questa cosa", passa.
+Claude (o ChatGPT, o Gemini) e fa questa cosa", passa. Per una NOVITÀ passa anche
+"sa se la può usare, da quando, e cosa ci prova per primo".
 
 **Test 2: è nuovo per un principiante?** Se lo sa già chiunque usi l'AI da una
 settimana ("scrivi richieste chiare"), è un luogo comune e nessuno lo salva. Serve
@@ -117,7 +149,8 @@ non un'opinione.
 **4. Coda.**
 - la nota sull'automazione, tra parentesi:
   `(Questo post l'ha scritto il mio agente di ricerca. Fonti nel primo commento.)`
-- tre hashtag nell'ultima riga: `#AI #Claude` più uno sul tema del giorno
+- tre hashtag nell'ultima riga: `#AI`, lo strumento o il produttore di cui parla
+  il post (`#Claude`, `#ChatGPT`, `#Gemini`...) e uno sul tema del giorno
 - nessun link nel corpo: le fonti vanno nel primo commento, ci pensa `publish.py`
 
 ## Come si spiega una funzione

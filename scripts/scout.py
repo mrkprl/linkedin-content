@@ -123,7 +123,7 @@ def idee_da_usare() -> str:
 
 
 def main() -> int:
-    giorni = int(sys.argv[1]) if len(sys.argv) > 1 else 7
+    giorni = int(sys.argv[1]) if len(sys.argv) > 1 else 12
     dal = datetime.now(timezone.utc) - timedelta(days=giorni)
     fonti = yaml.safe_load((RADICE / "fonti.yaml").read_text(encoding="utf-8"))
 
