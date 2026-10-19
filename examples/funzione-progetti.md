@@ -5,7 +5,6 @@ sources:
   - https://support.claude.com/en/articles/9519177
 immagine:
   modello: numero
-  etichetta: Claude · Progetti
   titolo: Quanto ti costa rispiegare chi sei
   sottotitolo: A ogni chat nuova, Claude riparte da zero.
   numero: 100 minuti

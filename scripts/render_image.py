@@ -58,7 +58,6 @@ KRAFT_SCURO = (176, 141, 103)
 KRAFT_CHIARO = (246, 239, 228)
 TRATTO = 3
 
-AUTORE = "Marco Parolin"
 MODELLI = ("numero", "confronto", "frase")
 ALT_MAX = 300   # LinkedIn ne accetta 4.086, ne consiglia meno di 120
 CUBI_MAX = 24   # la pila più alta del confronto
@@ -69,7 +68,6 @@ VALORE = "InterDisplay-Bold"
 ETICHETTA = "Inter-SemiBold"
 SERIF = "SourceSerif4Subhead-Regular"
 SERIF_TESTO = "SourceSerif4-Regular"
-SERIF_FORTE = "SourceSerif4-Semibold"
 
 
 class ErroreImmagine(ValueError):
@@ -376,14 +374,10 @@ def disegna(dati: dict) -> Image.Image:
     img = Image.new("RGB", (W, H), SFONDO)
     draw = ImageDraw.Draw(img)
 
-    y = MARGINE - 8
-    etichetta = campo(dati, "etichetta", obbligatorio=False).upper()
-    if etichetta:
-        f_et = font(ETICHETTA, 28)
-        if larghezza(draw, etichetta, f_et) + 5 * len(etichetta) > LARGHEZZA:
-            raise ErroreImmagine("«etichetta» troppo lunga: bastano due o tre parole")
-        spaziato(draw, (MARGINE, y), etichetta, f_et, INCHIOSTRO, 5)
-        y += 76
+    # Niente etichetta sopra e niente nome sotto (dal 2026-10-19): il titolo apre
+    # l'immagine e il nome di Marco è già sopra il post. Un campo `etichetta`
+    # rimasto in un post vecchio viene ignorato.
+    y = MARGINE
 
     f_tit, righe_tit = adatta(draw, campo(dati, "titolo"), TITOLO,
                               range(124, 71, -4), LARGHEZZA, 3, "titolo")
@@ -395,22 +389,22 @@ def disegna(dati: dict) -> Image.Image:
                                   range(46, 31, -2), LARGHEZZA, 3, "sottotitolo")
         y = scrivi(draw, (MARGINE, y + 26), righe_sot, f_sot, INCHIOSTRO, 1.22)
 
-    # Piede: linea sottile, fonte a sinistra, nome a destra, con le grazie.
-    piede_y = H - MARGINE + 8 - 30
-    draw.line((MARGINE, piede_y - 30, W - MARGINE, piede_y - 30), fill=LINEA, width=2)
-    f_piede = font(SERIF_TESTO, 27)
-    f_autore = font(SERIF_FORTE, 27)
-    w_autore = larghezza(draw, AUTORE, f_autore)
-    draw.text((W - MARGINE - w_autore, piede_y), AUTORE, font=f_autore, fill=INCHIOSTRO)
+    # Piede, solo se c'è una fonte: linea sottile e fonte con le grazie. Senza
+    # fonte (un conto fatto nel post) il disegno scende fino al margine.
+    fondo = H - MARGINE
     fonte = campo(dati, "fonte", obbligatorio=False)
     if fonte:
+        piede_y = H - MARGINE - 22
+        f_piede = font(SERIF_TESTO, 27)
         fonte = fonte.removeprefix("https://").removeprefix("http://").removeprefix("www.")
         testo_fonte = f"Fonte: {fonte}"
-        if larghezza(draw, testo_fonte, f_piede) > LARGHEZZA - w_autore - 40:
+        if larghezza(draw, testo_fonte, f_piede) > LARGHEZZA:
             raise ErroreImmagine("«fonte» troppo lunga per il piede: metti solo il dominio")
+        draw.line((MARGINE, piede_y - 30, W - MARGINE, piede_y - 30), fill=LINEA, width=2)
         draw.text((MARGINE, piede_y), testo_fonte, font=f_piede, fill=SECONDARIO)
+        fondo = piede_y - 70
 
-    CORPI[dati["modello"]](draw, dati, y + 56, piede_y - 70)
+    CORPI[dati["modello"]](draw, dati, y + 56, fondo)
     return img
 
 

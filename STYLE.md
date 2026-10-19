@@ -166,7 +166,8 @@ che un numero finto.
 
 Dal 2026-10-19 ogni post esce con un'infografica 1080x1350: fondo avorio, titolo
 nero pesante, testi con le grazie, terracotta come accento e piccoli cubi
-isometrici disegnati con il contorno nero. Non la disegni tu: scrivi nel frontmatter un blocco
+isometrici disegnati con il contorno nero. Niente etichetta sopra il titolo e
+niente nome in fondo: il nome di Marco è già sopra il post. Non la disegni tu: scrivi nel frontmatter un blocco
 `immagine:` e `scripts/render_image.py` la impagina. L'Action della PR la disegna,
 la mostra a Marco e `publish.py` la carica su LinkedIn insieme al testo.
 
@@ -186,7 +187,6 @@ Tre modelli, scegli quello che regge il punto del post:
 ```yaml
 immagine:
   modello: numero                  # numero, confronto o frase
-  etichetta: Claude · Progetti     # facoltativa: strumento e tema, 2-3 parole
   titolo: Quanto ti costa rispiegare chi sei
   sottotitolo: A ogni chat nuova, Claude riparte da zero.   # facoltativo
   numero: 100 minuti               # solo per «numero»
