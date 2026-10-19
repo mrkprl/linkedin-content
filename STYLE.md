@@ -278,6 +278,25 @@ suona bene ma non aggiunge niente da fare, si taglia.
 
 **Gli stilemi da modello linguistico.** Trattino lungo, freccia `→`, «non è solo
 X ma Y», «in un mondo in cui», «la vera domanda è», «rappresenta una svolta».
+L'elenco completo, con gli esempi, è nella skill humanizer (sotto).
+
+## L'ultima passata: humanizer
+
+Dal 2026-10-19 ogni post, prima di `readability.py`, passa dalla skill humanizer
+in `.claude/skills/humanizer/SKILL.md`. È un adattamento italiano della skill
+humanizer di Siqi Chen (MIT) e toglie i segni della scrittura AI senza cambiare
+quello che il post dice.
+
+Se la skill è fra quelle caricate nella sessione, usala; altrimenti apri il file
+con Read e seguilo. Valgono le regole della sua sezione «Nei post LinkedIn di
+questo repo»: riscrivi direttamente il file, la struttura di questo STYLE.md
+resta, nota e hashtag non si toccano, e si ripassano anche i testi del blocco
+`immagine:`.
+
+`readability.py` blocca i segnali più sicuri (contrasto «non si tratta di X, si
+tratta di Y», «è importante notare», «in conclusione», «vediamo insieme», residui
+da chatbot, importanza gonfiata) e avvisa sugli altri (parole da AI in gruppo,
+gerundi appesi, «non è X, è Y» fuori dall'hook).
 
 ## Esempi
 

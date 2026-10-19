@@ -100,6 +100,8 @@ Ometti la riga idea: se lo spunto non viene da IDEE.md. Se viene da lì, copia l
 
 In sources elenca tutte le fonti usate, ufficiali per prime.
 
+Poi passa il post dalla skill humanizer (.claude/skills/humanizer/SKILL.md): se non è fra le skill caricate, aprila con Read e seguila. Vale la sua sezione "Nei post LinkedIn di questo repo": riscrivi direttamente il file, compresi i testi del blocco immagine.
+
 Poi:
 
 python scripts/readability.py approved/YYYY-MM-DD.md

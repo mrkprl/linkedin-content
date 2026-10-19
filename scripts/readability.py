@@ -58,7 +58,29 @@ STILEMI = [
     (re.compile(r"\brappresenta un(?:a)? (?:vero|vera|svolta|punto)\b", re.I), "enfasi 'rappresenta una svolta'"),
     (re.compile(r"\bsi configura come\b|\bfunge da\b", re.I), "verbo gonfio al posto di 'è'"),
     (re.compile(r"\bnonostante (?:le difficoltà|tutto), \w+ continua\b", re.I), "chiusa formulaica"),
+    # Dalla skill humanizer (.claude/skills/humanizer): i segnali più sicuri.
+    (re.compile(r"\bnon si tratta (?:solo |soltanto )?di [^.!?\n]{1,60}[,;:.]\s*si tratta di\b", re.I),
+     "contrasto 'non si tratta di X, si tratta di Y'"),
+    (re.compile(r"\bè (?:importante|fondamentale|bene) (?:notare|sottolineare|ricordare)\b", re.I),
+     "formula 'è importante notare'"),
+    (re.compile(r"\b(?:in conclusione|in sintesi|per concludere)\b", re.I), "chiusa da tema 'in conclusione'"),
+    (re.compile(r"\b(?:vediamo|scopriamo) insieme\b|\bimmergiamoci\b|\bfacciamo chiarezza\b|"
+                r"\bandiamo con ordine\b|\becco cosa devi sapere\b", re.I), "rincorsa prima del punto"),
+    (re.compile(r"\bspero (?:ti|vi) sia (?:stato )?utile\b|\bottima domanda\b", re.I), "residuo da chatbot"),
+    (re.compile(r"\b(?:segna|segnano) una svolta\b|\bgioca(?:no)? un ruolo (?:chiave|cruciale|fondamentale)\b|"
+                r"\bapre la strada a\b|\bgetta le basi\b|\bin continua evoluzione\b|\bgame[- ]?changer\b", re.I),
+     "importanza gonfiata"),
 ]
+
+# Parole che i modelli usano molto più delle persone (skill humanizer, §12):
+# una sola non dice niente, due o più nello stesso post sì.
+PAROLE_AI = re.compile(
+    r"\b(?:fondamental[ei]|crucial[ei]|essenzial[ei]|potenzia\w*|sfrutta\w*|ottimizza\w*|"
+    r"valorizza\w*|ecosistem[ai]|panoram[ai]|sinergi[ae]|approfondi\w*|innovativ[oaie]|"
+    r"rivoluzionari\w*|testimonianz[ae]|a 360 gradi)\b", re.I)
+GERUNDIO_APPESO = re.compile(
+    r",\s*(?:sottolineando|evidenziando|garantendo|contribuendo|favorendo|rendendo possibile)\b", re.I)
+ANTITESI = re.compile(r"\bnon è [^.!?\n]{1,40}[.;:,]\s*è\b", re.I)
 
 # Aperture da quiz: l'hook a domanda è ultimo dei cinque tipi per engagement.
 HOOK_FORMULE = re.compile(
@@ -196,6 +218,17 @@ def avvisi(testo: str) -> list:
                    "senza un numero vero il post va bene così")
     if CTA_GENERICA.search(testo):
         out.append("chiusura da engagement bait: la domanda deve chiedere un'esperienza specifica")
+    parole_ai = PAROLE_AI.findall(testo)
+    if len(parole_ai) >= 2:
+        out.append(f"parole da testo generato ({', '.join(parole_ai[:5])}): "
+                   f"riscrivi con parole di tutti i giorni (skill humanizer, §12)")
+    if GERUNDIO_APPESO.search(testo):
+        out.append("gerundio appeso a un fatto (', garantendo...', ', sottolineando...'): "
+                   "tieni il fatto e togli il gerundio (skill humanizer, §15)")
+    antitesi = ANTITESI.findall(testo)
+    if len(antitesi) > 1 or (antitesi and antitesi[0] not in testo.split("\n")[0]):
+        out.append("contrasto 'non è X, è Y' fuori dall'hook: di' la cosa direttamente, "
+                   "tienilo solo se corregge un'idea che chi legge ha davvero (skill humanizer, §1)")
     if re.search(r"^\s*P\.?S\.?[ :]", testo, re.M):
         out.append("firma con P.S.: la nota sull'automazione va tra parentesi, asciutta")
     return out
