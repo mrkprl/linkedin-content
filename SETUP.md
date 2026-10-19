@@ -184,8 +184,9 @@ uniche fonti sono due blog SEO. Non inseguirle.
 - Il generatore scrive nel frontmatter un blocco `immagine:` (campi e modelli in
   `STYLE.md`, sezione "L'immagine"). Non committa il PNG.
 - `scripts/render_image.py` disegna `images/DATA.png`, 1080x1350, con Pillow e i
-  font Inter in `assets/fonts/` (licenza SIL OFL, `LICENSE.txt` accanto). Esce
-  con 1 se un campo manca o un testo non ci sta.
+  font Inter e Source Serif 4 in `assets/fonts/` (entrambi SIL OFL, licenze
+  accanto). Stile chiaro: avorio, inchiostro, terracotta, cubi isometrici; niente
+  loghi né mascotte di marchi. Esce con 1 se un campo manca o un testo non ci sta.
 - "Open Post PR" disegna l'immagine, la committa sul branch e la mostra in cima
   alla PR. Se il blocco è sbagliato la PR lo dice: con il Merge esce solo il testo.
 - "Publish to LinkedIn" la ridisegna dal frontmatter (così vale anche una

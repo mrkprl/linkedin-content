@@ -164,8 +164,9 @@ che un numero finto.
 
 ## L'immagine
 
-Dal 2026-10-19 ogni post esce con un'infografica 1080x1350, bianco su nero con un
-solo colore d'accento. Non la disegni tu: scrivi nel frontmatter un blocco
+Dal 2026-10-19 ogni post esce con un'infografica 1080x1350: fondo avorio, titolo
+nero pesante, testi con le grazie, terracotta come accento e piccoli cubi
+isometrici disegnati con il contorno nero. Non la disegni tu: scrivi nel frontmatter un blocco
 `immagine:` e `scripts/render_image.py` la impagina. L'Action della PR la disegna,
 la mostra a Marco e `publish.py` la carica su LinkedIn insieme al testo.
 
@@ -177,7 +178,8 @@ Tre modelli, scegli quello che regge il punto del post:
 
 - **numero**: il post ha un numero che conta. Va al centro, grande.
 - **confronto**: da due a quattro valori della stessa misura e della stessa
-  fonte, uno in evidenza. Le barre sono proporzionali ai valori.
+  fonte, uno in evidenza. Ogni valore diventa una pila di cubi proporzionale
+  (la più alta ne ha 24, la più bassa almeno uno).
 - **frase**: il post non ha numeri ma ha la frase esatta da scrivere
   all'assistente. È il modello giusto per TRUCCO e FUNZIONE senza numeri.
 
@@ -198,7 +200,7 @@ Per **confronto**, al posto di `numero` e `didascalia`:
 ```yaml
   voci:
     - nome: Haiku 4.5
-      valore: 1000000              # numero puro: decide la lunghezza della barra
+      valore: 1000000              # numero puro, maggiore di zero: decide quanti cubi
       testo: 1M token              # come lo leggi sull'immagine
     - nome: Haiku 5.5
       valore: 10000000
