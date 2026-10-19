@@ -3,6 +3,14 @@ date: 2026-10-19
 topic: FUNZIONE
 sources:
   - https://support.claude.com/en/articles/9519177
+immagine:
+  modello: numero
+  etichetta: Claude · Progetti
+  titolo: Quanto ti costa rispiegare chi sei
+  sottotitolo: A ogni chat nuova, Claude riparte da zero.
+  numero: 100 minuti
+  didascalia: al mese, se ogni mattina ci metti 5 minuti per 20 giorni di lavoro
+  alt: "100 minuti al mese spesi a rispiegare a Claude chi sei: 5 minuti al giorno per 20 giorni di lavoro"
 status: example
 ---
 

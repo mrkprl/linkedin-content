@@ -90,6 +90,8 @@ topic: NOME_ANGOLO
 idea: "riga copiata da IDEE.md, solo se lo spunto viene da lì"
 sources:
   - URL1
+immagine:
+  (il blocco descritto in STYLE.md, sezione "L'immagine")
 status: pending
 ---
 
@@ -102,6 +104,12 @@ Poi:
 
 python scripts/readability.py approved/YYYY-MM-DD.md
 Le righe ! sono violazioni: riscrivi e rilancia finché lo script non esce con 0. Le righe ? sono avvisi: sistemali se puoi senza forzare il testo. Se dopo cinque tentativi una violazione resta, tienila e spiegala nel commit. Non barare: spezzare frasi a caso alza il punteggio e peggiora il testo.
+
+Poi l'immagine:
+
+pip install Pillow 2>/dev/null
+python scripts/render_image.py approved/YYYY-MM-DD.md
+Se esce con 1, correggi il blocco immagine e rilancia. Apri images/YYYY-MM-DD.png con Read e controlla che si legga e dica la stessa cosa del post. Non aggiungere il PNG al commit: lo ridisegna e lo committa la GitHub Action della PR.
 
 Step 6: branch, commit e push (MAI su main)
 git config user.email "agent@claude.ai"

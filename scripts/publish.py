@@ -9,12 +9,15 @@ Secrets necessari:
 import os
 import sys
 import re
+import time
+from pathlib import Path
 from urllib.parse import quote
 
 import requests
 import yaml
 
 LINKEDIN_POSTS_API = "https://api.linkedin.com/rest/posts"
+LINKEDIN_IMAGES_API = "https://api.linkedin.com/rest/images?action=initializeUpload"
 LINKEDIN_USERINFO_API = "https://api.linkedin.com/v2/userinfo"
 LINKEDIN_SOCIAL_ACTIONS_API = "https://api.linkedin.com/rest/socialActions"
 LINKEDIN_SOCIAL_ACTIONS_V2 = "https://api.linkedin.com/v2/socialActions"
@@ -73,8 +76,43 @@ def escape_little_text(text: str) -> str:
     return PLACEHOLDER.sub(lambda m: "#" + stashed[int(m.group(1))], escaped)
 
 
-def publish_post(text: str, person_id: str, access_token: str) -> str:
-    """Invia il post a LinkedIn API. Restituisce l'ID del post creato."""
+def upload_image(png_path, person_id: str, access_token: str) -> str:
+    """Carica un'immagine con la Images API e restituisce la sua URN.
+
+    Due passi: initializeUpload dà l'indirizzo di caricamento e la URN, poi il file
+    va mandato con un PUT. Con il solo scope w_member_social non si può leggere lo
+    stato dell'immagine (la GET su /rest/images è negata), quindi se il post parte
+    mentre LinkedIn la sta ancora elaborando lo si riprova in publish_post."""
+    headers = {
+        "Authorization": f"Bearer {access_token}",
+        "Content-Type": "application/json",
+        "LinkedIn-Version": LINKEDIN_VERSION,
+        "X-Restli-Protocol-Version": "2.0.0",
+    }
+    payload = {"initializeUploadRequest": {"owner": f"urn:li:person:{person_id}"}}
+    response = requests.post(LINKEDIN_IMAGES_API, headers=headers, json=payload, timeout=30)
+    if response.status_code != 200:
+        raise RuntimeError(f"initializeUpload fallito {response.status_code}: {response.text}")
+    value = response.json()["value"]
+
+    with open(png_path, "rb") as f:
+        dati = f.read()
+    response = requests.put(
+        value["uploadUrl"],
+        headers={"Authorization": f"Bearer {access_token}"},
+        data=dati,
+        timeout=60,
+    )
+    if response.status_code not in (200, 201):
+        raise RuntimeError(f"caricamento immagine fallito {response.status_code}: {response.text}")
+    return value["image"]
+
+
+def publish_post(text: str, person_id: str, access_token: str, image: dict = None,
+                 tentativi: int = 3, attesa: float = 5.0) -> str:
+    """Invia il post a LinkedIn API. Restituisce l'ID del post creato.
+
+    image, se c'è, è {"id": "urn:li:image:...", "altText": "..."}."""
     if len(text) > COMMENTARY_MAX_CHARS:
         raise ValueError(
             f"Testo troppo lungo: {len(text)} caratteri, il massimo è {COMMENTARY_MAX_CHARS}"
@@ -97,10 +135,19 @@ def publish_post(text: str, person_id: str, access_token: str) -> str:
         "lifecycleState": "PUBLISHED",
         "isReshareDisabledByAuthor": False,
     }
-    response = requests.post(LINKEDIN_POSTS_API, headers=headers, json=payload, timeout=30)
-    if response.status_code not in (200, 201):
-        raise RuntimeError(f"LinkedIn API error {response.status_code}: {response.text}")
-    return response.headers.get("x-restli-id", "unknown")
+    if image:
+        payload["content"] = {"media": {"id": image["id"], "altText": image["altText"]}}
+    # Senza immagine un errore è definitivo. Con l'immagine può voler dire che
+    # LinkedIn la sta ancora elaborando: un rifiuto non crea il post, quindi
+    # riprovare non rischia doppioni.
+    for tentativo in range(1, (tentativi if image else 1) + 1):
+        response = requests.post(LINKEDIN_POSTS_API, headers=headers, json=payload, timeout=30)
+        if response.status_code in (200, 201):
+            return response.headers.get("x-restli-id", "unknown")
+        if tentativo < (tentativi if image else 1):
+            print(f"  … post rifiutato ({response.status_code}), riprovo fra {attesa:.0f} s")
+            time.sleep(attesa)
+    raise RuntimeError(f"LinkedIn API error {response.status_code}: {response.text}")
 
 
 def source_comment(meta: dict) -> str:
@@ -148,6 +195,33 @@ def publish_comment(text: str, post_urn: str, person_id: str, access_token: str)
     raise RuntimeError("LinkedIn API error — " + " | ".join(errori))
 
 
+def prepare_image(filepath: str, meta: dict, person_id: str, warnings: list):
+    """Ridisegna l'infografica dal frontmatter e la carica. Restituisce il blocco
+    media per il post, oppure None se il post non ha un'immagine.
+
+    Si ridisegna sempre, anche se il PNG è già nel repo: se Marco corregge il
+    blocco immagine nella PR, esce l'immagine corretta e non l'anteprima vecchia.
+    Un blocco sbagliato era già segnalato nella PR, che Marco ha approvato
+    comunque: si pubblica il testo da solo. Un errore di LinkedIn invece blocca
+    il post, così si può rilanciare il workflow."""
+    if "immagine" not in (meta or {}):
+        return None
+    from render_image import ErroreImmagine, disegna, percorso_immagine
+
+    try:
+        img = disegna(meta["immagine"])
+    except ErroreImmagine as e:
+        warnings.append(filepath)
+        print(f"  ! Immagine non valida ({e}): pubblico solo il testo")
+        return None
+    png = percorso_immagine(Path(filepath))
+    png.parent.mkdir(parents=True, exist_ok=True)
+    img.save(png, "PNG", optimize=True)
+    urn = upload_image(png, person_id, ACCESS_TOKEN)
+    print(f"  ✓ Immagine caricata: {urn}")
+    return {"id": urn, "altText": str(meta["immagine"]["alt"]).strip()}
+
+
 def main():
     if not ACCESS_TOKEN:
         print("ERROR: LINKEDIN_ACCESS_TOKEN non impostato")
@@ -177,7 +251,8 @@ def main():
         print(f"\n→ Processo: {filepath}")
         try:
             post = parse_post_file(filepath)
-            post_id = publish_post(post["text"], person_id, ACCESS_TOKEN)
+            image = prepare_image(filepath, post["meta"], person_id, warnings)
+            post_id = publish_post(post["text"], person_id, ACCESS_TOKEN, image)
             print(f"  ✓ Pubblicato — LinkedIn post ID: {post_id}")
             print(f"  Topic: {post['meta'].get('topic', 'N/A')}")
 
@@ -201,7 +276,7 @@ def main():
         print(f"\nFalliti: {errors}")
         sys.exit(1)
     if warnings:
-        print(f"\nPubblicati ma senza commento con le fonti: {warnings}")
+        print(f"\nPubblicati con un avviso (commento o immagine mancante): {warnings}")
     print("\nDone.")
 
 

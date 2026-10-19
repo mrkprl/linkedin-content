@@ -38,11 +38,13 @@ jobs:
 
       - name: Install dependencies
         if: steps.new_files.outputs.files != ''
-        run: pip install requests PyYAML
+        run: pip install requests PyYAML Pillow
 
       - name: Validate commentary formatting
         if: steps.new_files.outputs.files != ''
-        run: python scripts/test_publish.py
+        run: |
+          python scripts/test_publish.py
+          python scripts/test_image.py
 
       - name: Publish to LinkedIn
         if: steps.new_files.outputs.files != ''
@@ -62,5 +64,7 @@ jobs:
             git mv "approved/$FILENAME" "published/$FILENAME"
             echo "Moved: $FILENAME → published/"
           done
+          # L'immagine pubblicata, ridisegnata da publish.py, resta nel repo.
+          git add images/ 2>/dev/null || true
           git commit -m "publish: moved to published/ [skip ci]"
           git push

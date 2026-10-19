@@ -6,7 +6,7 @@ on:
       - 'post/**'
 
 permissions:
-  contents: read
+  contents: write        # per committare l'anteprima dell'immagine sul branch
   pull-requests: write
 
 jobs:
@@ -23,7 +23,7 @@ jobs:
           python-version: '3.12'
 
       - name: Install dependencies
-        run: pip install requests PyYAML
+        run: pip install requests PyYAML Pillow
 
       - name: Open approval PR
         env:
@@ -45,9 +45,47 @@ jobs:
 
           TOPIC=$(awk -F': *' '$1=="topic" {print $2; exit}' "$FILE")
 
+          # Anteprima dell'infografica: si disegna dal blocco immagine del
+          # frontmatter e si committa sul branch, così la PR la mostra da telefono.
+          # Niente [skip ci] nel messaggio: con lo squash merge finirebbe nel
+          # commit su main e salterebbe la pubblicazione.
+          IMG="images/${POST_DATE}.png"
+          RENDER=$(python scripts/render_image.py "$FILE" 2>&1) || true
+          echo "$RENDER"
+          ANTEPRIMA=""
+          if [ -f "$IMG" ] && [ -z "$(git status --porcelain -- "$IMG")" ]; then
+            ANTEPRIMA="si"   # già committata dal generatore
+          elif [ -f "$IMG" ]; then
+            git config user.email "github-actions[bot]@users.noreply.github.com"
+            git config user.name "GitHub Actions"
+            git add "$IMG"
+            git commit -m "image: anteprima ${POST_DATE}"
+            # Se il push fallisce la PR si apre lo stesso, senza anteprima.
+            if git push origin HEAD:"$BRANCH"; then
+              ANTEPRIMA="si"
+            else
+              echo "::warning::Push dell'anteprima fallito, la PR si apre senza immagine"
+            fi
+          fi
+          SHA=$(git rev-parse HEAD)
+
           {
             echo "✅ **Merge** = pubblica su LinkedIn · ❌ **Close** = scarta il post"
             echo
+            if [ -n "$ANTEPRIMA" ]; then
+              echo "![Immagine del post](https://raw.githubusercontent.com/${GITHUB_REPOSITORY}/${SHA}/${IMG})"
+              echo
+            elif [ -f "$IMG" ]; then
+              echo "⚠️ Anteprima non caricata: l'immagine viene comunque ridisegnata e pubblicata con il Merge."
+              echo
+            elif grep -q '^immagine:' "$FILE"; then
+              echo "⚠️ **Immagine non disegnata**: se fai Merge esce solo il testo."
+              echo
+              echo '```'
+              echo "$RENDER"
+              echo '```'
+              echo
+            fi
             echo "---"
             echo
             awk 'fm>=2 {print} /^---[[:space:]]*$/ {fm++}' "$FILE"

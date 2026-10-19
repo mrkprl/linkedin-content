@@ -162,6 +162,71 @@ come fatto («risparmi il 40%»). Un rapporto preso dalla fonte («costa un deci
 Se lo spunto non ha un numero vero, il post va bene anche senza: meglio niente
 che un numero finto.
 
+## L'immagine
+
+Dal 2026-10-19 ogni post esce con un'infografica 1080x1350, bianco su nero con un
+solo colore d'accento. Non la disegni tu: scrivi nel frontmatter un blocco
+`immagine:` e `scripts/render_image.py` la impagina. L'Action della PR la disegna,
+la mostra a Marco e `publish.py` la carica su LinkedIn insieme al testo.
+
+L'immagine dice **una cosa sola, la stessa del post**, in modo che si capisca
+anche senza leggerlo. Niente dati che nel post non ci sono, e i numeri seguono le
+regole di «Il numero». Niente loghi, marchi o persone.
+
+Tre modelli, scegli quello che regge il punto del post:
+
+- **numero**: il post ha un numero che conta. Va al centro, grande.
+- **confronto**: da due a quattro valori della stessa misura e della stessa
+  fonte, uno in evidenza. Le barre sono proporzionali ai valori.
+- **frase**: il post non ha numeri ma ha la frase esatta da scrivere
+  all'assistente. È il modello giusto per TRUCCO e FUNZIONE senza numeri.
+
+```yaml
+immagine:
+  modello: numero                  # numero, confronto o frase
+  etichetta: Claude · Progetti     # facoltativa: strumento e tema, 2-3 parole
+  titolo: Quanto ti costa rispiegare chi sei
+  sottotitolo: A ogni chat nuova, Claude riparte da zero.   # facoltativo
+  numero: 100 minuti               # solo per «numero»
+  didascalia: al mese, se ci metti 5 minuti al giorno per 20 giorni
+  fonte: support.claude.com        # dominio della fonte ufficiale; ometti per un conto tuo
+  alt: "100 minuti al mese spesi a rispiegare a Claude chi sei"
+```
+
+Per **confronto**, al posto di `numero` e `didascalia`:
+
+```yaml
+  voci:
+    - nome: Haiku 4.5
+      valore: 1000000              # numero puro: decide la lunghezza della barra
+      testo: 1M token              # come lo leggi sull'immagine
+    - nome: Haiku 5.5
+      valore: 10000000
+      testo: 10M token
+      evidenza: true               # al massimo una voce
+```
+
+Per **frase**: `frase: Lavoro in uno studio di commercialisti. Rispondi in modo sintetico.`
+
+Regole sui campi:
+- il **titolo** non ripete l'hook: lo completa. Massimo 3 righe, meglio 2.
+- **alt** descrive cosa dice l'immagine a chi non la vede, in meno di 120
+  caratteri. È obbligatorio.
+- **fonte** è il dominio, al massimo con il percorso corto, senza `https://`.
+- valori fra virgolette se contengono i due punti.
+
+Dopo aver salvato il post, controlla l'immagine:
+
+```bash
+pip install Pillow 2>/dev/null
+python scripts/render_image.py approved/YYYY-MM-DD.md
+```
+
+Se esce con 1, il messaggio dice cosa accorciare o cosa manca: correggi e
+rilancia. Poi apri `images/YYYY-MM-DD.png` con Read e guardala: si legge al primo
+colpo? Dice la stessa cosa del post? **Non aggiungere il PNG al commit**: lo
+ridisegna e lo committa l'Action della PR.
+
 ## La lingua
 
 - Parole di tutti i giorni. "Usare", non "utilizzare". "Problema", non
@@ -217,7 +282,8 @@ X ma Y», «in un mondo in cui», «la vera domanda è», «rappresenta una svol
 - `examples/funzione-progetti.md`: **il modello di riferimento** per il formato
   corto. Un post FUNZIONE: il problema, il conto che lo rende concreto, dove si
   trova e la frase da scrivere, l'esempio da un altro mestiere, il limite, la
-  chiusura sull'hook. La versione lunga del 12 ottobre è nella storia git.
+  chiusura sull'hook. Nel frontmatter c'è il blocco `immagine:` con il modello
+  «numero». La versione lunga del 12 ottobre è nella storia git.
 - `examples/riscrittura-2026-08-10.md` e `examples/riscrittura-2026-08-13.md`:
   utili **solo per l'hook**. Sono nel vecchio formato lungo e nella vecchia voce
   in prima persona: non imitarne né la lunghezza né il punto di vista.

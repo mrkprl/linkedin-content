@@ -180,6 +180,23 @@ uniche fonti sono due blog SEO. Non inseguirle.
   - `LINKEDIN_ACCESS_TOKEN` — impostato 2026-10-12, **scade ~2026-12-11**
   - `LINKEDIN_PERSON_ID` — `IJ0yQ3PjVm` (il claim `sub` di `/v2/userinfo`, stabile)
 
+### 4. Infografica (dal 2026-10-19)
+- Il generatore scrive nel frontmatter un blocco `immagine:` (campi e modelli in
+  `STYLE.md`, sezione "L'immagine"). Non committa il PNG.
+- `scripts/render_image.py` disegna `images/DATA.png`, 1080x1350, con Pillow e i
+  font Inter in `assets/fonts/` (licenza SIL OFL, `LICENSE.txt` accanto). Esce
+  con 1 se un campo manca o un testo non ci sta.
+- "Open Post PR" disegna l'immagine, la committa sul branch e la mostra in cima
+  alla PR. Se il blocco è sbagliato la PR lo dice: con il Merge esce solo il testo.
+- "Publish to LinkedIn" la ridisegna dal frontmatter (così vale anche una
+  correzione fatta nella PR), la carica con la Images API e la allega al post con
+  il testo alternativo. Se LinkedIn rifiuta il caricamento il post non parte e il
+  workflow fallisce: si può rilanciare.
+- Prova senza pubblicare: Actions → "Smoke test immagine" → Run workflow. Carica
+  l'immagine dell'esempio senza creare nessun post.
+- Test locali: `python scripts/test_image.py` (disegno, campi sbagliati, chiamate
+  all'API simulate).
+
 ## Rinnovo token LinkedIn (ogni ~60 giorni!)
 
 1. Vai su https://www.linkedin.com/developers/tools/oauth/token-generator
@@ -216,6 +233,15 @@ uniche fonti sono due blog SEO. Non inseguirle.
   il branch `post/*`, prima dell'approvazione.
 - **Notifiche mobile**: servono l'app GitHub Mobile con le notifiche push attive
   (Impostazioni profilo GitHub → Notifications → Mobile, incluse le review request).
+- **Images API con il solo `w_member_social`**: `initializeUpload` e il PUT
+  funzionano, ma la GET su `/rest/images/{urn}` per leggere lo stato
+  dell'immagine è negata (lo scope è di sola scrittura). Per questo
+  `publish_post()` non aspetta lo stato `AVAILABLE`: se il post con immagine viene
+  rifiutato lo riprova fino a 3 volte a 5 secondi di distanza. Un rifiuto non
+  crea il post, quindi riprovare non fa doppioni.
+- **Mai `[skip ci]` nei commit dei branch `post/*`**: con lo squash merge i
+  messaggi dei commit finiscono nel commit su main, e `[skip ci]` farebbe saltare
+  la pubblicazione.
 - **Smoke test versione API senza pubblicare**: `POST /rest/posts` con body `{}` —
   `422` = versione ok (fallisce solo la validazione campi), `426` = versione scaduta.
 - **Person ID**: è il `sub` di `GET https://api.linkedin.com/v2/userinfo` (richiede
