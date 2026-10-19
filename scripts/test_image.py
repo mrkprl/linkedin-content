@@ -65,8 +65,14 @@ def test_rendering(failures):
                 assert img.size == (W, H), img.size
                 print(f"  [OK ] {folder}/{post.name} — immagine {W}x{H}")
             except Exception as e:  # noqa: BLE001
-                failures.append((f"{folder}/{post.name}", "immagine valida", str(e)))
-                print(f"  [FAIL] {folder}/{post.name}: {e}")
+                # Solo gli esempi devono disegnarsi per forza. Un post con il
+                # blocco sbagliato esce con il solo testo (lo dice la PR): se il
+                # test fallisse, bloccherebbe tutte le pubblicazioni successive.
+                if folder == "examples":
+                    failures.append((f"{folder}/{post.name}", "immagine valida", str(e)))
+                    print(f"  [FAIL] {folder}/{post.name}: {e}")
+                else:
+                    print(f"  [AVVISO] {folder}/{post.name}: {e} (esce senza immagine)")
     if not trovati:
         failures.append(("esempi", "almeno un post con immagine", "nessuno"))
 
