@@ -41,6 +41,10 @@ Angoli: `TRUCCO`, `FUNZIONE`, `NOVITÀ`, `ERRORE_COMUNE`, `CASO_D_USO` (dettagli
 in `STYLE.md`). I test prima di scrivere sono "si può provare oggi?" ed "è nuovo
 per un principiante?".
 
+Dal 2026-10-19 il formato è corto: 1.000-1.400 caratteri, 6-10 blocchi, un numero
+concreto (dalla fonte o da un conto con le ipotesi scritte). Pubblico e voce non
+cambiano. Dettagli in `STYLE.md`, soglie qui sotto in "Policy di forma dei post".
+
 Fino al 2026-10-09 la linea era un'altra: una tesi da difendere ("cercare contro
 costruire") raccontata in prima persona a partire dai progetti di Marco. È stata
 abbandonata perché troppo centrata su di lui; i 25 post scritti in quella voce
@@ -99,7 +103,7 @@ Verificato il 2026-10-12:
 
 Per rileggere o modificare il prompt: https://claude.ai/code/routines/trig_01E1UaHdMXwNi3Z3QydKjoHg
 
-## Policy di forma dei post (aggiornata il 2026-08-13)
+## Policy di forma dei post (aggiornata il 2026-10-19)
 
 Ogni numero qui sotto viene da una misura, non da un'opinione. Le fonti sono in
 fondo alla sezione. `scripts/readability.py` implementa i controlli; le regole di
@@ -107,10 +111,10 @@ voce che i numeri non catturano stanno in `STYLE.md`.
 
 | Regola | Valore | Perché |
 |---|---|---|
-| Lunghezza | 1.800-2.400 caratteri | Le impression mediane crescono con la lunghezza: 575 sotto i 400 caratteri, 1.106 tra 1.301 e 2.000, 1.400 tra 2.501 e 3.000. Accorciare costa portata. |
+| Lunghezza | 1.000-1.400 caratteri, coda compresa (lo script tollera 900-1.500) | **Scelta di Marco del 2026-10-19**, contro i dati: post corti e densi, sul modello di quelli che legge e vuole scrivere. Le impression mediane crescono con la lunghezza (575 sotto i 400 caratteri, 1.106 tra 1.301 e 2.000, 1.400 tra 2.501 e 3.000), quindi la scelta va verificata sulle impression dei prossimi post. Fino al 2026-10-18 la fascia era 1.800-2.400. |
 | Hook (prima riga) | max 60 caratteri, meglio sotto 40 | Hook sotto i 40 caratteri battono quelli oltre i 200 di circa il 25% di engagement rate. |
 | Tipo di hook | affermazione, fatto o confessione, **mai domanda** | Su 309.614 post l'hook a domanda è ultimo dei cinque tipi (2,16% contro 2,60% dell'hook narrativo). Bloccate anche le aperture da quiz ("Sai qual è…", "Ti sei mai chiesto…"). |
-| Paragrafi | almeno 20, da 1-3 righe, max 260 caratteri l'uno | Post con 20+ paragrafi: 1,13x reach. Con 0-5 paragrafi: 0,70x. È l'effetto di formattazione più forte e costa zero. Il limite per blocco evita il muro di testo sul telefono. |
+| Blocchi | 6-10, contando hook e domanda finale (nota e hashtag esclusi); righe max 260 caratteri | Post con 20+ paragrafi: 1,13x reach. Con 0-5 paragrafi: 0,70x. In 1.200 caratteri 20 paragrafi vorrebbero dire una frase per blocco, il difetto del post del 14-08: si sta sopra la fascia peggiore e si raggruppano 2-3 righe per blocco. Il limite per riga evita il muro di testo sul telefono. Fino al 2026-10-18 la soglia era almeno 20 paragrafi. |
 | Frasi | mai oltre 25 parole, media 12-18 | Direttiva sulla semplificazione del linguaggio dei testi amministrativi (8/5/2002), regola 1; Cortelazzo-Pellegrino regola 12. |
 | Gulpease | ≥ 60, target 70 | Sotto 60 il testo non è leggibile in autonomia da chi ha la licenza media. È l'indice tarato sull'italiano (Lucisano-Piemontese 1988), non Flesch. |
 | Glosse didascaliche | **zero** | "cioè", "ovvero", "in altre parole": presuppongono un lettore che non capisce e fanno suonare il testo come un tema di scuola. Al loro posto va un esempio concreto. |

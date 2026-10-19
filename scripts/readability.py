@@ -20,15 +20,26 @@ PAROLE_PER_FRASE_MAX = 25  # Direttiva 8/5/2002 regola 1; Cortelazzo regola 12
 MEDIA_PAROLE_MAX = 18
 HOOK_MAX_CHARS = 60        # la prima riga è anche lo slug dell'URL del post
 HOOK_CONSIGLIATO = 40      # sotto i 40 caratteri l'engagement rate è ~25% più alto
-CARATTERI_MIN = 1600       # target di scrittura 1800-2400, qui la banda di tolleranza
-CARATTERI_MAX = 2600       # oltre i 3000 LinkedIn rifiuta il post
-PARAGRAFI_MIN = 20         # blocchi da 1-3 righe: 20+ paragrafi valgono 1,13x reach
+# Formato corto dal 2026-10-19 (scelta di Marco, vedi SETUP.md): prima 1600-2600
+# di tolleranza e almeno 20 paragrafi.
+CARATTERI_MIN = 900        # target di scrittura 1000-1400 coda compresa, qui la banda di tolleranza
+CARATTERI_MAX = 1500       # oltre i 3000 LinkedIn rifiuta il post
+BLOCCHI_MIN = 6            # sotto: 0-5 paragrafi valgono 0,70x reach
+BLOCCHI_MAX = 10           # sopra, in 1.200 caratteri, si torna a una frase per blocco
 PARAGRAFO_MAX_CHARS = 260  # oltre, il blocco è un muro di testo sul telefono
+# Il post corto regge su un dato concreto, se la fonte ne ha uno. "sei" è escluso
+# perché in italiano è quasi sempre il verbo.
+NUMERO = re.compile(
+    r"\d|\b(?:due|tre|quattro|cinque|sette|otto|nove|dieci|undici|dodici|quindici|"
+    r"venti|trenta|quaranta|cinquanta|cento|mille|milion[ei]|miliard[oi]|metà|"
+    r"decimo|doppio|triplo)\b", re.I)
 EMOJI_MAX = 1              # da 0 a 1 emoji: +22% reach. Oltre, l'effetto è piatto
 HASHTAG_MAX = 3
 ATTENUATORI_MAX = 2        # oltre, il testo non afferma più niente
 RIGA_BREVE = 40            # una riga sotto i 40 caratteri è un colpo di ritmo
-QUOTA_RIGHE_BREVI = 0.15   # sotto: tutti i blocchi sono lunghi uguali, suona da notiziario
+QUOTA_RIGHE_BREVI = 0.10   # sotto: tutti i blocchi sono lunghi uguali, suona da notiziario
+                           # (0,15 fino al 2026-10-18: nel formato corto le righe brevi sono
+                           # hook, chiusura e domanda, e spezzare il resto lo farebbe ansimare)
 QUOTA_BLOCCHI_MONORIGA = 0.50  # sopra: una frase per blocco, cioè un elenco travestito da post
 BLOCCO = re.compile(r"\n\s*\n")  # su LinkedIn il blocco è ciò che sta fra due righe vuote
 
@@ -139,9 +150,12 @@ def problemi(testo: str) -> list:
         out.append(f"hook da quiz: «{m['hook'][:40]}...» — apri con un fatto, non con un indovinello")
     if not (CARATTERI_MIN <= m["caratteri"] <= CARATTERI_MAX):
         out.append(f"{m['caratteri']} caratteri, fuori dalla fascia {CARATTERI_MIN}-{CARATTERI_MAX}")
-    if m["paragrafi"] < PARAGRAFI_MIN:
-        out.append(f"solo {m['paragrafi']} paragrafi: servono blocchi da 1-3 righe, "
-                   f"almeno {PARAGRAFI_MIN}")
+    if len(m["blocchi"]) < BLOCCHI_MIN:
+        out.append(f"solo {len(m['blocchi'])} blocchi (hook e domanda compresi): "
+                   f"ne servono almeno {BLOCCHI_MIN}, separati da riga vuota")
+    elif len(m["blocchi"]) > BLOCCHI_MAX:
+        out.append(f"{len(m['blocchi'])} blocchi, il massimo è {BLOCCHI_MAX}: raggruppa in "
+                   f"un blocco le 2-3 righe che portano avanti lo stesso pensiero")
     for p in m["paragrafi_lunghi"]:
         out.append(f"paragrafo da {len(p)} caratteri (max {PARAGRAFO_MAX_CHARS}), "
                    f"spezzalo: «{p[:60]}...»")
@@ -176,6 +190,10 @@ def avvisi(testo: str) -> list:
     if m["paragrafi"] and len(m["righe_brevi"]) / m["paragrafi"] < QUOTA_RIGHE_BREVI:
         out.append(f"ritmo piatto: solo {len(m['righe_brevi'])} blocchi su {m['paragrafi']} "
                    f"sotto i {RIGA_BREVE} caratteri. Senza righe corte il post è un notiziario")
+    if not NUMERO.search(testo):
+        out.append("nessun numero: se la fonte ne ha uno (prezzo, limite, data) o se un conto "
+                   "con le ipotesi dichiarate rende concreto il punto, usalo. Mai inventarlo: "
+                   "senza un numero vero il post va bene così")
     if CTA_GENERICA.search(testo):
         out.append("chiusura da engagement bait: la domanda deve chiedere un'esperienza specifica")
     if re.search(r"^\s*P\.?S\.?[ :]", testo, re.M):
