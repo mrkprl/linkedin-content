@@ -6,11 +6,12 @@ funzione, un errore da evitare, un caso d'uso da un mestiere non informatico.
 
 ## Flusso
 
-```
-routine (lun-mer-ven) → scripts/scout.py raccoglie gli spunti → scrive approved/DATA.md
-→ push del branch post/DATA → la PR si apre da sola
-→ Marco dal telefono: Merge = pubblica su LinkedIn · Close = scarta
-```
+![Schema del flusso](docs/schema-flusso.png)
+
+In breve: la routine (ogni giorno alle 8:00) scrive `approved/DATA.md` e fa push del
+branch `post/DATA`. La Action "Open Post PR" apre la PR con l'immagine. Marco dal
+telefono decide: Merge = pubblica su LinkedIn, Close = scarta. Lo schema è
+un'immagine fissa: se il flusso cambia, va rifatta.
 
 ## File da conoscere
 
