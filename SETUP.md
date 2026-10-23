@@ -37,17 +37,26 @@ non è più usata dal flusso (rimane solo per compatibilità storica).
   aprire a ogni esecuzione: cambiarla non richiede di toccare la routine.
 - Le regole di forma sono verificabili e la routine le auto-controlla con
   `scripts/readability.py` prima di pushare (esce con 1 se qualcosa non passa).
-  Esempio di riferimento in `examples/funzione-progetti.md`.
+  Esempio di riferimento in `examples/novita-duet.md` (dal 2026-10-23).
 
 ### Linea editoriale (dal 2026-10-12)
 
-Il profilo insegna a usare l'AI a chi parte da zero: ogni post lascia una cosa
-da provare oggi. Il post parla al "tu", Marco è l'autore e non il protagonista.
-Dal 2026-10-23 gli strumenti sono tutti alla pari (Claude, ChatGPT, Gemini,
-Copilot): fino al 2026-10-22 il perimetro era Claude.
-Angoli: `TRUCCO`, `FUNZIONE`, `NOVITÀ`, `STRUMENTO`, `ERRORE_COMUNE`,
-`CASO_D_USO` (dettagli in `STYLE.md`). I test prima di scrivere sono "si può provare oggi?" ed "è nuovo
-per un principiante?".
+Dal 2026-10-23 il profilo racconta le **novità serie dell'AI** a chi lavora e
+l'AI la usa già (professionisti, piccole imprese), su tutti gli strumenti alla
+pari: Claude, ChatGPT, Gemini, Copilot. Il riferimento per testi e impaginazione
+sono i caroselli di notizie di @ai__facile e @profession.ai. Ogni giorno una
+novità seria; un trucco solo nei giorni senza novità e solo se è forte; se non
+c'è nessuno dei due, niente post. Niente riepilogo settimanale (scelta di Marco
+del 2026-10-23).
+Angoli: `NOVITÀ` (quasi sempre), `FUNZIONE`, `STRUMENTO`, e nei giorni senza
+novità `TRUCCO`, `ERRORE_COMUNE`, `CASO_D_USO` (dettagli in `STYLE.md`). I test
+prima di scrivere sono "è una novità seria?" e "chi legge lo capisce fino in
+fondo?".
+
+Dal 2026-10-12 al 2026-10-22 il profilo insegnava "una cosa da provare oggi" a
+chi partiva da zero, con Claude al centro. Marco l'ha trovato troppo da
+principianti, e sulle notizie grosse la regola le nascondeva (post su Claude
+Duet del 22 ottobre: non diceva che era un agente).
 
 Dal 2026-10-19 il formato è corto: 1.000-1.400 caratteri, 6-10 blocchi, un numero
 concreto (dalla fonte o da un conto con le ipotesi scritte). Pubblico e voce non
@@ -141,8 +150,8 @@ voce che i numeri non catturano stanno in `STYLE.md`.
 | Hashtag | 3, ultima riga, mai in apertura | L'effetto sulla portata è vicino a zero, ma un hashtag in prima riga rovina lo slug dell'URL. |
 | CTA | domanda che richiede esperienza personale | Le domande generiche ("Sei d'accordo?") sono engagement bait dichiarato e vengono ridotte. Una domanda specifica sposta l'engagement dai like ai commenti (+77% commenti), che pesano di più. |
 | Blocchi da una riga sola | max 50%, meglio ~33% | Nei post riusciti due blocchi su tre raggruppano 2-3 righe. Sopra il 50% il testo ansima e si legge come un elenco puntato senza punti (post del 14-08: 59%, zero reazioni). |
-| Spazio dedicato alla notizia | max un quarto del testo | Quando il post parte da una novità, il resto è cosa farne. Dove si trova una funzione si dice in una riga: elencare menu e pulsanti è manuale utente (post del 14-08: un terzo dello spazio su un pannello). |
-| Utilità | chi legge può provarlo oggi, ed è nuovo per un principiante | Un luogo comune ("non è quanto usi l'AI, è come la usi") non lascia niente da fare: 15 impression, zero reazioni. Se lo spunto non passa, si cambia, o quel giorno non si pubblica. |
+| Ordine | prima la notizia: nei primi due blocchi cos'è, chi, quando | Dal 2026-10-23. Fino al 2026-10-22 la regola era l'opposta (la notizia al massimo un quarto del testo, il resto "cosa farne"), e sul post di Claude Duet ha nascosto la notizia. Dove si trova una funzione si dice comunque in una riga: elencare menu e pulsanti è manuale utente. |
+| Utilità | una novità seria, che chi legge capisce fino in fondo (cos'è, cosa fa, se la può usare) | Un luogo comune o una notizia di contorno non lasciano niente: 15 impression, zero reazioni (post del 14-08). Se non c'è una novità seria né un trucco forte, quel giorno non si pubblica. |
 | Emoji | 0-1, mai nell'hook | Da 0 a 1 emoji: +22% reach. Oltre, l'effetto è piatto, e in serie fanno registro adolescenziale. |
 | Nota sull'automazione | tra parentesi, in coda, senza faccine | Sostituisce il vecchio "P.S. … il mio amico Claudio Code 🙂". |
 

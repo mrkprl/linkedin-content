@@ -1,11 +1,11 @@
-# LinkedIn Content: l'AI per chi parte da zero
+# LinkedIn Content: le novità dell'AI per chi lavora
 
 Post LinkedIn scritti da una routine Claude per il profilo di Marco Parolin. Ogni
-post lascia a chi legge una cosa da provare oggi con l'assistente AI che usa
-(Claude, ChatGPT, Gemini, Copilot): un trucco, una funzione, un errore da
-evitare, un caso d'uso da un mestiere non informatico. Dal 23 ottobre 2026 ogni
-post esce con un carosello, con l'illustrazione della copertina disegnata da
-ChatGPT.
+giorno una novità seria dell'AI (un modello, un agente, una funzione che cambia
+cosa si può fare con Claude, ChatGPT, Gemini o Copilot), raccontata a chi lavora
+e l'AI la usa già: cos'è, cosa fa, il dettaglio che conta, chi può usarla. Ogni
+post esce con un carosello sul modello di @ai__facile e @profession.ai, con
+l'illustrazione della copertina disegnata da ChatGPT.
 
 ## Flusso
 

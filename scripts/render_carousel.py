@@ -24,8 +24,10 @@ pesanti, testi con le grazie, terracotta come accento, cubi isometrici. In più:
 
 Struttura del carosello:
 - copertina: titolo con le parole evidenziate, sottotitolo facoltativo, illustrazione
-- da 2 a 5 slide, una per passo o per trucco: un'etichetta e un contenuto fra
-  testo, frase (la frase esatta da scrivere), numero e voci (un confronto)
+- da 2 a 5 slide, una per punto della notizia o per passo: un'etichetta, un
+  titoletto facoltativo e un contenuto fra testo, frase (la frase esatta da
+  scrivere), numero e voci (un confronto). Nel titoletto e nel testo le parole
+  fra ** cambiano colore: sono i passaggi chiave
 - chiusura: la frase che riprende l'hook e l'invito a salvare il post
 """
 
@@ -38,14 +40,15 @@ from PIL import Image, ImageDraw, ImageOps
 sys.path.insert(0, str(Path(__file__).parent))
 from publish import parse_post_file  # noqa: E402
 from render_image import (  # noqa: E402
-    ALT_MAX, ARGILLA, CARTA, COLORI_EVIDENZA, CREMA, ETICHETTA, H, IMAGES, INCHIOSTRO,
-    LARGHEZZA, LINEA, MARGINE, SECONDARIO, SERIF, SERIF_TESTO, SFONDO, TITOLO, TRATTO,
+    ALT_MAX, ARGILLA, ARGILLA_SCURA, CARTA, COLORI_EVIDENZA, CREMA, ETICHETTA, H, IMAGES, INCHIOSTRO,
+    LARGHEZZA, LINEA, MARGINE, SECONDARIO, SERIF, SERIF_TESTO, SFONDO, TITOLO, TRATTO, VALORE,
     W, ErroreImmagine, adatta, campo, corpo_confronto, corpo_numero, dimensioni_pila,
     disegna_pila, font, larghezza, motivo, scrivi, spaziato, valida,
 )
 
 SLIDE_MIN, SLIDE_MAX = 2, 5
 ETICHETTA_MAX = 40
+TITOLETTO_MAX = 60
 ILLUSTRAZIONE_MAX = 500
 SALVA = "Salva il post per quando lo provi."
 ANTEPRIMA_W = 720
@@ -94,10 +97,15 @@ def testo_semplice(testo: str) -> str:
 
 
 def scrivi_evidenziato(draw, xy, testo: str, nome_font: str, sizes, max_w: int,
-                       max_righe: int, nome_campo: str, interlinea: float = 1.1) -> int:
-    """Come scrivi(), ma le parole fra ** finiscono in un riquadro terracotta con il
-    testo chiaro. Due parole evidenziate vicine sulla stessa riga condividono il
-    riquadro. Restituisce la y sotto l'ultima riga."""
+                       max_righe: int, nome_campo: str, interlinea: float = 1.1,
+                       riquadro: bool = True, colore_evidenza=None) -> int:
+    """Come scrivi(), ma le parole fra ** si vedono.
+
+    Con riquadro=True (titoli di copertina e chiusura) finiscono in un riquadro
+    terracotta con il testo chiaro, e due parole evidenziate vicine sulla stessa
+    riga condividono il riquadro. Con riquadro=False (titoletti e testi delle
+    slide) cambiano solo colore, come i passaggi chiave nei caroselli di notizie.
+    Restituisce la y sotto l'ultima riga."""
     parole = parole_evidenziate(testo)
     if not parole:
         raise ErroreImmagine(f"«{nome_campo}» è vuoto")
@@ -133,12 +141,13 @@ def scrivi_evidenziato(draw, xy, testo: str, nome_font: str, sizes, max_w: int,
                 gruppi.append(aperto)
             else:
                 aperto = None
-        for gx0, gx1 in gruppi:
+        for gx0, gx1 in (gruppi if riquadro else []):
             draw.rounded_rectangle(
                 (gx0 - pad_x, y + alto_lettere - pad_y, gx1 + pad_x, y + basso_lettere + pad_y),
                 radius=int(f.size * 0.14), fill=ARGILLA)
+        acceso = CREMA if riquadro else (colore_evidenza or ARGILLA_SCURA)
         for px, _, testo_pezzo, ev in pezzi:
-            draw.text((px, y), testo_pezzo, font=f, fill=CREMA if ev else INCHIOSTRO)
+            draw.text((px, y), testo_pezzo, font=f, fill=acceso if ev else INCHIOSTRO)
         y += passo
     return y
 
@@ -166,6 +175,10 @@ def valida_carosello(dati) -> dict:
         etichetta = campo(s, "etichetta")
         if len(etichetta) > ETICHETTA_MAX:
             raise ErroreImmagine(f"l'etichetta della slide {i} supera {ETICHETTA_MAX} caratteri")
+        titoletto = campo(s, "titolo", obbligatorio=False)
+        if len(testo_semplice(titoletto) if titoletto else "") > TITOLETTO_MAX:
+            raise ErroreImmagine(f"il titolo della slide {i} supera {TITOLETTO_MAX} caratteri")
+        parole_evidenziate(campo(s, "testo", obbligatorio=False))
         tipi = [t for t in ("frase", "numero", "voci") if s.get(t) not in (None, "")]
         if len(tipi) > 1:
             raise ErroreImmagine(f"la slide {i} ha {' e '.join(tipi)}: una slide, una cosa")
@@ -274,39 +287,66 @@ def pagina_copertina(dati: dict, totale: int, illustrazione: Path = None) -> Ima
     return img
 
 
-def pagina_slide(s: dict, pagina: int, totale: int) -> Image.Image:
-    img = Image.new("RGB", (W, H), SFONDO)
-    draw = ImageDraw.Draw(img)
-    fonte = campo(s, "fonte", obbligatorio=False)
-
-    y = MARGINE + 4
+def _intestazione(draw, s: dict, pagina: int, y: int) -> int:
+    """Numero del passo ed etichetta in terracotta, poi il titoletto se c'è."""
     f_lab = font(ETICHETTA, 30)
-    # Il numero del passo in terracotta, poi l'etichetta: si capisce dove sei.
     x = spaziato(draw, (MARGINE, y), f"{pagina - 1:02d}", f_lab, ARGILLA, 3)
     draw.line((x + 14, y + 17, x + 54, y + 17), fill=ARGILLA, width=3)
     spaziato(draw, (x + 70, y), campo(s, "etichetta").upper(), f_lab, ARGILLA, 3)
     y += 30 + 64
+    titoletto = campo(s, "titolo", obbligatorio=False)
+    if titoletto:
+        # Grassetto nero, le parole fra ** in terracotta.
+        y = scrivi_evidenziato(draw, (MARGINE, y - 18), titoletto, VALORE, range(66, 43, -2),
+                               LARGHEZZA, 2, "titolo della slide", 1.12,
+                               riquadro=False, colore_evidenza=ARGILLA) + 26
+    return y
 
+
+def _paragrafo(draw, s: dict, y: int, sizes, righe_max: int, interlinea: float = 1.28) -> int:
+    return scrivi_evidenziato(draw, (MARGINE, y), campo(s, "testo"), SERIF, sizes, LARGHEZZA,
+                              righe_max, "testo", interlinea, riquadro=False)
+
+
+def _solo_testo(s: dict) -> bool:
+    return all(s.get(k) in (None, "", []) for k in ("numero", "voci", "frase"))
+
+
+def pagina_slide(s: dict, pagina: int, totale: int) -> Image.Image:
+    img = Image.new("RGB", (W, H), SFONDO)
+    draw = ImageDraw.Draw(img)
+    fonte = campo(s, "fonte", obbligatorio=False)
     testo = campo(s, "testo", obbligatorio=False)
-    if s.get("numero") not in (None, ""):
-        corpo_numero(draw, {"numero": s["numero"], "didascalia": testo}, y, FONDO)
-    elif s.get("voci"):
-        if testo:
-            f, righe = adatta(draw, testo, SERIF, range(48, 33, -2), LARGHEZZA, 3, "testo")
-            y = scrivi(draw, (MARGINE, y), righe, f, INCHIOSTRO, 1.25) + 24
-        corpo_confronto(draw, {"voci": s["voci"]}, y, FONDO)
-    elif s.get("frase"):
-        if testo:
-            f, righe = adatta(draw, testo, SERIF, range(48, 33, -2), LARGHEZZA, 4, "testo")
-            y = scrivi(draw, (MARGINE, y), righe, f, INCHIOSTRO, 1.25) + 40
-        y_fine = fumetto(draw, y, campo(s, "frase"), FONDO)
-        if FONDO - y_fine > 4 * 40 + 20:
-            motivo(draw, W - MARGINE, FONDO, 40)
-    else:
-        f, righe = adatta(draw, testo, SERIF, range(64, 37, -2), LARGHEZZA, 11, "testo")
-        y_fine = scrivi(draw, (MARGINE, y), righe, f, INCHIOSTRO, 1.28)
+    titoletto = campo(s, "titolo", obbligatorio=False)
+    y = MARGINE + 4
+
+    if _solo_testo(s):
+        # Etichetta, titoletto e testo fanno un blocco solo, alzato un po' sopra il
+        # centro della pagina: niente metà bassa vuota.
+        sizes = range(54, 35, -2) if titoletto else range(64, 37, -2)
+        righe_max = 10 if titoletto else 11
+        prova = ImageDraw.Draw(Image.new("RGB", (W, H)))
+        alto = _paragrafo(prova, s, _intestazione(prova, s, pagina, 0), sizes, righe_max)
+        y += max(0, int((FONDO - 40 - y - alto) * 0.42))
+        y = _intestazione(draw, s, pagina, y)
+        y_fine = _paragrafo(draw, s, y, sizes, righe_max)
         if FONDO - y_fine > 4 * 54 + 40:
             motivo(draw, W - MARGINE, FONDO, 54)
+    else:
+        y = _intestazione(draw, s, pagina, y)
+        if s.get("numero") not in (None, ""):
+            corpo_numero(draw, {"numero": s["numero"], "didascalia": testo_semplice(testo)},
+                         y, FONDO)
+        elif s.get("voci"):
+            if testo:
+                y = _paragrafo(draw, s, y, range(48, 33, -2), 3, 1.25) + 24
+            corpo_confronto(draw, {"voci": s["voci"]}, y, FONDO)
+        else:
+            if testo:
+                y = _paragrafo(draw, s, y, range(48, 33, -2), 4, 1.25) + 40
+            y_fine = fumetto(draw, y, campo(s, "frase"), FONDO)
+            if FONDO - y_fine > 4 * 40 + 20:
+                motivo(draw, W - MARGINE, FONDO, 40)
     piede(draw, pagina, totale, fonte)
     return img
 
