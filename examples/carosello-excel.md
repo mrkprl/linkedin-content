@@ -10,20 +10,16 @@ carosello:
     sottotitolo: Carichi il file, scrivi una frase, ti ridà i totali.
     illustrazione: "Un portatile aperto sul bancone di un ristorante, accanto una pila di scontrini e un raccoglitore ad anelli. Sullo schermo un grafico a barre."
   slide:
-    - etichetta: Il problema
-      testo: Un ristoratore ha il file degli acquisti di settembre. Centinaia di righe, una ventina di fornitori. Per sapere quanto ha speso con ciascuno gli servono filtri, somme e un pomeriggio.
-    - etichetta: Carica il file
+    - titolo: Carica il **file**
       numero: 30 MB
       testo: il file più grande che puoi caricare in chat, anche con l'account gratuito
       fonte: support.claude.com
-    - etichetta: Scrivi così
+    - titolo: Poi scrivi **così**
       testo: Clicca il più in basso a sinistra, aggiungi il file e scrivi
       frase: Dimmi quanto ho speso con ogni fornitore, fammi un grafico e ridammi un Excel con i totali e le formule.
-    - etichetta: Prima di fidarti
-      testo: Rifai a mano un totale. Se torna, Claude ha letto bene le colonne. Se il file non si carica, controlla nelle Impostazioni che l'esecuzione del codice sia attiva.
-  chiusura: |
-    Claude fa i conti sul tuo Excel.
-    **A te resta da controllarne uno.**
+    - titolo: Prima di **fidarti**
+      testo: "Rifai a mano **un totale**. Se torna, Claude ha letto bene le colonne. Se il file non si carica, controlla nelle Impostazioni che l'**esecuzione del codice** sia attiva."
+      illustrazione: "Una calcolatrice da tavolo accanto a un foglio di conti stampato con una spunta a matita, e una tazza di caffè."
   fonte: support.claude.com
   alt: "Carosello: come far calcolare a Claude i totali di un file Excel, la frase da scrivere e il controllo da fare"
 status: example

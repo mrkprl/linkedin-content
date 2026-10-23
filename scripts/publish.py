@@ -252,20 +252,20 @@ def prepare_image(filepath: str, meta: dict, person_id: str, warnings: list):
 
 
 def prepare_carousel(filepath: str, meta: dict, person_id: str, warnings: list):
-    """Ridisegna il carosello dal frontmatter, con l'illustrazione già salvata nella
-    PR (non la rigenera: esce quella che Marco ha visto), e carica il PDF.
+    """Ridisegna il carosello dal frontmatter, con le illustrazioni già salvate nella
+    PR (non le rigenera: escono quelle che Marco ha visto), e carica il PDF.
 
     Restituisce il blocco media e le opzioni per publish_post. Un blocco sbagliato
     era già segnalato nella PR: si pubblica il solo testo. Se LinkedIn rifiuta i
     documenti per un problema di permessi (401/403), esce la sola copertina come
     immagine; qualunque altro errore blocca il post, così si può rilanciare."""
-    from render_carousel import (ErroreImmagine, disegna_carosello, percorso_illustrazione,
+    from render_carousel import (ErroreImmagine, cartella_post, disegna_carosello,
                                  percorso_pdf, salva_pdf, testo_semplice)
 
     post = Path(filepath)
     carosello = meta["carosello"]
     try:
-        pagine = disegna_carosello(carosello, percorso_illustrazione(post))
+        pagine = disegna_carosello(carosello, cartella_post(post))
     except ErroreImmagine as e:
         warnings.append(filepath)
         print(f"  ! Carosello non valido ({e}): pubblico solo il testo")

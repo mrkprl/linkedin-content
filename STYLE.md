@@ -9,11 +9,14 @@ Le soglie numeriche sono in `SETUP.md`; qui c'è cosa si scrive e come deve suon
 **Dal 2026-10-23 la linea è cambiata.** Il profilo racconta le **novità serie
 dell'AI** a chi lavora e l'AI la usa già: un modello nuovo, un agente, una
 funzione che cambia cosa si può fare. Ogni post esce con un carosello (sezione
-«Il carosello»). Il riferimento per testi e impaginazione sono i caroselli di
-notizie di @ai__facile e @profession.ai su Instagram: prima la notizia detta per
-intero, poi una slide per aspetto, il dettaglio che pochi notano, chi può usarla.
-Da loro si prendono lo schema e il tono, mai le frasi: ogni fatto si verifica
-sulla fonte ufficiale e si scrive con parole nostre.
+«Il carosello»). I riferimenti sono i post di Datapizza su LinkedIn per il testo
+e i caroselli di notizie di @ai__facile e @profession.ai su Instagram per le
+slide: prima la notizia detta per intero, per chi è, dov'è la novità, i paletti,
+chi può usarla. Da loro si prendono lo schema e il tono, mai le frasi: ogni fatto
+si verifica sulla fonte ufficiale e si scrive con parole nostre.
+
+Il tono è **colloquiale**: il post si legge come lo racconterebbe Marco a un
+collega davanti a un caffè. Il modello è `examples/novita-duet.md`.
 
 Fino al 2026-10-22 il profilo insegnava "una cosa da provare oggi" a chi partiva
 da zero. Su una notizia grossa quella regola la nascondeva: il post su Claude
@@ -60,7 +63,9 @@ connettore, research preview, finestra di contesto), chiarite la prima volta da
 quello che fanno, nella stessa frase.
 
 Il tono è quello di un collega che legge tutto e ti racconta in due minuti cosa
-è successo e perché conta. Né stupito né dall'alto in basso.
+è successo e perché conta, con le parole che userebbe a voce: "l'hanno pensata
+per chi ha più lavoro che ore", "i compiti se li porta avanti da solo", "aspetta
+il tuo ok". Né stupito né dall'alto in basso, e mai da comunicato stampa.
 
 ## Chi parla, e quanto
 
@@ -70,7 +75,8 @@ protagonista**: il protagonista è la notizia, e chi legge.
 - Il post parla al **tu** quando dice cosa cambia per chi legge ("puoi
   collegarlo a Gmail"), in terza persona quando racconta il prodotto.
 - La prima persona è ammessa in una frase al massimo, quando aggiunge
-  credibilità ("lo uso da una settimana"). Mai un paragrafo su di sé.
+  credibilità o un giudizio ("secondo me sono la parte più furba", "lo uso da
+  una settimana"). Mai un paragrafo su di sé.
 - I progetti di Marco (Calio, Rentario) non si citano.
 - Niente aneddoti inventati. Gli esempi da un mestiere si presentano come
   esempi ("uno studio, per esempio, gli lascerebbe..."), mai come fatti successi.
@@ -103,45 +109,52 @@ farsi un riassunto in chat, non che Anthropic aveva lanciato un agente.
 
 ## L'architettura del post
 
-**1. Hook: una riga, affermazione secca, con il nome del prodotto o del
-produttore dentro.** Tre forme che funzionano:
-- il fatto nudo: «Anthropic ha lanciato Claude Duet, un agente personale.»
-- la novità detta dal punto di vista di chi la usa: «Claude Duet non aspetta le
-  tue domande: ti scrive lui.»
-- il contesto: «Dopo OpenAI e Meta, anche Google ha il suo agente per l'ufficio.»
+Lo schema è quello dei post di Datapizza, adattato alle nostre regole.
 
-Mai una domanda. Mai un'apertura da quiz («Sai qual è…», «Ti sei mai chiesto…»).
-Mai un'emoji. La prima riga diventa l'indirizzo del post su LinkedIn e non si può
-più cambiare: mettici il nome del prodotto.
+**1. Hook: il fatto nudo, in una riga.** Chi l'ha fatto e cosa: «Anthropic ha
+lanciato Claude Duet, il suo agente personale.» Niente frasi a effetto: chi
+scorre il feed deve capire di cosa si parla prima di decidere se aprire. Mai una
+domanda, mai un'apertura da quiz («Sai qual è…»), mai un'emoji. La prima riga
+diventa l'indirizzo del post su LinkedIn e non si può più cambiare: mettici il
+nome del prodotto. Massimo 60 caratteri.
 
-**2. Corpo: da quattro a sei blocchi, ognuno di 2-3 righe.** Ogni blocco porta
-avanti un aspetto solo. Ordine che funziona:
-- **cos'è**: chi l'ha fatto, quando, che cosa è. Se c'è un contesto che aiuta
-  (gli altri produttori hanno appena fatto lo stesso), qui in mezza riga.
-- **cosa fa**: due o tre cose concrete, dette con esempi di lavoro e non con gli
-  aggettivi del comunicato.
-- **il dettaglio che conta**: quello che a una lettura veloce sfugge. Un limite,
-  un freno, un prezzo, una scelta di progetto. Spesso è il blocco più letto.
-- **chi può usarlo**: piani, paesi, prezzo, da quando. L'Italia si dice sempre:
-  c'è, non c'è, non c'è ancora una data.
-- facoltativo, **cosa cambia per chi lavora** o cosa puoi fare oggi se in Italia
-  non c'è, in una o due righe. Mai il pezzo principale.
+**2. Per chi è.** Il secondo blocco dice cos'è in pratica (un'app, un modello,
+una funzione dentro ChatGPT) e per chi l'hanno pensata, con un'immagine in cui
+chi legge si riconosce: «per chi ha più lavoro che ore: professionisti e piccoli
+imprenditori che passano la giornata tra mail, calendario e fatture».
+
+**3. Dov'è la novità.** Una frase che lo dice chiaro («la differenza con la solita
+chat è che non devi chiedergli niente»), poi due o tre cose concrete che fa.
+
+**4. Il dettaglio che conta.** Quello che a una lettura veloce sfugge: i paletti,
+un limite, un prezzo, una scelta di progetto. Qui è ammesso **un elenco breve**:
+da 2 a 4 righe che cominciano con `· `, una cosa per riga, senza grassetti né
+emoji. È l'unico elenco del post.
+
+**5. Chi può usarlo.** Piani, paesi, prezzo, da quando. L'Italia si dice sempre:
+c'è, non c'è, non c'è ancora una data. Se in Italia non c'è, si può aggiungere in
+una riga cosa si può fare oggi con gli strumenti che ci sono, mai come pezzo
+principale.
 
 Il limite c'è sempre, dentro uno dei blocchi: cosa non fa, cosa non si sa
 ancora, cosa costa in limiti o in dati. È quello che separa una notizia da un
 comunicato stampa.
 
-In tutto il post fa da 6 a 10 blocchi, contando l'hook e la domanda finale
-(nota e hashtag esclusi).
-
-**3. Chiusura: si torna all'hook.** L'ultima riga riprende l'apertura e la
-chiude, ora che chi legge sa com'è fatta la cosa. Non una morale nuova.
+**6. Chiusura: il contesto.** Una riga che dice quanto pesa la notizia mettendola
+accanto alle altre: «OpenAI ha Dots, Meta ha Muse: questa è la risposta di
+Anthropic.» Il contesto si verifica come i fatti (due fonti di stampa, o la
+fonte ufficiale). Se non c'è un contesto vero, l'ultima riga riprende l'hook e
+lo chiude.
 
 Dopo la chiusura, una domanda sola, su una riga, senza emoji: chiede
-un'esperienza o una scelta concreta di chi legge ("Quale attività della tua
-settimana gli lasceresti per prima?"), non un'opinione generica.
+un'esperienza o una scelta concreta di chi legge ("Tu cosa gli lasceresti fare
+per primo?"). Mai «Che ne pensi?» o «Sei d'accordo?»: LinkedIn le tratta come
+esca per i commenti.
 
-**4. Coda.**
+In tutto il post fa da 6 a 10 blocchi, contando l'hook e la domanda finale (nota
+e hashtag esclusi), e sta fra 900 e 1.300 caratteri.
+
+**7. Coda.**
 - la nota sull'automazione, tra parentesi:
   `(Questo post l'ha scritto il mio agente di ricerca. Fonti nel primo commento.)`
 - tre hashtag nell'ultima riga: `#AI`, il produttore o lo strumento del post
@@ -162,43 +175,49 @@ Se la notizia non ha un numero vero, il post va bene anche senza.
 
 ## Il carosello
 
-Ogni post esce con un carosello: un PDF da 4 a 7 slide 1080x1350 che LinkedIn
-mostra da sfogliare. Lo schema viene dai caroselli di notizie di @ai__facile e
-@profession.ai: copertina con il titolo grande e una o due parole evidenziate,
-poi una slide per aspetto della notizia, con un titoletto e un paragrafo in cui
-i passaggi chiave sono colorati, poi la chiusura. Lo stile resta chiaro: fondo
-avorio, titoli neri pesanti, testi con le grazie, terracotta come accento,
-piccoli cubi isometrici. Niente etichetta sopra il titolo, niente nome di Marco,
+Ogni post esce con un carosello: un PDF di **al massimo 4 pagine** 1080x1350 che
+LinkedIn mostra da sfogliare. Lo schema viene dai caroselli di notizie di
+@ai__facile e @profession.ai: copertina con il titolo grande e una o due parole
+evidenziate, poi una slide per aspetto della notizia, con un'illustrazione in
+alto, un titoletto e un paragrafo in cui i passaggi chiave sono colorati. Lo
+stile resta chiaro: fondo avorio, titoli neri pesanti, testi con le grazie,
+terracotta come accento. Niente etichette sopra i titoli, niente nome di Marco,
 niente loghi.
 
 Non lo disegni tu: scrivi nel frontmatter un blocco `carosello:`. L'Action della
-PR chiede a ChatGPT (OpenAI, `scripts/illustrazione.py`) l'illustrazione della
-copertina, disegna le slide con `scripts/render_carousel.py` e le mostra a Marco
-nella PR. Con il Merge `publish.py` carica il PDF su LinkedIn insieme al testo.
+PR chiede a ChatGPT (OpenAI, `scripts/illustrazione.py`) le illustrazioni,
+disegna le slide con `scripts/render_carousel.py` e le mostra a Marco nella PR.
+Con il Merge `publish.py` carica il PDF su LinkedIn insieme al testo.
 
-**Cosa ci va.** Chi sfoglia senza leggere il post deve capire la notizia. Le
-slide seguono gli stessi aspetti del testo, uno per slide: cos'è, cosa fa (anche
-su due slide), il dettaglio che conta, chi può usarlo. Ogni slide ha un
-titoletto di 3-6 parole che dice il punto ("Lavora su un computer suo") e un
-paragrafo di 30-45 parole con 2 o 3 passaggi chiave fra `**`. Niente dati che
-nel post non ci sono, e i numeri seguono «Il numero».
+**Cosa ci va.** Chi sfoglia senza leggere il post deve capire la notizia. Tre
+slide bastano: cos'è e cosa fa, il dettaglio che conta (i paletti, un limite),
+chi può usarlo. Ogni slide ha un titoletto di 2-6 parole che dice il punto
+("Non devi chiedergli niente") e un paragrafo di 25-40 parole, nello stesso tono
+colloquiale del post, con 2 o 3 passaggi chiave fra `**`. Niente dati che nel
+post non ci sono, e i numeri seguono «Il numero».
 
-Per un trucco le slide sono i passi, con la frase esatta da scrivere in una
-slide `frase`. I trucchi visti sui social restano spunti: se si appoggiano su
-una funzione o un comando, verificali sulla fonte ufficiale, altrimenti non
-entrano.
+Per un trucco le slide sono i passi: una con il numero, una con la frase esatta
+da scrivere (`frase`), una con il limite. I trucchi visti sui social restano
+spunti: se si appoggiano su una funzione o un comando, verificali sulla fonte
+ufficiale, altrimenti non entrano.
+
+**Le illustrazioni.** Le disegna ChatGPT, mai lo script: niente cubi o motivi
+decorativi messi lì per riempire. Ce n'è una in copertina e una per ogni slide
+di testo che ha il campo `illustrazione`. Se un'illustrazione non arriva, quella
+pagina esce con il solo testo, centrato, ed è normale. I cubi isometrici restano
+solo nelle slide `voci`, dove sono il grafico che confronta i valori.
 
 Le parti:
 
 - **copertina**: `titolo` dice la notizia con il nome del prodotto, non ripete
   l'hook parola per parola; massimo 4 righe, meglio 2-3. Una o due parole chiave
   fra `**` finiscono nel riquadro terracotta: il cuore della notizia ("agente",
-  "gratis", "in Italia"), non un aggettivo. `sottotitolo` è facoltativo, una riga:
-  chi e quando. `illustrazione` è la scena da disegnare (sotto).
-- **slide**: da 2 a 5. Ognuna ha un'`etichetta` di 1-3 parole («Cos'è», «I
-  freni», «Chi può usarlo»), un `titolo` (il titoletto, facoltativo ma da usare
-  nelle notizie; le parole fra `**` diventano terracotta) e una cosa sola fra:
-  - `testo`: il paragrafo, con i passaggi chiave fra `**`;
+  "gratis", "in Italia"), non un aggettivo. `sottotitolo` è facoltativo, una
+  riga. `illustrazione` è la scena da disegnare (obbligatoria).
+- **slide**: da 1 a 3. Ognuna ha un `titolo` (il titoletto; le parole fra `**`
+  diventano terracotta) e una cosa sola fra:
+  - `testo`: il paragrafo, con i passaggi chiave fra `**`, e la sua
+    `illustrazione`;
   - `frase`: la frase esatta da scrivere all'assistente, con un `testo`
     facoltativo sopra;
   - `numero`, con un `testo` che lo spiega e la `fonte` della slide;
@@ -206,46 +225,44 @@ Le parti:
     fonte (prezzi, limiti, modelli), con un `testo` facoltativo sopra. Ogni voce
     ha `nome`, `valore` (numero puro, decide quanti cubi), `testo` (come si
     legge) e al massimo una ha `evidenza: true`.
-- **chiusura**: riprende l'hook e lo chiude, come l'ultima riga del post. Si può
-  andare a capo: la seconda riga, fra `**`, finisce nel riquadro. Sotto, lo
-  script aggiunge da solo «Salva il post per quando lo provi.».
+- **chiusura**: facoltativa, e solo se le pagine restano 4 al massimo (quindi con
+  1 o 2 slide). Riprende l'hook e lo chiude; sotto, lo script aggiunge «Salva il
+  post per quando ti serve.». Nelle notizie di solito non serve.
 - **fonte**: il dominio della fonte ufficiale principale, senza `https://`. Va nel
-  piede dell'ultima slide.
+  piede dell'ultima pagina.
 - **alt**: cosa dice il carosello, in meno di 120 caratteri. Serve se LinkedIn
   rifiuta il documento e pubblica la sola copertina come immagine.
 
 ```yaml
 carosello:
   copertina:
-    titolo: "Claude Duet, un **agente** che ti scrive per primo"
-    sottotitolo: Anthropic l'ha presentato il 21 ottobre. Ecco cosa fa.
-    illustrazione: "Una scrivania di sera con un portatile chiuso e un telefono spento; sopra, alcuni cubi si spostano da soli tra una busta, un calendario e un grafico."
+    titolo: "Anthropic lancia Claude Duet, il suo **agente** personale"
+    sottotitolo: Lavora per te anche a telefono spento. Per ora solo negli USA.
+    illustrazione: "Una scrivania di sera con un portatile chiuso e un telefono spento, mentre una piccola lampada resta accesa."
   slide:
-    - etichetta: Cos'è
-      titolo: Un agente, non una **chat**
-      testo: "Un'**app a parte** in cui Claude lavora per conto tuo sulle app che gli colleghi: **oltre 6.000**, da Gmail a Slack a HubSpot."
-    - etichetta: I freni
-      titolo: L'ultimo clic resta **tuo**
-      testo: "Prima di **inviare, pagare, firmare o cancellare** ti mostra l'azione esatta e aspetta il tuo sì."
-    - etichetta: Chi può usarlo
-      titolo: Per ora solo **negli USA**
-      testo: "È una **research preview** con lista d'attesa, per chi ha **Pro o Max** e un account negli Stati Uniti."
-  chiusura: |
-    Duet ti scrive per primo.
-    **L'ultima parola resta tua.**
+    - titolo: Non devi chiedergli **niente**
+      testo: "La mattina ti manda le **priorità**, poi ricontrolla le tue app **ogni poche ore**. I compiti se li porta avanti da solo, su un **computer virtuale tutto suo**."
+      illustrazione: "Un comodino all'alba con un telefono che si illumina per una notifica, accanto una tazza di caffè."
+    - titolo: I **paletti**
+      testo: "Prima di **mandare, pagare, firmare o cancellare** ti fa vedere cosa sta per fare e aspetta il tuo ok."
+      illustrazione: "Una mano con il dito fermo sopra un grande pulsante tondo, accanto un lucchetto chiuso."
+    - titolo: Per ora **solo negli USA**
+      testo: "È una **research preview**: lista d'attesa, solo Stati Uniti, solo per chi paga **Pro o Max**."
+      illustrazione: "Un mappamondo su una scrivania, accanto una clessidra e un blocco note con righe vuote."
   fonte: claude.com
-  alt: "Claude Duet, l'agente di Anthropic: cosa fa, quando chiede il permesso e chi può usarlo"
+  alt: "Claude Duet, l'agente personale di Anthropic: cosa fa da solo, quali paletti ha e chi può usarlo"
 ```
 
 Valori fra virgolette se contengono i due punti o cominciano con `**`.
 
-**L'illustrazione.** Scrivi in `illustrazione` la scena in italiano, in una o
-due frasi: oggetti e luogo che raccontano la notizia. Lo stile (piatto, contorni
-neri, avorio e terracotta) lo aggiunge lo script. Niente testo, numeri o
-schermate da leggere: i modelli sbagliano le scritte, e il titolo c'è già. Niente
-persone riconoscibili, loghi, mascotte o prodotti veri. La chiede l'Action della
-PR, non tu: nella sessione della routine la copertina esce con una pila di cubi
-al posto dell'illustrazione, ed è normale.
+**Come si scrive una scena.** In italiano, in una o due frasi: oggetti e luoghi
+concreti che raccontano quella slide (il telefono che si illumina all'alba per
+il brief del mattino, il dito fermo sul pulsante per i paletti). Lo stile lo
+aggiunge lo script. Niente testo, numeri o schermate da leggere: i modelli
+sbagliano le scritte, e i testi ci sono già. Niente persone riconoscibili,
+loghi, mascotte o prodotti veri. Le illustrazioni le chiede l'Action della PR,
+non tu: nella sessione della routine le pagine escono di solo testo, ed è
+normale.
 
 Dopo aver salvato il post, controlla il carosello:
 
@@ -255,10 +272,9 @@ python scripts/render_carousel.py approved/YYYY-MM-DD.md
 ```
 
 Se esce con 1, il messaggio dice cosa accorciare o cosa manca: correggi e
-rilancia. Poi apri con Read le anteprime in `images/YYYY-MM-DD/`, almeno la
-copertina e due slide: si leggono al primo colpo? Dicono la stessa cosa del
-post? **Non aggiungere `images/` al commit**: illustrazione e anteprime le fa
-l'Action della PR.
+rilancia. Poi apri con Read le anteprime in `images/YYYY-MM-DD/`: si leggono al
+primo colpo? Dicono la stessa cosa del post? **Non aggiungere `images/` al
+commit**: illustrazioni e anteprime le fa l'Action della PR.
 
 I post fino al 2026-10-22 hanno l'infografica singola (blocco `immagine:`,
 disegnata da `scripts/render_image.py`): lo script resta per loro, i post nuovi
@@ -266,8 +282,11 @@ non la usano più.
 
 ## La lingua
 
-- Parole di tutti i giorni. "Usare", non "utilizzare". "Problema", non
-  "problematica".
+- Parole di tutti i giorni, come le diresti a voce. "Usare", non "utilizzare".
+  "Mandare", non "inviare". "Ok", non "approvazione".
+- Frasi girate come si parla: "i compiti se li porta avanti da solo", non "i
+  compiti vengono svolti in autonomia". Qualche "però", "poi", "insomma" va
+  bene, se non diventano un tic.
 - Niente sostantivi in *-zione* e *-mento* dove c'è un verbo: non "la creazione
   del file", ma "creare il file".
 - Voce attiva, sempre. Di' chi fa la cosa: Anthropic, l'agente, tu.
@@ -287,7 +306,11 @@ non la usano più.
   formato corto stanno da soli l'hook, l'ultima riga e la domanda; gli altri
   blocchi raggruppano 2-3 righe che portano avanti lo stesso aspetto.
 - **Prima la notizia, poi il resto.** Nei primi due blocchi chi legge deve già
-  sapere cos'è uscito e cos'è. Il "cosa puoi fare tu" viene dopo, se c'è.
+  sapere cos'è uscito, cos'è e per chi è. Il "cosa puoi fare tu" viene dopo, se
+  c'è.
+- **Una frase per blocco va bene**, come nei post di Datapizza: è la lettura da
+  telefono. L'avviso di `readability.py` sui blocchi di una riga sola, nelle
+  notizie, si può lasciare.
 
 ## Cosa non si fa mai
 
@@ -341,10 +364,11 @@ gerundi appesi, «non è X, è Y» fuori dall'hook).
 
 ## Esempi
 
-- `examples/novita-duet.md`: **il modello di riferimento** per testo e
-  carosello. Una NOVITÀ: cos'è, cosa fa, il dettaglio che conta (i freni), chi
-  può usarlo e il limite, la chiusura sull'hook; nel carosello cinque slide con
-  titoletto e passaggi chiave.
+- `examples/novita-duet.md`: **il modello di riferimento** per tono, testo e
+  carosello. Una NOVITÀ raccontata in modo colloquiale: il fatto nudo, per chi
+  è, dov'è la novità, i paletti in elenco, chi può usarlo, il contesto in
+  chiusura; nel carosello copertina e tre slide con illustrazione, titoletto e
+  passaggi chiave.
 - `examples/carosello-excel.md`: il modello per i giorni senza novità, un
   trucco con la slide `frase`. Testo e carosello sono ancora nella voce di prima,
   pensata per chi partiva da zero: prendine la struttura, non il tono.

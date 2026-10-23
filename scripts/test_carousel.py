@@ -1,12 +1,16 @@
 #!/usr/bin/env python3
-"""Test del carosello, dell'illustrazione e della pubblicazione come documento.
+"""Test del carosello, delle illustrazioni e della pubblicazione come documento.
 Esegui: python3 scripts/test_carousel.py
 
 Non chiama né LinkedIn né OpenAI: le risposte sono simulate. Controlla che
-- ogni post del repo con un blocco `carosello:` si disegni, e il PDF abbia tutte le pagine;
+- ogni post del repo con un blocco `carosello:` si disegni, al massimo in 4 pagine,
+  e il PDF abbia tutte le pagine;
 - i blocchi sbagliati vengano rifiutati con un messaggio chiaro;
 - le parole fra ** vengano riconosciute, con la punteggiatura attaccata;
-- l'illustrazione si chieda una volta sola per lo stesso prompt, e senza chiave si salti;
+- le illustrazioni finiscano nella pagina giusta, e senza illustrazione la pagina
+  resti di solo testo, senza cubi decorativi;
+- ogni illustrazione si chieda una volta sola per lo stesso prompt, e senza chiave
+  si salti;
 - il post con carosello mandi a LinkedIn il documento giusto, e con un 403 ripieghi
   sulla sola copertina.
 """
@@ -28,47 +32,47 @@ import publish  # noqa: E402
 import render_carousel  # noqa: E402
 from publish import parse_post_file  # noqa: E402
 from render_carousel import (  # noqa: E402
-    ErroreImmagine, H, W, disegna_carosello, parole_evidenziate, salva_pdf, testo_semplice,
+    PAGINE_MAX, ErroreImmagine, H, W, disegna_carosello, nome_illustrazione,
+    parole_evidenziate, salva_pdf, testo_semplice,
 )
+from render_image import KRAFT, KRAFT_SCURO  # noqa: E402
 
 BASE = {
     "copertina": {"titolo": "Titolo con **parola**", "illustrazione": "una scrivania"},
     "slide": [
-        {"etichetta": "Uno", "testo": "Testo della prima slide."},
-        {"etichetta": "Due", "frase": "Scrivi questa frase."},
+        {"titolo": "Uno", "testo": "Testo della prima slide.", "illustrazione": "un telefono"},
+        {"titolo": "Due", "frase": "Scrivi questa frase."},
     ],
-    "chiusura": "Chiusura.",
     "alt": "Descrizione",
 }
+TESTO = {"titolo": "T", "testo": "x"}
 
 
 def con(**modifiche):
-    blocco = {**BASE, **modifiche}
-    return blocco
+    return {**BASE, **modifiche}
 
 
 SBAGLIATI = [
     ("riga sola", "carosello: sì"),
     ("manca la copertina", {k: v for k, v in BASE.items() if k != "copertina"}),
-    ("manca l'illustrazione", con(copertina={"titolo": "Titolo"})),
+    ("manca l'illustrazione della copertina", con(copertina={"titolo": "Titolo"})),
     ("illustrazione troppo lunga", con(copertina={"titolo": "T", "illustrazione": "a" * 501})),
     ("asterischi non chiusi", con(copertina={"titolo": "Titolo **aperto", "illustrazione": "x"})),
-    ("una slide sola", con(slide=BASE["slide"][:1])),
-    ("sei slide", con(slide=BASE["slide"] * 3)),
-    ("slide senza contenuto", con(slide=[{"etichetta": "Vuota"}, BASE["slide"][0]])),
-    ("slide senza etichetta", con(slide=[{"testo": "x"}, BASE["slide"][0]])),
-    ("etichetta troppo lunga", con(slide=[{"etichetta": "e" * 41, "testo": "x"}, BASE["slide"][0]])),
-    ("numero senza testo", con(slide=[{"etichetta": "N", "numero": "5"}, BASE["slide"][0]])),
+    ("nessuna slide", con(slide=[])),
+    ("quattro slide", con(slide=[TESTO] * 4)),
+    ("tre slide e la chiusura: 5 pagine", con(slide=[TESTO] * 3, chiusura="Fine.")),
+    ("slide senza contenuto", con(slide=[{"titolo": "Vuota"}])),
+    ("titolo della slide troppo lungo", con(slide=[{"titolo": "t" * 61, "testo": "x"}])),
+    ("numero senza testo", con(slide=[{"titolo": "N", "numero": "5"}])),
     ("due contenuti nella stessa slide",
-     con(slide=[{"etichetta": "N", "numero": "5", "testo": "x", "frase": "y"}, BASE["slide"][0]])),
+     con(slide=[{"titolo": "N", "numero": "5", "testo": "x", "frase": "y"}])),
+    ("illustrazione su una slide con la frase",
+     con(slide=[{"titolo": "F", "frase": "y", "illustrazione": "z"}])),
     ("confronto con una voce",
-     con(slide=[{"etichetta": "C", "voci": [{"nome": "A", "valore": 1, "testo": "1"}]},
-                BASE["slide"][0]])),
-    ("manca la chiusura", {k: v for k, v in BASE.items() if k != "chiusura"}),
+     con(slide=[{"titolo": "C", "voci": [{"nome": "A", "valore": 1, "testo": "1"}]}])),
     ("manca alt", {k: v for k, v in BASE.items() if k != "alt"}),
     ("titolo che non ci sta", con(copertina={"titolo": "parola " * 60, "illustrazione": "x"})),
-    ("testo che non ci sta", con(slide=[{"etichetta": "L", "testo": "parola " * 400},
-                                       BASE["slide"][0]])),
+    ("testo che non ci sta", con(slide=[{"titolo": "L", "testo": "parola " * 400}])),
     ("fonte troppo lunga", con(fonte="esempio.com/" + "a" * 120)),
 ]
 
@@ -94,6 +98,12 @@ def pagine_pdf(percorso: Path) -> int:
     return len(re.findall(rb"/Type\s*/Page(?!s)", percorso.read_bytes()))
 
 
+def ha_cubi(img: Image.Image) -> bool:
+    """I cubi decorativi hanno le facce kraft: se quei colori ci sono, ci sono i cubi."""
+    colori = {c for _, c in img.getcolors(maxcolors=1 << 20)}
+    return KRAFT in colori or KRAFT_SCURO in colori
+
+
 def test_rendering(failures):
     repo = Path(__file__).parent.parent
     trovati = 0
@@ -104,10 +114,10 @@ def test_rendering(failures):
                 continue
             trovati += 1
             try:
-                pagine = disegna_carosello(meta["carosello"],
-                                           render_carousel.percorso_illustrazione(post))
-                attese = len(meta["carosello"]["slide"]) + 2
-                assert len(pagine) == attese, f"{len(pagine)} pagine invece di {attese}"
+                car = meta["carosello"]
+                pagine = disegna_carosello(car, render_carousel.cartella_post(post))
+                attese = 1 + len(car["slide"]) + (1 if car.get("chiusura") else 0)
+                assert len(pagine) == attese <= PAGINE_MAX, f"{len(pagine)} pagine"
                 assert all(p.size == (W, H) for p in pagine)
                 with tempfile.TemporaryDirectory() as tmp:
                     pdf = Path(tmp) / "c.pdf"
@@ -115,8 +125,8 @@ def test_rendering(failures):
                     assert pagine_pdf(pdf) == attese, f"PDF con {pagine_pdf(pdf)} pagine"
                 print(f"  [OK ] {folder}/{post.name} — {attese} pagine")
             except Exception as e:  # noqa: BLE001
-                # Come per l'infografica: solo gli esempi devono disegnarsi per forza,
-                # un post sbagliato esce col solo testo e la PR lo aveva già detto.
+                # Solo gli esempi devono disegnarsi per forza: un post sbagliato esce
+                # col solo testo e la PR lo aveva già detto.
                 if folder == "examples":
                     failures.append((f"{folder}/{post.name}", "carosello valido", str(e)))
                     print(f"  [FAIL] {folder}/{post.name}: {e}")
@@ -135,9 +145,15 @@ def test_validazione(failures):
             continue
         failures.append((label, "ErroreImmagine", "accettato"))
         print(f"  [FAIL] accettato: {label}")
+    # Una slide sola e la chiusura facoltativa sono permesse.
+    try:
+        n = len(disegna_carosello(con(slide=[TESTO], chiusura="Fine.")))
+        controlla(failures, "una slide con la chiusura: 3 pagine", n == 3, str(n))
+    except ErroreImmagine as e:
+        controlla(failures, "una slide con la chiusura: 3 pagine", False, str(e))
 
 
-def test_evidenziate(failures):
+def test_pagine(failures):
     parole = parole_evidenziate("Fai i **conti** sul tuo **Excel**.")
     controlla(failures, "parole evidenziate riconosciute",
               parole[2] == [("conti", True)] and parole[5] == [("Excel", True), (".", False)],
@@ -146,17 +162,26 @@ def test_evidenziate(failures):
               [p[0][1] for p in parole_evidenziate("**A te** resta")] == [True, True, False])
     controlla(failures, "titolo del documento senza asterischi",
               testo_semplice("Fai i **conti** sul tuo **Excel**.") == "Fai i conti sul tuo Excel.")
-    # Con e senza illustrazione la copertina si disegna, e l'illustrazione si vede.
+
+    blu, verde = (0, 128, 255), (0, 200, 90)
     with tempfile.TemporaryDirectory() as tmp:
-        foto = Path(tmp) / "ill.png"
-        Image.new("RGB", (1536, 1024), (0, 128, 255)).save(foto)
-        con_foto = disegna_carosello(BASE, foto)[0]
-        senza = disegna_carosello(BASE, Path(tmp) / "manca.jpg")[0]
-    centro = (W // 2, H - 400)
-    controlla(failures, "copertina con l'illustrazione dentro il riquadro",
-              con_foto.getpixel(centro) == (0, 128, 255), str(con_foto.getpixel(centro)))
-    controlla(failures, "copertina senza illustrazione disegnata lo stesso",
-              senza.getpixel(centro) != (0, 128, 255))
+        cartella = Path(tmp)
+        Image.new("RGB", (1536, 1024), blu).save(cartella / nome_illustrazione(1), "PNG")
+        Image.new("RGB", (1536, 1024), verde).save(cartella / nome_illustrazione(2), "PNG")
+        # .jpg di nome, PNG di contenuto: Pillow lo apre lo stesso e i colori restano esatti.
+        con_foto = disegna_carosello(BASE, cartella)
+        senza = disegna_carosello(BASE, cartella / "manca")
+    controlla(failures, "copertina con l'illustrazione nel riquadro",
+              con_foto[0].getpixel((W // 2, H - 400)) == blu, str(con_foto[0].getpixel((W // 2, H - 400))))
+    controlla(failures, "slide di testo con l'illustrazione in alto",
+              con_foto[1].getpixel((W // 2, 300)) == verde, str(con_foto[1].getpixel((W // 2, 300))))
+    controlla(failures, "senza illustrazioni le pagine escono di solo testo",
+              senza[0].getpixel((W // 2, H - 400)) != blu and senza[1].getpixel((W // 2, 300)) != verde)
+    controlla(failures, "niente cubi decorativi, con o senza illustrazioni",
+              not any(ha_cubi(p) for p in con_foto + senza))
+    confronto = disegna_carosello(con(slide=[{"titolo": "C", "voci": [
+        {"nome": "A", "valore": 1, "testo": "1"}, {"nome": "B", "valore": 3, "testo": "3"}]}]))
+    controlla(failures, "i cubi restano nei confronti", ha_cubi(confronto[1]))
 
 
 def jpeg_finto() -> str:
@@ -169,9 +194,11 @@ def test_illustrazione(failures):
     with tempfile.TemporaryDirectory() as tmp:
         tmp = Path(tmp)
         post = tmp / "2026-01-01.md"
-        post.write_text("---\ndate: 2026-01-01\ncarosello:\n  copertina:\n    titolo: T\n"
-                        "    illustrazione: una scrivania con un portatile\n---\n\nTesto\n",
-                        encoding="utf-8")
+        post.write_text(
+            "---\ndate: 2026-01-01\ncarosello:\n  copertina:\n    titolo: T\n"
+            "    illustrazione: una scrivania con un portatile\n  slide:\n"
+            "    - titolo: Uno\n      testo: x\n      illustrazione: un telefono\n"
+            "    - titolo: Due\n      frase: y\n---\n\nTesto\n", encoding="utf-8")
         chiamate = []
 
         def finto_post(url, headers=None, json=None, timeout=None):
@@ -181,34 +208,40 @@ def test_illustrazione(failures):
         with mock.patch.object(render_carousel, "IMAGES", tmp / "images"), \
              mock.patch.object(illustrazione.requests, "post", finto_post):
             nessuna = illustrazione.genera(post, chiave="")
-            controlla(failures, "senza chiave non chiama OpenAI", nessuna is None and not chiamate)
+            controlla(failures, "senza chiave non chiama OpenAI",
+                      not chiamate and all(v is None for v in nessuna.values()))
 
             prima = illustrazione.genera(post, chiave="sk-test")
-            controlla(failures, "con la chiave salva l'illustrazione",
-                      prima is not None and prima.exists() and len(chiamate) == 1)
+            controlla(failures, "con la chiave salva copertina e slide di testo",
+                      sorted(prima) == [1, 2] and all(p and p.exists() for p in prima.values())
+                      and prima[2].name == "illustrazione-02.jpg" and len(chiamate) == 2,
+                      str(prima))
             url, headers, payload = chiamate[0]
             controlla(failures, "chiamata con modello, formato e prompt giusti",
                       url == illustrazione.API and headers["Authorization"] == "Bearer sk-test"
                       and payload["model"] == illustrazione.MODELLO_DEFAULT
                       and payload["size"] == "1536x1024"
                       and "una scrivania con un portatile" in payload["prompt"]
-                      and "no text" in payload["prompt"].lower(), str(payload)[:200])
+                      and "no text" in payload["prompt"].lower()
+                      and "cube" not in payload["prompt"].lower(), str(payload)[:200])
 
             illustrazione.genera(post, chiave="sk-test")
-            controlla(failures, "stesso prompt: non la rifà", len(chiamate) == 1)
+            controlla(failures, "stessi prompt: non le rifà", len(chiamate) == 2)
 
-            post.write_text(post.read_text(encoding="utf-8").replace("una scrivania", "un bancone"),
+            post.write_text(post.read_text(encoding="utf-8").replace("un telefono", "una tazza"),
                             encoding="utf-8")
             illustrazione.genera(post, chiave="sk-test")
-            controlla(failures, "scena cambiata: la rifà", len(chiamate) == 2)
+            controlla(failures, "scena di una slide cambiata: rifà solo quella",
+                      len(chiamate) == 3 and "una tazza" in chiamate[-1][2]["prompt"])
 
         def errore(*a, **k):
             return Risposta(400, {"error": {"message": "prompt rifiutato"}})
 
         with mock.patch.object(render_carousel, "IMAGES", tmp / "altre"), \
              mock.patch.object(illustrazione.requests, "post", errore):
-            controlla(failures, "errore di OpenAI: niente illustrazione, nessuna eccezione",
-                      illustrazione.genera(post, chiave="sk-test") is None)
+            esito = illustrazione.genera(post, chiave="sk-test")
+            controlla(failures, "errore di OpenAI: niente illustrazioni, nessuna eccezione",
+                      all(v is None for v in esito.values()))
 
 
 def test_pubblicazione(failures):
@@ -277,7 +310,7 @@ def run():
     failures = []
     test_rendering(failures)
     test_validazione(failures)
-    test_evidenziate(failures)
+    test_pagine(failures)
     test_illustrazione(failures)
     test_pubblicazione(failures)
     if failures:

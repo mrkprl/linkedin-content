@@ -51,7 +51,7 @@ jobs:
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git config user.name "GitHub Actions"
 
-          # Carosello: l'illustrazione la chiede a OpenAI (una volta sola per lo
+          # Carosello: le illustrazioni le chiede a OpenAI (una volta sola per lo
           # stesso prompt), poi si disegnano le slide e se ne committano le anteprime,
           # così la PR le mostra da telefono. I post vecchi con il blocco immagine
           # hanno ancora l'infografica singola.
@@ -105,8 +105,10 @@ jobs:
             echo "✅ **Merge** = pubblica su LinkedIn · ❌ **Close** = scarta il post"
             echo
             if [ "$TIPO" = "carosello" ] && [ -n "$RENDER_OK" ]; then
-              if [ ! -f "$CARTELLA/illustrazione.jpg" ]; then
-                echo "⚠️ **Copertina senza illustrazione**: al suo posto ci sono i cubi."
+              # Un'illustrazione mancante non blocca niente: quella pagina esce di
+              # solo testo. La PR lo dice, con il motivo (chiave, errore di OpenAI).
+              if echo "$ILLUSTRAZIONE" | grep -q '^  [!?]'; then
+                echo "⚠️ **Qualche illustrazione manca**: quelle pagine escono con il solo testo."
                 echo
                 echo '```'
                 echo "$ILLUSTRAZIONE"

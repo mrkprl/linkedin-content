@@ -58,13 +58,17 @@ chi partiva da zero, con Claude al centro. Marco l'ha trovato troppo da
 principianti, e sulle notizie grosse la regola le nascondeva (post su Claude
 Duet del 22 ottobre: non diceva che era un agente).
 
-Dal 2026-10-19 il formato è corto: 1.000-1.400 caratteri, 6-10 blocchi, un numero
+Dal 2026-10-19 il formato è corto: 900-1.300 caratteri dal 2026-10-23 (prima 1.000-1.400), 6-10 blocchi, un numero
 concreto (dalla fonte o da un conto con le ipotesi scritte). Pubblico e voce non
 cambiano. Dettagli in `STYLE.md`, soglie qui sotto in "Policy di forma dei post".
 
-Dal 2026-10-23 il post esce con un carosello PDF al posto dell'infografica
-singola, sul modello di @ai__facile su Instagram: copertina con illustrazione e
-parole evidenziate, una slide per passo, chiusura. Dettagli in "5. Carosello".
+Dal 2026-10-23 il post esce con un carosello PDF di al massimo 4 pagine al posto
+dell'infografica singola, sul modello di @ai__facile e @profession.ai su
+Instagram: copertina e slide con le illustrazioni di ChatGPT, titoletti e
+passaggi chiave evidenziati. Il testo segue lo schema dei post di Datapizza su
+LinkedIn, in tono colloquiale: fatto nudo, per chi è, dov'è la novità, i paletti
+in un elenco breve, chi può usarlo, il contesto in chiusura. Dettagli in
+"5. Carosello" e in `STYLE.md`.
 
 Fino al 2026-10-09 la linea era un'altra: una tesi da difendere ("cercare contro
 costruire") raccontata in prima persona a partire dai progetti di Marco. È stata
@@ -137,7 +141,7 @@ voce che i numeri non catturano stanno in `STYLE.md`.
 
 | Regola | Valore | Perché |
 |---|---|---|
-| Lunghezza | 1.000-1.400 caratteri, coda compresa (lo script tollera 900-1.500) | **Scelta di Marco del 2026-10-19**, contro i dati: post corti e densi, sul modello di quelli che legge e vuole scrivere. Le impression mediane crescono con la lunghezza (575 sotto i 400 caratteri, 1.106 tra 1.301 e 2.000, 1.400 tra 2.501 e 3.000), quindi la scelta va verificata sulle impression dei prossimi post. Fino al 2026-10-18 la fascia era 1.800-2.400. |
+| Lunghezza | 900-1.300 caratteri, coda compresa (lo script tollera 800-1.500) | **Scelta di Marco del 2026-10-19**, ritoccata il 2026-10-23 sul modello dei post di Datapizza (circa 850 caratteri), contro i dati: post corti e densi, sul modello di quelli che legge e vuole scrivere. Le impression mediane crescono con la lunghezza (575 sotto i 400 caratteri, 1.106 tra 1.301 e 2.000, 1.400 tra 2.501 e 3.000), quindi la scelta va verificata sulle impression dei prossimi post. Fino al 2026-10-18 la fascia era 1.800-2.400. |
 | Hook (prima riga) | max 60 caratteri, meglio sotto 40 | Hook sotto i 40 caratteri battono quelli oltre i 200 di circa il 25% di engagement rate. |
 | Tipo di hook | affermazione, fatto o confessione, **mai domanda** | Su 309.614 post l'hook a domanda è ultimo dei cinque tipi (2,16% contro 2,60% dell'hook narrativo). Bloccate anche le aperture da quiz ("Sai qual è…", "Ti sei mai chiesto…"). |
 | Blocchi | 6-10, contando hook e domanda finale (nota e hashtag esclusi); righe max 260 caratteri | Post con 20+ paragrafi: 1,13x reach. Con 0-5 paragrafi: 0,70x. In 1.200 caratteri 20 paragrafi vorrebbero dire una frase per blocco, il difetto del post del 14-08: si sta sopra la fascia peggiore e si raggruppano 2-3 righe per blocco. Il limite per riga evita il muro di testo sul telefono. Fino al 2026-10-18 la soglia era almeno 20 paragrafi. |
@@ -226,23 +230,28 @@ uniche fonti sono due blog SEO. Non inseguirle.
 
 ### 5. Carosello (dal 2026-10-23)
 - Il generatore scrive nel frontmatter un blocco `carosello:` (campi in
-  `STYLE.md`, sezione "Il carosello"). Non committa niente in `images/`.
-- `scripts/illustrazione.py` chiede a OpenAI l'illustrazione della copertina
-  (Images API, `POST /v1/images/generations`, modello `gpt-image-2.5-flare`,
-  1536x1024, qualità `medium`, JPEG). Salva `images/DATA/illustrazione.jpg` e
-  accanto `illustrazione.txt` con il prompt usato: finché il prompt non cambia non
-  la richiede, quindi un secondo push non paga una seconda immagine. Senza chiave
-  o con un errore di OpenAI esce con 0 e la copertina ha una pila di cubi.
+  `STYLE.md`, sezione "Il carosello"): copertina, da 1 a 3 slide, chiusura
+  facoltativa, al massimo 4 pagine. Non committa niente in `images/`.
+- `scripts/illustrazione.py` chiede a OpenAI un'illustrazione per la copertina e
+  una per ogni slide di testo con il campo `illustrazione` (Images API,
+  `POST /v1/images/generations`, modello `gpt-image-2.5-flare`, 1536x1024,
+  qualità `medium`, JPEG). Le salva in `images/DATA/illustrazione.jpg` (copertina)
+  e `illustrazione-NN.jpg` (pagina NN), ognuna con accanto un `.txt` con il prompt
+  usato: finché il prompt non cambia non la richiede, quindi un secondo push non
+  paga le immagini due volte. Senza chiave o con un errore di OpenAI esce con 0 e
+  quella pagina esce di solo testo.
 - `scripts/render_carousel.py` disegna le pagine 1080x1350 con Pillow e gli
   stessi font e colori dell'infografica: scrive le anteprime JPEG a 720 px in
   `images/DATA/slide-NN.jpg` e il PDF in `images/DATA.pdf` (in `.gitignore`).
-- "Open Post PR" chiede l'illustrazione, disegna le slide, committa illustrazione
-  e anteprime sul branch e le mostra una sotto l'altra nella PR. A ogni push
-  successivo sullo stesso branch (per esempio una correzione fatta da Marco nella
-  PR) rifà le anteprime e aggiorna il testo della PR; l'illustrazione si rifà solo
-  se è cambiata la scena.
-- "Publish to LinkedIn" ridisegna il PDF dal frontmatter con l'illustrazione già
-  committata (non la rigenera: esce quella vista nella PR), lo carica con la
+  Niente cubi decorativi (dal 2026-10-23): restano solo nelle slide `voci`, dove
+  sono il grafico.
+- "Open Post PR" chiede le illustrazioni, disegna le slide, committa
+  illustrazioni e anteprime sul branch e le mostra una sotto l'altra nella PR. A
+  ogni push successivo sullo stesso branch (per esempio una correzione fatta da
+  Marco nella PR) rifà le anteprime e aggiorna il testo della PR; un'illustrazione
+  si rifà solo se è cambiata la sua scena.
+- "Publish to LinkedIn" ridisegna il PDF dal frontmatter con le illustrazioni già
+  committate (non le rigenera: escono quelle viste nella PR), lo carica con la
   Documents API (`/rest/documents?action=initializeUpload`, poi PUT) e lo allega
   al post con il titolo della copertina. LinkedIn elabora i documenti in modo
   asincrono, quindi il post si riprova fino a 8 volte a 10 secondi. Se la
@@ -251,7 +260,7 @@ uniche fonti sono due blog SEO. Non inseguirle.
 - Prova senza pubblicare: Actions → "Smoke test carosello" → Run workflow.
   Carica il PDF dell'esempio senza creare nessun post.
 - Test locali: `python scripts/test_carousel.py` (disegno, campi sbagliati,
-  illustrazione con OpenAI simulato, pubblicazione con LinkedIn simulato).
+  illustrazioni con OpenAI simulato, pubblicazione con LinkedIn simulato).
 
 **Secret e variabili su GitHub** (repo → Settings → Secrets and variables → Actions):
 - `OPENAI_API_KEY` (secret): chiave API di OpenAI da platform.openai.com. È
@@ -264,8 +273,9 @@ uniche fonti sono due blog SEO. Non inseguirle.
 
 Costo, a ottobre 2026: secondo i listini che riportano i prezzi di OpenAI,
 un'immagine 1536x1024 con gpt-image-2.5 va da circa mezzo centesimo (qualità
-bassa) a circa 17 centesimi (massima). Con un post al giorno sono al massimo
-circa 5 dollari al mese. Il prezzo ufficiale è su openai.com/api/pricing.
+bassa) a circa 17 centesimi (massima). Con fino a 4 immagini al giorno, anche alla
+qualità massima si sta sotto i 20 dollari al mese; alla qualità media usata qui
+il costo è una frazione di quel massimo. Il prezzo ufficiale è su openai.com/api/pricing.
 
 ## Rinnovo token LinkedIn (ogni ~60 giorni!)
 
