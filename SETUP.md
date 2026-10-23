@@ -234,7 +234,8 @@ uniche fonti sono due blog SEO. Non inseguirle.
   facoltativa, al massimo 4 pagine. Non committa niente in `images/`.
 - `scripts/illustrazione.py` chiede a OpenAI un'illustrazione per la copertina e
   una per ogni slide di testo con il campo `illustrazione` (Images API,
-  `POST /v1/images/generations`, modello `gpt-image-2.5-flare`, 1536x1024,
+  `POST /v1/images/generations`, modello `gpt-image-2.5-flare`, 1536x768 (2:1,
+  per i riquadri larghi e bassi del quadrato),
   qualità `medium`, JPEG). Le salva in `images/DATA/illustrazione.jpg` (copertina)
   e `illustrazione-NN.jpg` (pagina NN), ognuna con accanto un `.txt` con il prompt
   usato: finché il prompt non cambia non la richiede, quindi un secondo push non
@@ -246,7 +247,8 @@ uniche fonti sono due blog SEO. Non inseguirle.
   così resta uguale da un post all'altro. Se OpenAI rifiuta il riferimento, lo
   script riprova su `/v1/images/generations` con la sola descrizione (riga `~` nel
   log). Per cambiare personaggio basta sostituire `assets/personaggio.jpg`.
-- `scripts/render_carousel.py` disegna le pagine 1080x1350 con Pillow e gli
+- `scripts/render_carousel.py` disegna le pagine quadrate 1080x1080 (scelta di Marco
+  del 2026-10-23, al posto del 4:5) con Pillow e gli
   stessi font e colori dell'infografica: scrive le anteprime JPEG a 720 px in
   `images/DATA/slide-NN.jpg` e il PDF in `images/DATA.pdf` (in `.gitignore`).
   Niente cubi decorativi (dal 2026-10-23): restano solo nelle slide `voci`, dove

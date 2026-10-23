@@ -40,12 +40,16 @@ from PIL import Image, ImageDraw, ImageOps
 sys.path.insert(0, str(Path(__file__).parent))
 from publish import parse_post_file  # noqa: E402
 from render_image import (  # noqa: E402
-    ALT_MAX, ARGILLA, ARGILLA_SCURA, CREMA, H, IMAGES, INCHIOSTRO, LARGHEZZA, LINEA,
+    ALT_MAX, ARGILLA, ARGILLA_SCURA, CREMA, IMAGES, INCHIOSTRO, LARGHEZZA, LINEA,
     MARGINE, SECONDARIO, SERIF, SERIF_TESTO, SFONDO, TITOLO, TRATTO, VALORE, W,
     ErroreImmagine, adatta, campo, corpo_confronto, corpo_numero, font, larghezza,
     scrivi, valida,
 )
 
+# Quadrato (dal 2026-10-23): sul telefono occupa metà schermo invece di due terzi,
+# ed è il formato che Marco vede usare di più nei caroselli. L'infografica dei post
+# vecchi (render_image.py) resta 1080x1080.
+H = 1080
 PAGINE_MAX = 4
 SLIDE_MIN, SLIDE_MAX = 1, 3
 TITOLETTO_MAX = 60
@@ -54,7 +58,7 @@ SALVA = "Salva il post per quando ti serve."
 ANTEPRIMA_W = 720
 PIEDE_Y = H - MARGINE - 26          # riga del piede: fonte a sinistra, pagina a destra
 FONDO = PIEDE_Y - 64                # sotto questa y non si disegna il contenuto
-ALTO_FOTO = 560                     # l'illustrazione in cima alle slide di testo
+ALTO_FOTO = 430                     # l'illustrazione in cima alle slide di testo
 
 
 # --- parole evidenziate -------------------------------------------------------------
@@ -261,9 +265,9 @@ def fumetto(draw, y: int, frase: str, y_max: int) -> int:
     """La frase da scrivere all'assistente dentro un fumetto. Restituisce la y sotto la coda."""
     pad = 52
     spazio = y_max - y - 70
-    for size in range(52, 29, -2):
+    for size in range(46, 27, -2):
         try:
-            f, righe = adatta(draw, f"“{frase}”", SERIF, [size], LARGHEZZA - 2 * pad - 40, 9, "frase")
+            f, righe = adatta(draw, f"“{frase}”", SERIF, [size], LARGHEZZA - 2 * pad - 40, 7, "frase")
         except ErroreImmagine:
             continue
         alto = int(f.size * 1.3) * len(righe) + 2 * pad
@@ -280,7 +284,7 @@ def fumetto(draw, y: int, frase: str, y_max: int) -> int:
     return y + alto + 54
 
 
-def _titoletto(draw, s: dict, y: int, sizes=range(66, 43, -2)) -> int:
+def _titoletto(draw, s: dict, y: int, sizes=range(58, 39, -2)) -> int:
     """Il titoletto della slide: grassetto nero, le parole fra ** in terracotta."""
     titoletto = campo(s, "titolo", obbligatorio=False)
     if not titoletto:
@@ -299,9 +303,9 @@ def _blocco(draw, s: dict, y: int, alto_max: int, grande: bool) -> int:
     """Titoletto e testo, dal corpo più grande che sta in alto_max pixel.
     Restituisce la y sotto il testo. Con draw=None misura soltanto."""
     prova = ImageDraw.Draw(Image.new("RGB", (W, H)))
-    titoli = range(66, 43, -2) if grande else range(62, 43, -2)
-    for alto_testo in (range(56, 33, -2) if grande else range(52, 29, -2)):
-        sizes = range(alto_testo, 29, -2)
+    titoli = range(60, 41, -2) if grande else range(52, 37, -2)
+    for alto_testo in (range(50, 29, -2) if grande else range(44, 27, -2)):
+        sizes = range(alto_testo, 27, -2)
         try:
             fine = _testo(prova, s, _titoletto(prova, s, 0, titoli), sizes, 11)
         except ErroreImmagine:
@@ -329,23 +333,23 @@ def pagina_copertina(dati: dict, totale: int, foto=None) -> Image.Image:
                                sizes, LARGHEZZA, 4, "titolo", 1.18)
         sottotitolo = campo(cop, "sottotitolo", obbligatorio=False)
         if sottotitolo:
-            f_sot, righe = adatta(d, sottotitolo, SERIF, range(44, 31, -2), LARGHEZZA, 2,
+            f_sot, righe = adatta(d, sottotitolo, SERIF, range(38, 27, -2), LARGHEZZA, 2,
                                   "sottotitolo")
             y = scrivi(d, (MARGINE, y + 10), righe, f_sot, INCHIOSTRO, 1.22)
         return y
 
     if foto and Path(foto).is_file():
-        y = testata(draw, MARGINE - 8, range(112, 63, -4))
-        box = (MARGINE, y + 44, W - MARGINE, FONDO)
-        if box[3] - box[1] < 360:
+        y = testata(draw, MARGINE - 8, range(92, 51, -4))
+        box = (MARGINE, y + 36, W - MARGINE, FONDO)
+        if box[3] - box[1] < 300:
             raise ErroreImmagine("titolo e sottotitolo lasciano poco posto all'illustrazione: "
                                  "accorciali")
         metti_foto(img, foto, box)
     else:
         # Senza illustrazione: il titolo più grande, un po' sopra il centro.
         prova = ImageDraw.Draw(Image.new("RGB", (W, H)))
-        alto = testata(prova, 0, range(128, 71, -4))
-        testata(draw, MARGINE + max(0, int((FONDO - MARGINE - alto) * 0.38)), range(128, 71, -4))
+        alto = testata(prova, 0, range(112, 63, -4))
+        testata(draw, MARGINE + max(0, int((FONDO - MARGINE - alto) * 0.38)), range(112, 63, -4))
     piede(draw, 1, totale)
     return img
 
@@ -360,7 +364,7 @@ def pagina_slide(s: dict, pagina: int, totale: int, foto=None, fonte: str = "") 
     if _solo_testo(s):
         if foto and metti_foto(img, foto, (MARGINE, MARGINE, W - MARGINE, MARGINE + ALTO_FOTO)):
             # Come nei caroselli di notizie: l'illustrazione sopra, il testo sotto.
-            y = MARGINE + ALTO_FOTO + 52
+            y = MARGINE + ALTO_FOTO + 40
             _blocco(draw, s, y, FONDO - y, grande=False)
         else:
             # Senza illustrazione: titoletto e testo in un blocco solo, un po' sopra il
@@ -375,11 +379,11 @@ def pagina_slide(s: dict, pagina: int, totale: int, foto=None, fonte: str = "") 
                          y, FONDO, cubi=False)
         elif s.get("voci"):
             if testo:
-                y = _testo(draw, s, y, range(48, 33, -2), 3, 1.25) + 24
+                y = _testo(draw, s, y, range(42, 29, -2), 3, 1.25) + 20
             corpo_confronto(draw, {"voci": s["voci"]}, y, FONDO)
         else:
             if testo:
-                y = _testo(draw, s, y, range(48, 33, -2), 4, 1.25) + 40
+                y = _testo(draw, s, y, range(42, 29, -2), 3, 1.25) + 32
             fumetto(draw, y, campo(s, "frase"), FONDO)
     piede(draw, pagina, totale, fonte)
     return img
@@ -389,7 +393,7 @@ def pagina_chiusura(dati: dict, totale: int) -> Image.Image:
     img = Image.new("RGB", (W, H), SFONDO)
     draw = ImageDraw.Draw(img)
     y = scrivi_evidenziato(draw, (MARGINE, MARGINE + 60), campo(dati, "chiusura"), TITOLO,
-                           range(96, 55, -4), LARGHEZZA, 6, "chiusura", 1.2)
+                           range(84, 51, -4), LARGHEZZA, 5, "chiusura", 1.2)
     f_salva = font(SERIF, 42)
     y_salva = FONDO - 52
     if y_salva - y < 120:
