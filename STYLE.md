@@ -175,7 +175,8 @@ Se la notizia non ha un numero vero, il post va bene anche senza.
 
 ## Il carosello
 
-Ogni post esce con un carosello: un PDF di **al massimo 4 pagine** 1080x1350 che
+Ogni post esce con un carosello: un PDF di **al massimo 4 pagine quadrate**
+(1080x1080, dal 2026-10-23: sul telefono occupa metà schermo, non due terzi) che
 LinkedIn mostra da sfogliare. Lo schema viene dai caroselli di notizie di
 @ai__facile e @profession.ai: copertina con il titolo grande e una o due parole
 evidenziate, poi una slide per aspetto della notizia, con un'illustrazione in

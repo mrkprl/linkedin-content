@@ -47,9 +47,9 @@ API_MODIFICHE = "https://api.openai.com/v1/images/edits"
 RIFERIMENTO = Path(__file__).resolve().parent.parent / "assets" / "personaggio.jpg"
 MODELLO_DEFAULT = "gpt-image-2.5-flare"
 QUALITA_DEFAULT = "medium"
-# Orizzontale: i riquadri del carosello sono più larghi che alti, e il taglio al
-# centro perde poco.
-DIMENSIONE = "1536x1024"
+# 2:1: nel carosello quadrato i riquadri delle illustrazioni sono fasce larghe e
+# basse, così il taglio al centro perde poco.
+DIMENSIONE = "1536x768"
 
 STILE = (
     "Editorial illustration for a LinkedIn carousel about AI news.\n"
@@ -58,8 +58,9 @@ STILE = (
     "shading. Warm ivory background (#F4F2EC). Main accent terracotta (#D97757), with "
     "kraft beige (#D4B28C), cream (#FBF8F3), muted sage green and near-black ink "
     "(#141413). Draw the objects of the scene, not abstract decorations.\n"
-    "Composition: landscape, the subject centered with generous empty margins, nothing "
-    "important near the edges because the image will be cropped.\n"
+    "Composition: wide panoramic landscape (2:1), the subject centered with generous "
+    "empty margins, nothing important near the top, bottom or side edges because the "
+    "image will be cropped.\n"
     "Strictly no text: no letters, words, numbers, labels or readable screens. No logos, "
     "brand marks or real products. No recognizable people: if people are needed, show "
     "only hands or figures seen from behind, without faces."

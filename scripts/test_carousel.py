@@ -221,7 +221,7 @@ def test_illustrazione(failures):
             controlla(failures, "chiamata con modello, formato e prompt giusti",
                       url == illustrazione.API and headers["Authorization"] == "Bearer sk-test"
                       and payload["model"] == illustrazione.MODELLO_DEFAULT
-                      and payload["size"] == "1536x1024"
+                      and payload["size"] == illustrazione.DIMENSIONE
                       and "una scrivania con un portatile" in payload["prompt"]
                       and "no text" in payload["prompt"].lower()
                       and "cube" not in payload["prompt"].lower(), str(payload)[:200])
