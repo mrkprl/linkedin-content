@@ -17,8 +17,13 @@ disegna il carosello e apre la PR con le slide. Marco dal
 telefono decide: Merge = pubblica su LinkedIn, Close = scarta. Lo schema è
 un'immagine fissa: se il flusso cambia, va rifatta.
 
+Dal 23 ottobre 2026 i post si preparano in anticipo in `programmati/`, uno per
+giorno, e una Action li pubblica ogni mattina alle 8:30 (vedi `SETUP.md`, sezione
+"6. Post programmati"). La routine giornaliera è in pausa.
+
 ## File da conoscere
 
+- `programmati/`: i post pronti, uno per giorno (`AAAA-MM-GG.md`).
 - `IDEE.md`: dove incollare gli spunti (reel, video, trucchi). La routine li usa per primi.
 - `fonti.yaml`: le fonti che la routine scansiona.
 - `STYLE.md`: linea editoriale, voce, angoli, divieti.

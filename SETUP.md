@@ -5,7 +5,8 @@ Stato verificato il 2026-08-07.
 ## Architettura
 
 ```
-Routine cloud Claude (ogni giorno, 7:55 IT) → genera il post in approved/ sul branch post/YYYY-MM-DD
+Dal 2026-10-23: post preparati in anticipo in programmati/ → "Pubblica i post programmati" alle 8:30 IT (vedi "6. Post programmati")
+Routine cloud Claude (in pausa dal 2026-10-23; ogni giorno alle 7:55 IT) → genera il post in approved/ sul branch post/YYYY-MM-DD
 GitHub Action "Open Post PR" → illustrazione OpenAI + anteprime del carosello → PR di approvazione (reviewer: mrkprl)
 Tu, da GitHub Mobile → Merge = pubblica · Close = scarta
 GitHub Actions "Publish to LinkedIn" (solo main) → pubblica → sposta in published/
@@ -284,6 +285,36 @@ un'immagine 1536x1024 con gpt-image-2.5 va da circa mezzo centesimo (qualità
 bassa) a circa 17 centesimi (massima). Con fino a 4 immagini al giorno, anche alla
 qualità massima si sta sotto i 20 dollari al mese; alla qualità media usata qui
 il costo è una frazione di quel massimo. Il prezzo ufficiale è su openai.com/api/pricing.
+
+### 6. Post programmati (dal 2026-10-23)
+Il modo principale di lavorare da quando Marco l'ha scelto, il 2026-10-23: i post si
+preparano in anticipo, una settimana alla volta, e si programma solo la pubblicazione.
+La routine giornaliera è in pausa.
+
+- **Preparazione**: in una sessione con Claude si leggono le novità dei profili di
+  riferimento (@ai__facile, @profession.ai, Datapizza), si verificano sulle fonti
+  ufficiali e si scrive un file per giorno in `programmati/AAAA-MM-GG.md`, con lo stesso
+  formato dei post (`STYLE.md`). Tutto va in una sola PR, che Marco rilegge e unisce.
+  Il merge non pubblica niente: `programmati/` non fa partire "Publish to LinkedIn".
+- **Illustrazioni**: si disegnano nell'app di ChatGPT, che rientra nell'abbonamento.
+  `python scripts/prompt_chatgpt.py programmati/AAAA-MM-GG.md` stampa il messaggio da
+  incollare (nei post con il fattorino va allegato `assets/personaggio.jpg`). Le
+  immagini scaricate si mettono al loro posto con
+  `python scripts/importa_illustrazioni.py programmati/AAAA-MM-GG.md img1 img2 ...`,
+  nell'ordine delle scene. In alternativa le fa l'API con `scripts/illustrazione.py`.
+  Un post senza illustrazioni esce lo stesso, con le pagine di solo testo.
+- **Pubblicazione**: `.github/workflows/publish-scheduled.yml` gira alle 6:30, 7:30 e
+  9:30 UTC. Dalle 8 ora di Roma in poi pubblica `programmati/<oggi>.md` con
+  `publish.py` (carosello, fonti nel primo commento) e lo sposta in `published/`.
+  Tre orari perché le cron di GitHub sono in UTC e possono partire in ritardo: il
+  primo tentativo valido pubblica, gli altri non trovano più il file.
+- **Cambiare un post già programmato**: si modifica il file in `programmati/` prima
+  della sua data (anche da telefono, dall'app GitHub). Per toglierlo, si cancella.
+- **Pubblicare subito**: Actions → "Pubblica i post programmati" → Run workflow, con
+  la data del post.
+- Se la pubblicazione fallisce il file resta in `programmati/` e il tentativo
+  successivo della stessa mattina riprova. Attenzione al caso raro in cui il post esce
+  ma lo spostamento fallisce: il tentativo dopo lo ripubblicherebbe.
 
 ## Rinnovo token LinkedIn (ogni ~60 giorni!)
 
