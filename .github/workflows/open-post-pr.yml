@@ -6,8 +6,14 @@ on:
       - 'post/**'
 
 permissions:
-  contents: write        # per committare l'anteprima dell'immagine sul branch
+  contents: write        # per committare illustrazione e anteprime sul branch
   pull-requests: write
+
+# Due push ravvicinati sullo stesso branch (la routine, poi una correzione di Marco
+# dal telefono) non devono committare le anteprime in parallelo.
+concurrency:
+  group: post-pr-${{ github.ref }}
+  cancel-in-progress: false
 
 jobs:
   open-pr:
@@ -25,9 +31,12 @@ jobs:
       - name: Install dependencies
         run: pip install requests PyYAML Pillow
 
-      - name: Open approval PR
+      - name: Open or update the approval PR
         env:
           GH_TOKEN: ${{ github.token }}
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          OPENAI_IMAGE_MODEL: ${{ vars.OPENAI_IMAGE_MODEL }}
+          OPENAI_IMAGE_QUALITY: ${{ vars.OPENAI_IMAGE_QUALITY }}
         run: |
           BRANCH="$GITHUB_REF_NAME"
           POST_DATE="${BRANCH#post/}"
@@ -38,47 +47,95 @@ jobs:
             exit 0
           fi
 
-          if [ "$(gh pr list --head "$BRANCH" --state open --json number --jq length)" != "0" ]; then
-            echo "PR già aperta per $BRANCH."
-            exit 0
+          TOPIC=$(awk -F': *' '$1=="topic" {print $2; exit}' "$FILE")
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git config user.name "GitHub Actions"
+
+          # Carosello: l'illustrazione la chiede a OpenAI (una volta sola per lo
+          # stesso prompt), poi si disegnano le slide e se ne committano le anteprime,
+          # così la PR le mostra da telefono. I post vecchi con il blocco immagine
+          # hanno ancora l'infografica singola.
+          # Niente [skip ci] nei messaggi: con lo squash merge finirebbe nel commit
+          # su main e salterebbe la pubblicazione. I push fatti con il token della
+          # Action non fanno ripartire questo workflow.
+          CARTELLA="images/${POST_DATE}"
+          IMG="images/${POST_DATE}.png"
+          TIPO=""
+          ILLUSTRAZIONE=""
+          RENDER=""
+          RENDER_OK=""
+          if grep -q '^carosello:' "$FILE"; then
+            TIPO="carosello"
+            ILLUSTRAZIONE=$(python scripts/illustrazione.py "$FILE" 2>&1) || true
+            echo "$ILLUSTRAZIONE"
+            if RENDER=$(python scripts/render_carousel.py "$FILE" 2>&1); then
+              RENDER_OK="si"
+            else
+              # Niente anteprime vecchie se il carosello nuovo non si disegna.
+              git rm -q --ignore-unmatch "$CARTELLA"/slide-*.jpg || true
+              rm -f "$CARTELLA"/slide-*.jpg
+            fi
+            echo "$RENDER"
+            [ -d "$CARTELLA" ] && git add "$CARTELLA"
+          elif grep -q '^immagine:' "$FILE"; then
+            TIPO="immagine"
+            if RENDER=$(python scripts/render_image.py "$FILE" 2>&1); then
+              RENDER_OK="si"
+            fi
+            echo "$RENDER"
+            [ -f "$IMG" ] && git add "$IMG"
           fi
 
-          TOPIC=$(awk -F': *' '$1=="topic" {print $2; exit}' "$FILE")
-
-          # Anteprima dell'infografica: si disegna dal blocco immagine del
-          # frontmatter e si committa sul branch, così la PR la mostra da telefono.
-          # Niente [skip ci] nel messaggio: con lo squash merge finirebbe nel
-          # commit su main e salterebbe la pubblicazione.
-          IMG="images/${POST_DATE}.png"
-          RENDER=$(python scripts/render_image.py "$FILE" 2>&1) || true
-          echo "$RENDER"
           ANTEPRIMA=""
-          if [ -f "$IMG" ] && [ -z "$(git status --porcelain -- "$IMG")" ]; then
-            ANTEPRIMA="si"   # già committata dal generatore
-          elif [ -f "$IMG" ]; then
-            git config user.email "github-actions[bot]@users.noreply.github.com"
-            git config user.name "GitHub Actions"
-            git add "$IMG"
-            git commit -m "image: anteprima ${POST_DATE}"
-            # Se il push fallisce la PR si apre lo stesso, senza anteprima.
-            if git push origin HEAD:"$BRANCH"; then
+          if git diff --cached --quiet; then
+            ANTEPRIMA="si"   # niente di nuovo: le anteprime sul branch sono già giuste
+          else
+            git commit -q -m "image: anteprima ${POST_DATE}"
+            # Se il push fallisce la PR si apre lo stesso, senza anteprime.
+            if git push -q origin HEAD:"$BRANCH"; then
               ANTEPRIMA="si"
             else
-              echo "::warning::Push dell'anteprima fallito, la PR si apre senza immagine"
+              echo "::warning::Push delle anteprime fallito, la PR resta senza immagini"
             fi
           fi
           SHA=$(git rev-parse HEAD)
+          RAW="https://raw.githubusercontent.com/${GITHUB_REPOSITORY}/${SHA}"
 
           {
             echo "✅ **Merge** = pubblica su LinkedIn · ❌ **Close** = scarta il post"
             echo
-            if [ -n "$ANTEPRIMA" ]; then
-              echo "![Immagine del post](https://raw.githubusercontent.com/${GITHUB_REPOSITORY}/${SHA}/${IMG})"
+            if [ "$TIPO" = "carosello" ] && [ -n "$RENDER_OK" ]; then
+              if [ ! -f "$CARTELLA/illustrazione.jpg" ]; then
+                echo "⚠️ **Copertina senza illustrazione**: al suo posto ci sono i cubi."
+                echo
+                echo '```'
+                echo "$ILLUSTRAZIONE"
+                echo '```'
+                echo
+              fi
+              if [ -n "$ANTEPRIMA" ]; then
+                N=$(ls "$CARTELLA"/slide-*.jpg | wc -l)
+                echo "**Carosello, ${N} slide.** Per cambiare un testo modifica il blocco \`carosello:\` qui nella PR: le anteprime si rifanno da sole."
+                echo
+                for f in $(ls "$CARTELLA"/slide-*.jpg | sort); do
+                  echo "![${f##*/}](${RAW}/${f})"
+                  echo
+                done
+              else
+                echo "⚠️ Anteprime non caricate: il carosello viene comunque ridisegnato e pubblicato con il Merge."
+                echo
+              fi
+            elif [ "$TIPO" = "carosello" ]; then
+              echo "⚠️ **Carosello non disegnato**: se fai Merge esce solo il testo."
               echo
-            elif [ -f "$IMG" ]; then
-              echo "⚠️ Anteprima non caricata: l'immagine viene comunque ridisegnata e pubblicata con il Merge."
+              echo '```'
+              echo "$RENDER"
+              echo '```'
               echo
-            elif grep -q '^immagine:' "$FILE"; then
+            elif [ "$TIPO" = "immagine" ] && [ -n "$RENDER_OK" ] && [ -n "$ANTEPRIMA" ]; then
+              echo "![Immagine del post](${RAW}/${IMG})"
+              echo
+            elif [ "$TIPO" = "immagine" ]; then
               echo "⚠️ **Immagine non disegnata**: se fai Merge esce solo il testo."
               echo
               echo '```'
@@ -96,6 +153,14 @@ jobs:
             python scripts/readability.py "$FILE" 2>&1 || true
             echo '```'
           } > /tmp/pr-body.md
+
+          # PR già aperta (la routine ha rifatto il push, o Marco ha corretto il
+          # post): si aggiorna il testo con le anteprime nuove.
+          if [ "$(gh pr list --head "$BRANCH" --state open --json number --jq length)" != "0" ]; then
+            gh pr edit "$BRANCH" --body-file /tmp/pr-body.md
+            echo "PR aggiornata per $BRANCH."
+            exit 0
+          fi
 
           gh pr create \
             --base main \

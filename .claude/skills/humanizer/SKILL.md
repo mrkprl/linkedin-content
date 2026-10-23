@@ -267,6 +267,6 @@ Qui la skill si usa dentro un altro compito: riscrivi il post in `approved/YYYY-
 - `STYLE.md` vince. La struttura resta: hook, blocchi, numero, cosa fare, esempio, limite, chiusura, domanda, nota, hashtag.
 - La chiusura che riprende l'hook è voluta e il §2 non si applica a lei. La seconda riga però deve aggiungere qualcosa all'hook, non ripeterlo.
 - Non toccare la nota `(Questo post l'ha scritto il mio agente di ricerca. Fonti nel primo commento.)`, gli hashtag, i numeri, i nomi delle funzioni e le frasi fra virgolette da scrivere all'assistente.
-- Nel frontmatter riscrivi solo i testi del blocco `immagine:`: `titolo`, `sottotitolo`, `didascalia`, `frase` (questa solo se suona da AI: è la frase che chi legge copierà).
+- Nel frontmatter riscrivi solo i testi del blocco `carosello:`: `titolo` e `sottotitolo` della copertina, `testo` delle slide, `chiusura`. La `frase` solo se suona da AI: è la frase che chi legge copierà. Non toccare `etichetta`, `numero`, `voci`, `illustrazione`, `fonte` e gli asterischi `**` delle parole evidenziate. Nei post vecchi con il blocco `immagine:` valgono `titolo`, `sottotitolo`, `didascalia` e `frase`.
 - Le virgolette dei post sono quelle dritte ("..."): non cambiarle.
-- Dopo la riscrittura rilancia `python scripts/readability.py approved/YYYY-MM-DD.md` e `python scripts/render_image.py approved/YYYY-MM-DD.md`.
+- Dopo la riscrittura rilancia `python scripts/readability.py approved/YYYY-MM-DD.md` e `python scripts/render_carousel.py approved/YYYY-MM-DD.md` (per i post vecchi con il blocco `immagine:`, `render_image.py`).

@@ -5,8 +5,8 @@ Stato verificato il 2026-08-07.
 ## Architettura
 
 ```
-Routine cloud Claude (ogni giorno, 8:00 IT) → genera il post in approved/ sul branch post/YYYY-MM-DD
-GitHub Action "Open Post PR" → apre la PR di approvazione (reviewer: mrkprl)
+Routine cloud Claude (ogni giorno, 7:55 IT) → genera il post in approved/ sul branch post/YYYY-MM-DD
+GitHub Action "Open Post PR" → illustrazione OpenAI + anteprime del carosello → PR di approvazione (reviewer: mrkprl)
 Tu, da GitHub Mobile → Merge = pubblica · Close = scarta
 GitHub Actions "Publish to LinkedIn" (solo main) → pubblica → sposta in published/
 ```
@@ -20,14 +20,20 @@ non è più usata dal flusso (rimane solo per compatibilità storica).
 
 ### 1. Generazione contenuti — routine cloud Claude
 - **Routine**: `linkedin-content-generator` (`trig_01E1UaHdMXwNi3Z3QydKjoHg`)
-- **Schedule**: `0 6 * * *` UTC = 8:00 italiane con ora legale (7:00 con ora solare, dal 25 ottobre), ogni giorno
+- **Schedule**: `CRON_TZ=Europe/Rome 55 7 * * *` = 7:55 italiane tutto l'anno, ogni giorno
+  (dal 2026-10-23; prima era `0 6 * * *` in UTC e con l'ora solare sarebbe slittato alle 7:00.
+  Le 7:55 invece delle 8:00 perché le routine fissate allo scoccare dell'ora partono in ritardo)
   (era lun-ven fino al 2026-08-14: cinque post a settimana obbligavano a commentare
   anche i giorni senza una notizia degna, e il generatore riempiva descrivendo prodotti)
 - **Modello**: `claude-opus-5-5` (dal 2026-10-12; si imposta nella routine, non nel repo)
 - **Environment**: `LinkedInSearch`, con la rete Custom descritta in "Rete e fonti"
 - **Gestione**: https://claude.ai/code/routines
 - **Il prompt è copiato in `ROUTINE_PROMPT.md`**: se cambia lì, va reincollato
-  nella routine. La parte editoriale invece sta in `STYLE.md`, che il prompt fa
+  nella routine (claude.ai/code → Routine → linkedin-content-generator → freccia
+  accanto al nome → Modifica). La routine è stata creata via API: un agente non la
+  può modificare con i suoi strumenti, solo da quella pagina. Dopo averlo
+  incollato, controlla che gli a capo ci siano: il 2026-10-19 si erano persi e i
+  comandi erano finiti tutti su una riga. La parte editoriale invece sta in `STYLE.md`, che il prompt fa
   aprire a ogni esecuzione: cambiarla non richiede di toccare la routine.
 - Le regole di forma sono verificabili e la routine le auto-controlla con
   `scripts/readability.py` prima di pushare (esce con 1 se qualcosa non passa).
@@ -35,15 +41,21 @@ non è più usata dal flusso (rimane solo per compatibilità storica).
 
 ### Linea editoriale (dal 2026-10-12)
 
-Il profilo insegna a usare Claude a chi parte da zero: ogni post lascia una cosa
+Il profilo insegna a usare l'AI a chi parte da zero: ogni post lascia una cosa
 da provare oggi. Il post parla al "tu", Marco è l'autore e non il protagonista.
-Angoli: `TRUCCO`, `FUNZIONE`, `NOVITÀ`, `ERRORE_COMUNE`, `CASO_D_USO` (dettagli
-in `STYLE.md`). I test prima di scrivere sono "si può provare oggi?" ed "è nuovo
+Dal 2026-10-23 gli strumenti sono tutti alla pari (Claude, ChatGPT, Gemini,
+Copilot): fino al 2026-10-22 il perimetro era Claude.
+Angoli: `TRUCCO`, `FUNZIONE`, `NOVITÀ`, `STRUMENTO`, `ERRORE_COMUNE`,
+`CASO_D_USO` (dettagli in `STYLE.md`). I test prima di scrivere sono "si può provare oggi?" ed "è nuovo
 per un principiante?".
 
 Dal 2026-10-19 il formato è corto: 1.000-1.400 caratteri, 6-10 blocchi, un numero
 concreto (dalla fonte o da un conto con le ipotesi scritte). Pubblico e voce non
 cambiano. Dettagli in `STYLE.md`, soglie qui sotto in "Policy di forma dei post".
+
+Dal 2026-10-23 il post esce con un carosello PDF al posto dell'infografica
+singola, sul modello di @ai__facile su Instagram: copertina con illustrazione e
+parole evidenziate, una slide per passo, chiusura. Dettagli in "5. Carosello".
 
 Fino al 2026-10-09 la linea era un'altra: una tesi da difendere ("cercare contro
 costruire") raccontata in prima persona a partire dai progetti di Marco. È stata
@@ -64,6 +76,7 @@ in **Allowed domains** (impostato il 2026-10-12):
 ```
 *.anthropic.com
 *.claude.com
+openai.com
 *.openai.com
 blog.google
 deepmind.google
@@ -92,6 +105,10 @@ messaggi, ingranaggio sull'environment, campo **Network access**. Con il livello
 **Trusted** di default le fonti non rispondono, e anche WebFetch passa da lì.
 Meglio Custom che Full: la routine legge testo scritto da sconosciuti senza
 nessuno che guardi, e una lista chiusa limita cosa può raggiungere.
+
+`openai.com` (senza asterisco) è in lista dal 2026-10-23 per il feed di OpenAI News:
+non è detto che `*.openai.com` copra anche il dominio nudo. Se `scout.py` lo
+segnala come non raggiungibile, controlla che sia anche nell'environment.
 
 Verificato il 2026-10-12:
 - **Instagram non si legge**, nemmeno con Full: senza login non mostra i post, e
@@ -139,7 +156,7 @@ il feed usa dual encoder LLM che confrontano per similarità coseno l'embedding 
 post con quello del profilo di chi legge. Riempire il testo di parole chiave non
 serve. Serve la **coerenza tematica**: con pochi follower il post viene distribuito
 per argomento, non per rete sociale, quindi restare sempre sullo stesso perimetro
-(Claude e come usarlo) è la leva di portata numero uno.
+(gli assistenti AI e come usarli nel lavoro) è la leva di portata numero uno.
 
 **Da fare a mano, fuori dal sistema** (non automatizzabile, alto ritorno):
 1. Allineare headline, About e Skills del profilo al vocabolario dei post: il
@@ -180,7 +197,7 @@ uniche fonti sono due blog SEO. Non inseguirle.
   - `LINKEDIN_ACCESS_TOKEN` — impostato 2026-10-12, **scade ~2026-12-11**
   - `LINKEDIN_PERSON_ID` — `IJ0yQ3PjVm` (il claim `sub` di `/v2/userinfo`, stabile)
 
-### 4. Infografica (dal 2026-10-19)
+### 4. Infografica (dal 2026-10-19 al 2026-10-22, solo per i post di quei giorni)
 - Il generatore scrive nel frontmatter un blocco `immagine:` (campi e modelli in
   `STYLE.md`, sezione "L'immagine"). Non committa il PNG.
 - `scripts/render_image.py` disegna `images/DATA.png`, 1080x1350, con Pillow e i
@@ -197,6 +214,49 @@ uniche fonti sono due blog SEO. Non inseguirle.
   l'immagine dell'esempio senza creare nessun post.
 - Test locali: `python scripts/test_image.py` (disegno, campi sbagliati, chiamate
   all'API simulate).
+
+### 5. Carosello (dal 2026-10-23)
+- Il generatore scrive nel frontmatter un blocco `carosello:` (campi in
+  `STYLE.md`, sezione "Il carosello"). Non committa niente in `images/`.
+- `scripts/illustrazione.py` chiede a OpenAI l'illustrazione della copertina
+  (Images API, `POST /v1/images/generations`, modello `gpt-image-2.5-flare`,
+  1536x1024, qualità `medium`, JPEG). Salva `images/DATA/illustrazione.jpg` e
+  accanto `illustrazione.txt` con il prompt usato: finché il prompt non cambia non
+  la richiede, quindi un secondo push non paga una seconda immagine. Senza chiave
+  o con un errore di OpenAI esce con 0 e la copertina ha una pila di cubi.
+- `scripts/render_carousel.py` disegna le pagine 1080x1350 con Pillow e gli
+  stessi font e colori dell'infografica: scrive le anteprime JPEG a 720 px in
+  `images/DATA/slide-NN.jpg` e il PDF in `images/DATA.pdf` (in `.gitignore`).
+- "Open Post PR" chiede l'illustrazione, disegna le slide, committa illustrazione
+  e anteprime sul branch e le mostra una sotto l'altra nella PR. A ogni push
+  successivo sullo stesso branch (per esempio una correzione fatta da Marco nella
+  PR) rifà le anteprime e aggiorna il testo della PR; l'illustrazione si rifà solo
+  se è cambiata la scena.
+- "Publish to LinkedIn" ridisegna il PDF dal frontmatter con l'illustrazione già
+  committata (non la rigenera: esce quella vista nella PR), lo carica con la
+  Documents API (`/rest/documents?action=initializeUpload`, poi PUT) e lo allega
+  al post con il titolo della copertina. LinkedIn elabora i documenti in modo
+  asincrono, quindi il post si riprova fino a 8 volte a 10 secondi. Se la
+  Documents API risponde 401/403 esce la sola copertina come immagine, con l'alt;
+  qualunque altro errore blocca il post e il workflow si può rilanciare.
+- Prova senza pubblicare: Actions → "Smoke test carosello" → Run workflow.
+  Carica il PDF dell'esempio senza creare nessun post.
+- Test locali: `python scripts/test_carousel.py` (disegno, campi sbagliati,
+  illustrazione con OpenAI simulato, pubblicazione con LinkedIn simulato).
+
+**Secret e variabili su GitHub** (repo → Settings → Secrets and variables → Actions):
+- `OPENAI_API_KEY` (secret): chiave API di OpenAI da platform.openai.com. È
+  fatturata a parte rispetto all'abbonamento ChatGPT: serve credito prepagato sul
+  conto API. Per i modelli GPT Image OpenAI può chiedere la verifica
+  dell'organizzazione (platform.openai.com → Settings → Organization).
+- `OPENAI_IMAGE_MODEL` e `OPENAI_IMAGE_QUALITY` (variabili, facoltative): per
+  cambiare modello o qualità senza toccare il codice, per esempio
+  `gpt-image-2.5-sunburst` o `high`.
+
+Costo, a ottobre 2026: secondo i listini che riportano i prezzi di OpenAI,
+un'immagine 1536x1024 con gpt-image-2.5 va da circa mezzo centesimo (qualità
+bassa) a circa 17 centesimi (massima). Con un post al giorno sono al massimo
+circa 5 dollari al mese. Il prezzo ufficiale è su openai.com/api/pricing.
 
 ## Rinnovo token LinkedIn (ogni ~60 giorni!)
 

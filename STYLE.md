@@ -14,20 +14,30 @@ Fino al 2026-10-18 il riferimento erano i post testuali lunghi di Marco
 Montemagno: i post pubblicati prima di quella data sono lunghi, quindi se ne
 prendono i temi, non la forma.
 
+**Dal 2026-10-23 il post esce con un carosello** (sezione «Il carosello») e parla
+di tutti gli assistenti AI, non solo di Claude. Il riferimento per formato e temi
+è il profilo Instagram @ai__facile: caroselli con una cosa da provare per slide,
+su ChatGPT, Gemini, Claude e gli altri.
+
 ## La promessa del profilo
 
-Ogni post lascia a chi legge **una cosa che può provare oggi con Claude**, in
-pochi minuti, senza saper programmare: un trucco, una funzione che non conosceva,
-un errore da evitare, un modo di usarla nel suo lavoro.
+Ogni post lascia a chi legge **una cosa che può provare oggi con l'assistente
+AI che usa** (Claude, ChatGPT, Gemini, Copilot), in pochi minuti, senza saper
+programmare: un trucco, una funzione che non conosceva, un errore da evitare, un
+modo di usarla nel suo lavoro.
 
 Chi chiude il post deve saper fare una cosa in più. Se non c'è niente da provare,
 non è un post per questo profilo, per quanto sia grossa la notizia.
 
-Il perimetro è Claude: l'app, i Progetti, gli strumenti che ci girano intorno, e
-Claude Code quando serve a chi parte da zero. ChatGPT e Gemini entrano quando il
-trucco vale per tutti. Fuori perimetro: politica, cause legali, drammi aziendali,
-carriera, la notizia AI generica. Con pochi follower LinkedIn distribuisce i post
-per argomento: restare sempre sullo stesso tema è la leva di portata più forte.
+Il perimetro sono gli assistenti AI che usa chi parte da zero, tutti alla pari:
+Claude, ChatGPT, Gemini, Copilot e gli strumenti che ci girano intorno (le app,
+le funzioni per immagini e documenti, le estensioni). Quando un trucco vale per
+tutti, dillo («funziona anche con ChatGPT e Gemini»); quando vale per uno solo,
+nomina quello. Ruota gli strumenti: non tre post di fila sullo stesso. Fuori
+perimetro: politica, cause legali, drammi aziendali, carriera, la notizia AI
+generica, le curiosità che non lasciano niente da fare. Con pochi follower
+LinkedIn distribuisce i post per argomento: restare sempre sullo stesso tema
+(l'AI usata nel lavoro di tutti i giorni) è la leva di portata più forte.
 
 ## A chi parla
 
@@ -44,7 +54,7 @@ deve pensare "questo lo provo stasera".
 
 ## Chi parla, e quanto
 
-Marco Parolin, sviluppatore, usa Claude tutti i giorni. È l'autore, **non il
+Marco Parolin, sviluppatore, usa l'AI tutti i giorni. È l'autore, **non il
 protagonista**: il protagonista è chi legge.
 
 - Il post parla al **tu**. "Carica il listino", non "io carico il listino".
@@ -60,14 +70,17 @@ protagonista**: il protagonista è chi legge.
 
 Ruotano: mai lo stesso angolo due volte di fila.
 
-- **TRUCCO**: un modo di usare Claude che cambia il risultato. Farti fare le
-  domande prima di scrivere, dare un esempio invece di una descrizione, chiedere
-  tre versioni e sceglierne una.
+- **TRUCCO**: un modo di usare l'assistente che cambia il risultato. Farti fare
+  le domande prima di scrivere, dare un esempio invece di una descrizione,
+  chiedere tre versioni e sceglierne una. Regge bene anche la raccolta: da 3 a 5
+  frasi da provare per lo stesso lavoro, una per slide.
 - **FUNZIONE**: una funzione che esiste già e quasi nessuno apre. Progetti,
   istruzioni personalizzate, caricare un file, la voce, la ricerca, gli
   Artifacts. Spiegata a chi non l'ha mai vista.
 - **NOVITÀ**: una novità della settimana, da fonte ufficiale, tradotta in "cosa
   puoi fare da oggi". La notizia per sé non basta mai.
+- **STRUMENTO**: un'app, un'estensione o una funzione di un prodotto che chi
+  legge già usa e non conosce: cosa ci fa, quanto costa, da dove si comincia.
 - **ERRORE_COMUNE**: lo sbaglio tipico di chi comincia e come evitarlo. Fidarsi di
   un numero senza controllarlo, incollare dati sensibili, chiedere tutto in un
   messaggio solo, rifare la stessa chat ogni giorno.
@@ -78,7 +91,7 @@ Ruotano: mai lo stesso angolo due volte di fila.
 
 **Test 1: si può provare oggi?** Scrivi in una frase cosa farà chi legge, appena
 chiuso il post. Se la risposta è "ci rifletterà", il post non serve. Se è "apre
-Claude e fa questa cosa", passa.
+Claude (o ChatGPT, o Gemini) e fa questa cosa", passa.
 
 **Test 2: è nuovo per un principiante?** Se lo sa già chiunque usi l'AI da una
 settimana ("scrivi richieste chiare"), è un luogo comune e nessuno lo salva. Serve
@@ -129,7 +142,8 @@ non un'opinione.
 **4. Coda.**
 - la nota sull'automazione, tra parentesi:
   `(Questo post l'ha scritto il mio agente di ricerca. Fonti nel primo commento.)`
-- tre hashtag nell'ultima riga: `#AI #Claude` più uno sul tema del giorno
+- tre hashtag nell'ultima riga: `#AI`, lo strumento del post (`#Claude`,
+  `#ChatGPT`, `#Gemini`…) e uno sul tema del giorno
 - nessun link nel corpo: le fonti vanno nel primo commento, ci pensa `publish.py`
 
 ## Come si spiega una funzione
@@ -162,72 +176,108 @@ come fatto («risparmi il 40%»). Un rapporto preso dalla fonte («costa un deci
 Se lo spunto non ha un numero vero, il post va bene anche senza: meglio niente
 che un numero finto.
 
-## L'immagine
+## Il carosello
 
-Dal 2026-10-19 ogni post esce con un'infografica 1080x1350: fondo avorio, titolo
-nero pesante, testi con le grazie, terracotta come accento e piccoli cubi
-isometrici disegnati con il contorno nero. Niente etichetta sopra il titolo e
-niente nome in fondo: il nome di Marco è già sopra il post. Non la disegni tu: scrivi nel frontmatter un blocco
-`immagine:` e `scripts/render_image.py` la impagina. L'Action della PR la disegna,
-la mostra a Marco e `publish.py` la carica su LinkedIn insieme al testo.
+Dal 2026-10-23 ogni post esce con un carosello: un PDF da 4 a 7 slide 1080x1350
+che LinkedIn mostra da sfogliare. Il formato viene dai caroselli di @ai__facile:
+copertina con il titolo grande e una o due parole evidenziate, una slide per
+passo o per trucco con la frase esatta da scrivere, una slide finale. Lo stile
+resta quello chiaro delle infografiche: fondo avorio, titoli neri pesanti, testi
+con le grazie, terracotta come accento, piccoli cubi isometrici. Niente
+etichetta sopra il titolo, niente nome di Marco, niente loghi.
 
-L'immagine dice **una cosa sola, la stessa del post**, in modo che si capisca
-anche senza leggerlo. Niente dati che nel post non ci sono, e i numeri seguono le
-regole di «Il numero». Niente loghi, marchi o persone.
+Non lo disegni tu: scrivi nel frontmatter un blocco `carosello:`. L'Action della
+PR chiede a ChatGPT (OpenAI, `scripts/illustrazione.py`) l'illustrazione della
+copertina, disegna le slide con `scripts/render_carousel.py` e le mostra a Marco
+nella PR. Con il Merge `publish.py` carica il PDF su LinkedIn insieme al testo.
 
-Tre modelli, scegli quello che regge il punto del post:
+**Cosa ci va.** Chi sfoglia senza leggere il post deve capire e poter fare la
+cosa. Testo e carosello dicono la stessa cosa in due forme: il testo racconta il
+problema, il numero e l'esempio; le slide portano i passi, uno per slide, con la
+frase esatta. Niente dati che nel post non ci sono, e i numeri seguono le regole
+di «Il numero». Le frasi delle slide sono corte: chi sfoglia legge due righe, non
+un paragrafo.
 
-- **numero**: il post ha un numero che conta. Va al centro, grande.
-- **confronto**: da due a quattro valori della stessa misura e della stessa
-  fonte, uno in evidenza. Ogni valore diventa una pila di cubi proporzionale
-  (la più alta ne ha 24, la più bassa almeno uno).
-- **frase**: il post non ha numeri ma ha la frase esatta da scrivere
-  all'assistente. È il modello giusto per TRUCCO e FUNZIONE senza numeri.
+Per una raccolta (da 3 a 5 frasi da provare per lo stesso lavoro, come i
+caroselli «Ecco 6 prompt per…») ogni frase deve passare i due test da sola: se
+una è riempitivo, toglila. I trucchi visti sui social restano spunti: se una
+frase si appoggia su una funzione o un comando, verificali sulla fonte ufficiale,
+altrimenti non entrano.
+
+Le parti:
+
+- **copertina**: `titolo` completa l'hook, non lo ripete; massimo 4 righe, meglio
+  2-3. Una o due parole chiave fra `**` finiscono nel riquadro terracotta: il
+  tema, non un aggettivo. `sottotitolo` è facoltativo, una riga. `illustrazione`
+  è la scena da disegnare (sotto).
+- **slide**: da 2 a 5. Ognuna ha un'`etichetta` di 2-4 parole («Carica il file»,
+  «Scrivi così», «Prima di fidarti») e una cosa sola fra:
+  - `testo`: una o tre frasi brevi;
+  - `frase`: la frase esatta da scrivere all'assistente, con un `testo`
+    facoltativo sopra per dire dove scriverla, in mezza riga;
+  - `numero`, con un `testo` che lo spiega e la `fonte` della slide se il numero
+    viene da una fonte ufficiale;
+  - `voci`: un confronto da 2 a 4 valori della stessa misura e della stessa
+    fonte, con un `testo` facoltativo sopra. Ogni voce ha `nome`, `valore` (numero
+    puro, decide quanti cubi), `testo` (come si legge) e al massimo una ha
+    `evidenza: true`.
+- **chiusura**: riprende l'hook e lo chiude, come l'ultima riga del post. Si può
+  andare a capo: la seconda riga, fra `**`, finisce nel riquadro. Sotto, lo
+  script aggiunge da solo «Salva il post per quando lo provi.».
+- **fonte**: il dominio della fonte ufficiale principale, senza `https://`. Va nel
+  piede dell'ultima slide.
+- **alt**: cosa dice il carosello, in meno di 120 caratteri. Serve se LinkedIn
+  rifiuta il documento e pubblica la sola copertina come immagine.
 
 ```yaml
-immagine:
-  modello: numero                  # numero, confronto o frase
-  titolo: Quanto ti costa rispiegare chi sei
-  sottotitolo: A ogni chat nuova, Claude riparte da zero.   # facoltativo
-  numero: 100 minuti               # solo per «numero»
-  didascalia: al mese, se ci metti 5 minuti al giorno per 20 giorni
-  fonte: support.claude.com        # dominio della fonte ufficiale; ometti per un conto tuo
-  alt: "100 minuti al mese spesi a rispiegare a Claude chi sei"
+carosello:
+  copertina:
+    titolo: "Claude fa i **conti** sul tuo **Excel**"
+    sottotitolo: Carichi il file, scrivi una frase, ti ridà i totali.
+    illustrazione: "Un portatile aperto sul bancone di un ristorante, accanto una pila di scontrini e un raccoglitore."
+  slide:
+    - etichetta: Carica il file
+      numero: 30 MB
+      testo: il file più grande che puoi caricare in chat, anche con l'account gratuito
+      fonte: support.claude.com
+    - etichetta: Scrivi così
+      testo: Clicca il più in basso a sinistra, aggiungi il file e scrivi
+      frase: Dimmi quanto ho speso con ogni fornitore e ridammi un Excel con i totali.
+    - etichetta: Prima di fidarti
+      testo: Rifai a mano un totale. Se torna, Claude ha letto bene le colonne.
+  chiusura: |
+    Claude fa i conti sul tuo Excel.
+    **A te resta da controllarne uno.**
+  fonte: support.claude.com
+  alt: "Come far calcolare a Claude i totali di un file Excel, la frase da scrivere e il controllo da fare"
 ```
 
-Per **confronto**, al posto di `numero` e `didascalia`:
+Valori fra virgolette se contengono i due punti o cominciano con `**`.
 
-```yaml
-  voci:
-    - nome: Haiku 4.5
-      valore: 1000000              # numero puro, maggiore di zero: decide quanti cubi
-      testo: 1M token              # come lo leggi sull'immagine
-    - nome: Haiku 5.5
-      valore: 10000000
-      testo: 10M token
-      evidenza: true               # al massimo una voce
-```
+**L'illustrazione.** Scrivi in `illustrazione` la scena in italiano, in una o
+due frasi: oggetti e luogo del mestiere dell'esempio. Lo stile (piatto, contorni
+neri, avorio e terracotta) lo aggiunge lo script. Niente testo, numeri o
+schermate da leggere: i modelli sbagliano le scritte, e il titolo c'è già. Niente
+persone riconoscibili, loghi o prodotti veri. La chiede l'Action della PR, non
+tu: nella sessione della routine la copertina esce con una pila di cubi al posto
+dell'illustrazione, ed è normale.
 
-Per **frase**: `frase: Lavoro in uno studio di commercialisti. Rispondi in modo sintetico.`
-
-Regole sui campi:
-- il **titolo** non ripete l'hook: lo completa. Massimo 3 righe, meglio 2.
-- **alt** descrive cosa dice l'immagine a chi non la vede, in meno di 120
-  caratteri. È obbligatorio.
-- **fonte** è il dominio, al massimo con il percorso corto, senza `https://`.
-- valori fra virgolette se contengono i due punti.
-
-Dopo aver salvato il post, controlla l'immagine:
+Dopo aver salvato il post, controlla il carosello:
 
 ```bash
 pip install Pillow 2>/dev/null
-python scripts/render_image.py approved/YYYY-MM-DD.md
+python scripts/render_carousel.py approved/YYYY-MM-DD.md
 ```
 
 Se esce con 1, il messaggio dice cosa accorciare o cosa manca: correggi e
-rilancia. Poi apri `images/YYYY-MM-DD.png` con Read e guardala: si legge al primo
-colpo? Dice la stessa cosa del post? **Non aggiungere il PNG al commit**: lo
-ridisegna e lo committa l'Action della PR.
+rilancia. Poi apri con Read le anteprime in `images/YYYY-MM-DD/`, almeno la
+copertina e la slide con la frase: si leggono al primo colpo? Dicono la stessa
+cosa del post? **Non aggiungere `images/` al commit**: illustrazione e anteprime
+le fa l'Action della PR.
+
+I post fino al 2026-10-22 hanno l'infografica singola (blocco `immagine:`,
+disegnata da `scripts/render_image.py`): lo script resta per loro, i post nuovi
+non la usano più.
 
 ## La lingua
 
@@ -235,7 +285,7 @@ ridisegna e lo committa l'Action della PR.
   "problematica".
 - Niente sostantivi in *-zione* e *-mento* dove c'è un verbo: non "la creazione
   del file", ma "creare il file".
-- Voce attiva, sempre. Di' chi fa la cosa: tu, Claude, il collega.
+- Voce attiva, sempre. Di' chi fa la cosa: tu, l'assistente, il collega.
 - La stessa parola per la stessa cosa, per tutto il post. Alternare "prompt",
   "istruzione" e "richiesta" fa credere che siano tre cose diverse.
 - Un termine tecnico solo se serve a trovare la funzione (il suo nome sullo
@@ -291,7 +341,7 @@ Se la skill è fra quelle caricate nella sessione, usala; altrimenti apri il fil
 con Read e seguilo. Valgono le regole della sua sezione «Nei post LinkedIn di
 questo repo»: riscrivi direttamente il file, la struttura di questo STYLE.md
 resta, nota e hashtag non si toccano, e si ripassano anche i testi del blocco
-`immagine:`.
+`carosello:`.
 
 `readability.py` blocca i segnali più sicuri (contrasto «non si tratta di X, si
 tratta di Y», «è importante notare», «in conclusione», «vediamo insieme», residui
@@ -300,11 +350,14 @@ gerundi appesi, «non è X, è Y» fuori dall'hook).
 
 ## Esempi
 
-- `examples/funzione-progetti.md`: **il modello di riferimento** per il formato
-  corto. Un post FUNZIONE: il problema, il conto che lo rende concreto, dove si
-  trova e la frase da scrivere, l'esempio da un altro mestiere, il limite, la
-  chiusura sull'hook. Nel frontmatter c'è il blocco `immagine:` con il modello
-  «numero». La versione lunga del 12 ottobre è nella storia git.
+- `examples/funzione-progetti.md`: **il modello di riferimento per il testo**
+  nel formato corto. Un post FUNZIONE: il problema, il conto che lo rende
+  concreto, dove si trova e la frase da scrivere, l'esempio da un altro
+  mestiere, il limite, la chiusura sull'hook. Nel frontmatter ha ancora
+  l'infografica singola: per l'immagine vale l'esempio sotto.
+- `examples/carosello-excel.md`: **il modello di riferimento per il carosello**.
+  Un CASO_D_USO con copertina, quattro slide (problema, numero, frase, limite) e
+  chiusura.
 - `examples/riscrittura-2026-08-10.md` e `examples/riscrittura-2026-08-13.md`:
   utili **solo per l'hook**. Sono nel vecchio formato lungo e nella vecchia voce
   in prima persona: non imitarne né la lunghezza né il punto di vista.

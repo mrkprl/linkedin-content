@@ -18,6 +18,7 @@ import yaml
 
 LINKEDIN_POSTS_API = "https://api.linkedin.com/rest/posts"
 LINKEDIN_IMAGES_API = "https://api.linkedin.com/rest/images?action=initializeUpload"
+LINKEDIN_DOCUMENTS_API = "https://api.linkedin.com/rest/documents?action=initializeUpload"
 LINKEDIN_USERINFO_API = "https://api.linkedin.com/v2/userinfo"
 LINKEDIN_SOCIAL_ACTIONS_API = "https://api.linkedin.com/rest/socialActions"
 LINKEDIN_SOCIAL_ACTIONS_V2 = "https://api.linkedin.com/v2/socialActions"
@@ -76,13 +77,18 @@ def escape_little_text(text: str) -> str:
     return PLACEHOLDER.sub(lambda m: "#" + stashed[int(m.group(1))], escaped)
 
 
-def upload_image(png_path, person_id: str, access_token: str) -> str:
-    """Carica un'immagine con la Images API e restituisce la sua URN.
+class ErroreLinkedIn(RuntimeError):
+    """Errore di un caricamento, con il codice HTTP: serve a capire se riprovare
+    o ripiegare (403 = il token non ha il permesso)."""
 
-    Due passi: initializeUpload dà l'indirizzo di caricamento e la URN, poi il file
-    va mandato con un PUT. Con il solo scope w_member_social non si può leggere lo
-    stato dell'immagine (la GET su /rest/images è negata), quindi se il post parte
-    mentre LinkedIn la sta ancora elaborando lo si riprova in publish_post."""
+    def __init__(self, messaggio: str, status: int = None):
+        super().__init__(messaggio)
+        self.status = status
+
+
+def _carica(api: str, chiave: str, nome: str, percorso, person_id: str, access_token: str) -> str:
+    """initializeUpload dà l'indirizzo di caricamento e la URN, poi il file va
+    mandato con un PUT. Vale per le immagini e per i documenti (i caroselli PDF)."""
     headers = {
         "Authorization": f"Bearer {access_token}",
         "Content-Type": "application/json",
@@ -90,29 +96,52 @@ def upload_image(png_path, person_id: str, access_token: str) -> str:
         "X-Restli-Protocol-Version": "2.0.0",
     }
     payload = {"initializeUploadRequest": {"owner": f"urn:li:person:{person_id}"}}
-    response = requests.post(LINKEDIN_IMAGES_API, headers=headers, json=payload, timeout=30)
+    response = requests.post(api, headers=headers, json=payload, timeout=30)
     if response.status_code != 200:
-        raise RuntimeError(f"initializeUpload fallito {response.status_code}: {response.text}")
+        raise ErroreLinkedIn(
+            f"initializeUpload {nome} fallito {response.status_code}: {response.text}",
+            response.status_code)
     value = response.json()["value"]
 
-    with open(png_path, "rb") as f:
+    with open(percorso, "rb") as f:
         dati = f.read()
     response = requests.put(
         value["uploadUrl"],
         headers={"Authorization": f"Bearer {access_token}"},
         data=dati,
-        timeout=60,
+        timeout=120,
     )
     if response.status_code not in (200, 201):
-        raise RuntimeError(f"caricamento immagine fallito {response.status_code}: {response.text}")
-    return value["image"]
+        raise ErroreLinkedIn(
+            f"caricamento {nome} fallito {response.status_code}: {response.text}",
+            response.status_code)
+    return value[chiave]
+
+
+def upload_image(png_path, person_id: str, access_token: str) -> str:
+    """Carica un'immagine con la Images API e restituisce la sua URN.
+
+    Con il solo scope w_member_social non si può leggere lo stato dell'immagine
+    (la GET su /rest/images è negata), quindi se il post parte mentre LinkedIn la
+    sta ancora elaborando lo si riprova in publish_post."""
+    return _carica(LINKEDIN_IMAGES_API, "image", "immagine", png_path, person_id, access_token)
+
+
+def upload_document(pdf_path, person_id: str, access_token: str) -> str:
+    """Carica il PDF del carosello con la Documents API e restituisce la sua URN.
+
+    LinkedIn elabora i documenti in modo asincrono (il caricamento sincrono non
+    esiste per i documenti): il post si riprova finché il documento è pronto."""
+    return _carica(LINKEDIN_DOCUMENTS_API, "document", "documento", pdf_path, person_id,
+                   access_token)
 
 
 def publish_post(text: str, person_id: str, access_token: str, image: dict = None,
                  tentativi: int = 3, attesa: float = 5.0) -> str:
     """Invia il post a LinkedIn API. Restituisce l'ID del post creato.
 
-    image, se c'è, è {"id": "urn:li:image:...", "altText": "..."}."""
+    image è il blocco media, se c'è: {"id": "urn:li:image:...", "altText": "..."}
+    per un'immagine, {"id": "urn:li:document:...", "title": "..."} per un carosello."""
     if len(text) > COMMENTARY_MAX_CHARS:
         raise ValueError(
             f"Testo troppo lungo: {len(text)} caratteri, il massimo è {COMMENTARY_MAX_CHARS}"
@@ -136,10 +165,10 @@ def publish_post(text: str, person_id: str, access_token: str, image: dict = Non
         "isReshareDisabledByAuthor": False,
     }
     if image:
-        payload["content"] = {"media": {"id": image["id"], "altText": image["altText"]}}
-    # Senza immagine un errore è definitivo. Con l'immagine può voler dire che
-    # LinkedIn la sta ancora elaborando: un rifiuto non crea il post, quindi
-    # riprovare non rischia doppioni.
+        payload["content"] = {"media": dict(image)}
+    # Senza immagine un errore è definitivo. Con un'immagine o un documento può
+    # voler dire che LinkedIn lo sta ancora elaborando: un rifiuto non crea il
+    # post, quindi riprovare non rischia doppioni.
     for tentativo in range(1, (tentativi if image else 1) + 1):
         response = requests.post(LINKEDIN_POSTS_API, headers=headers, json=payload, timeout=30)
         if response.status_code in (200, 201):
@@ -222,6 +251,52 @@ def prepare_image(filepath: str, meta: dict, person_id: str, warnings: list):
     return {"id": urn, "altText": str(meta["immagine"]["alt"]).strip()}
 
 
+def prepare_carousel(filepath: str, meta: dict, person_id: str, warnings: list):
+    """Ridisegna il carosello dal frontmatter, con l'illustrazione già salvata nella
+    PR (non la rigenera: esce quella che Marco ha visto), e carica il PDF.
+
+    Restituisce il blocco media e le opzioni per publish_post. Un blocco sbagliato
+    era già segnalato nella PR: si pubblica il solo testo. Se LinkedIn rifiuta i
+    documenti per un problema di permessi (401/403), esce la sola copertina come
+    immagine; qualunque altro errore blocca il post, così si può rilanciare."""
+    from render_carousel import (ErroreImmagine, disegna_carosello, percorso_illustrazione,
+                                 percorso_pdf, salva_pdf, testo_semplice)
+
+    post = Path(filepath)
+    carosello = meta["carosello"]
+    try:
+        pagine = disegna_carosello(carosello, percorso_illustrazione(post))
+    except ErroreImmagine as e:
+        warnings.append(filepath)
+        print(f"  ! Carosello non valido ({e}): pubblico solo il testo")
+        return None, {}
+    pdf = percorso_pdf(post)
+    salva_pdf(pagine, pdf)
+    titolo = testo_semplice(carosello["copertina"]["titolo"])
+    try:
+        urn = upload_document(pdf, person_id, ACCESS_TOKEN)
+    except ErroreLinkedIn as e:
+        if e.status not in (401, 403):
+            raise
+        warnings.append(filepath)
+        print(f"  ! LinkedIn non accetta il documento ({e}): pubblico la sola copertina")
+        png = pdf.with_suffix(".png")
+        pagine[0].save(png, "PNG", optimize=True)
+        urn = upload_image(png, person_id, ACCESS_TOKEN)
+        return {"id": urn, "altText": str(carosello["alt"]).strip()}, {}
+    print(f"  ✓ Carosello caricato: {urn} ({len(pagine)} pagine)")
+    # I documenti ci mettono più delle immagini a essere pronti.
+    return {"id": urn, "title": titolo}, {"tentativi": 8, "attesa": 10.0}
+
+
+def prepare_media(filepath: str, meta: dict, person_id: str, warnings: list):
+    """Carosello se il post ne ha uno, altrimenti l'infografica singola dei post
+    precedenti, altrimenti niente."""
+    if "carosello" in (meta or {}):
+        return prepare_carousel(filepath, meta, person_id, warnings)
+    return prepare_image(filepath, meta, person_id, warnings), {}
+
+
 def main():
     if not ACCESS_TOKEN:
         print("ERROR: LINKEDIN_ACCESS_TOKEN non impostato")
@@ -251,8 +326,8 @@ def main():
         print(f"\n→ Processo: {filepath}")
         try:
             post = parse_post_file(filepath)
-            image = prepare_image(filepath, post["meta"], person_id, warnings)
-            post_id = publish_post(post["text"], person_id, ACCESS_TOKEN, image)
+            media, opzioni = prepare_media(filepath, post["meta"], person_id, warnings)
+            post_id = publish_post(post["text"], person_id, ACCESS_TOKEN, media, **opzioni)
             print(f"  ✓ Pubblicato — LinkedIn post ID: {post_id}")
             print(f"  Topic: {post['meta'].get('topic', 'N/A')}")
 
@@ -276,7 +351,7 @@ def main():
         print(f"\nFalliti: {errors}")
         sys.exit(1)
     if warnings:
-        print(f"\nPubblicati con un avviso (commento o immagine mancante): {warnings}")
+        print(f"\nPubblicati con un avviso (commento, immagine o carosello mancante): {warnings}")
     print("\nDone.")
 
 
