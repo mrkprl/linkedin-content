@@ -74,6 +74,7 @@ SBAGLIATI = [
     ("titolo che non ci sta", con(copertina={"titolo": "parola " * 60, "illustrazione": "x"})),
     ("testo che non ci sta", con(slide=[{"titolo": "L", "testo": "parola " * 400}])),
     ("fonte troppo lunga", con(fonte="esempio.com/" + "a" * 120)),
+    ("personaggio scritto a parole", con(personaggio="sì")),
 ]
 
 
@@ -233,6 +234,34 @@ def test_illustrazione(failures):
             illustrazione.genera(post, chiave="sk-test")
             controlla(failures, "scena di una slide cambiata: rifà solo quella",
                       len(chiamate) == 3 and "una tazza" in chiamate[-1][2]["prompt"])
+
+            # Post sugli agenti: il fattorino entra in tutte le scene, con il riferimento.
+            post.write_text(post.read_text(encoding="utf-8").replace(
+                "carosello:\n", "carosello:\n  personaggio: true\n"), encoding="utf-8")
+            chiamate.clear()
+            illustrazione.genera(post, chiave="sk-test")
+            controlla(failures, "con personaggio: tutte e due rifatte con il riferimento",
+                      len(chiamate) == 2
+                      and all(c[0] == illustrazione.API_MODIFICHE for c in chiamate)
+                      and all(c[2]["images"][0]["image_url"].startswith("data:image/jpeg;base64,")
+                              for c in chiamate)
+                      and all("fattorino" in c[2]["prompt"] for c in chiamate),
+                      str([(c[0], sorted(c[2])) for c in chiamate]))
+
+        def rifiuta_modifiche(url, headers=None, json=None, timeout=None):
+            chiamate.append((url, headers, json))
+            if url == illustrazione.API_MODIFICHE:
+                return Risposta(400, {"error": {"message": "images non supportato"}})
+            return Risposta(200, {"data": [{"b64_json": jpeg_finto()}]})
+
+        chiamate.clear()
+        with mock.patch.object(render_carousel, "IMAGES", tmp / "riprova"), \
+             mock.patch.object(illustrazione.requests, "post", rifiuta_modifiche):
+            esito = illustrazione.genera(post, chiave="sk-test")
+            controlla(failures, "riferimento rifiutato: riprova con la sola descrizione",
+                      all(v and v.exists() for v in esito.values())
+                      and [c[0] for c in chiamate].count(illustrazione.API) == 2
+                      and all("images" not in c[2] for c in chiamate if c[0] == illustrazione.API))
 
         def errore(*a, **k):
             return Risposta(400, {"error": {"message": "prompt rifiutato"}})

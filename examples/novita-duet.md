@@ -7,20 +7,21 @@ sources:
   - https://claude.com/product/claude-duet
   - https://thurrott.com/a-i/anthropic/343121/anthropic-announces-claude-duet-a-personal-ai-agent
 carosello:
+  personaggio: true
   copertina:
     titolo: "Anthropic lancia Claude Duet, il suo **agente** personale"
     sottotitolo: Lavora per te anche a telefono spento. Per ora solo negli USA.
-    illustrazione: "Una scrivania di sera con un portatile chiuso e un telefono a schermo spento, mentre una piccola lampada resta accesa come se qualcuno stesse ancora lavorando."
+    illustrazione: "Il fattorino seduto a una scrivania di sera che lavora a un portatile aperto, mentre accanto un telefono resta spento e una piccola lampada è accesa: il padrone di casa è già andato a dormire."
   slide:
     - titolo: Non devi chiedergli **niente**
       testo: "La mattina ti manda le **priorità**, poi ricontrolla le tue app **ogni poche ore**. I compiti se li porta avanti da solo, su un **computer virtuale tutto suo**."
-      illustrazione: "Un comodino all'alba con un telefono che si illumina per una notifica, accanto una tazza di caffè fumante e un'agenda aperta."
+      illustrazione: "Il fattorino che all'alba appoggia sul comodino, accanto a un telefono e a una tazza di caffè fumante, una busta con le priorità della giornata."
     - titolo: I **paletti**
       testo: "Prima di **mandare, pagare, firmare o cancellare** ti fa vedere cosa sta per fare e aspetta il tuo ok. **Spostare soldi tra conti** o comprare azioni non può farlo, nemmeno se glielo chiedi."
-      illustrazione: "Una mano con il dito fermo sopra un grande pulsante tondo, accanto un lucchetto chiuso e una carta di pagamento senza scritte."
+      illustrazione: "Il fattorino fermo davanti a un grande pulsante tondo terracotta, con una mano alzata come per chiedere il permesso prima di premerlo; accanto un lucchetto chiuso e una carta di pagamento senza scritte."
     - titolo: Per ora **solo negli USA**
       testo: "È una **research preview**: lista d'attesa, solo Stati Uniti, solo per chi paga **Pro o Max**. Per l'Italia ancora nessuna data."
-      illustrazione: "Un mappamondo su una scrivania con l'America del Nord rivolta verso chi guarda, accanto una clessidra e un blocco note con righe vuote."
+      illustrazione: "Il fattorino seduto su una valigia accanto a un grande mappamondo con l'America del Nord rivolta verso chi guarda, mentre guarda una clessidra: aspetta il suo turno."
   fonte: claude.com
   alt: "Claude Duet, l'agente personale di Anthropic: cosa fa da solo, quali paletti ha e chi può usarlo"
 status: example
