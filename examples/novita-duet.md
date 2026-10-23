@@ -28,7 +28,7 @@ status: example
 
 Anthropic ha lanciato Claude Duet, il suo agente personale.
 
-È un'app a parte (iPhone, Android e web) e l'hanno pensata per chi ha più lavoro che ore: professionisti e piccoli imprenditori che passano la giornata tra mail, calendario e fatture.
+È un'app a parte (iPhone, Android e web) e l'hanno pensata per professionisti e piccoli imprenditori che non riescono più a stare dietro a tutto.
 
 Sotto gira Claude Opus 5.5, e la differenza con la solita chat è che non devi chiedergli niente.
 La mattina ti manda le priorità e durante il giorno ricontrolla le tue app ogni poche ore. I compiti poi se li porta avanti da solo, su un computer virtuale tutto suo.
