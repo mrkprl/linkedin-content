@@ -39,28 +39,39 @@ def nome_pagina(pagina: int) -> str:
     return "copertina" if pagina == 1 else f"pagina {pagina}"
 
 
-def messaggio(post: Path) -> tuple:
-    """Restituisce (pagine, testo): le pagine che hanno un'illustrazione, nell'ordine
-    delle immagini, e il messaggio da incollare in ChatGPT."""
+def messaggi(post: Path) -> tuple:
+    """Restituisce (pagine, messaggi): le pagine che hanno un'illustrazione e un
+    messaggio per ognuna, da mandare uno alla volta nella stessa chat. Chiedere
+    tutte le scene insieme non funziona: ChatGPT fa un collage e lo taglia col
+    codice, oppure ripete la prima scena."""
     meta = parse_post_file(str(post))["meta"] or {}
     carosello = meta.get("carosello")
     da_fare = scene(carosello)
     if not da_fare:
-        return [], ""
+        return [], []
     pagine = sorted(da_fare)
     n = len(pagine)
-    righe = [
-        f"Mi servono {n} illustrazioni per un carosello LinkedIn. Generale una alla volta, "
-        "nell'ordine, tutte nello stesso stile. Dopo ogni immagine passa subito alla "
-        "successiva, senza chiedermi conferma.",
+    testi = [" ".join(da_fare[p].split()) for p in pagine]
+    primo = [
+        f"Mi servono {n} illustrazioni per un carosello LinkedIn, che ti chiederò una "
+        "per messaggio. Ora genera solo la prima, UNA immagine.",
         "",
         STILE,
     ]
     if isinstance(carosello, dict) and carosello.get("personaggio") is True:
-        righe += ["", PERSONAGGIO]
-    righe += ["", "Le scene:"]
-    righe += [f"{i}. {' '.join(da_fare[p].split())}" for i, p in enumerate(pagine, 1)]
-    return pagine, "\n".join(righe)
+        primo += ["", PERSONAGGIO]
+    primo += ["", f"Scena 1: {testi[0]}"]
+    altri = [
+        f"Ora UNA sola immagine, stesso stile e formato: scena {i}. {t}"
+        for i, t in enumerate(testi[1:], 2)
+    ]
+    return pagine, ["\n".join(primo)] + altri
+
+
+def messaggio(post: Path) -> tuple:
+    """Come messaggi(), ma con tutto in un testo solo (per anteprima e test)."""
+    pagine, testi = messaggi(post)
+    return pagine, "\n\n---\n\n".join(testi)
 
 
 def main(argv=None) -> int:
@@ -80,8 +91,10 @@ def main(argv=None) -> int:
         meta = parse_post_file(str(post))["meta"] or {}
         if (meta.get("carosello") or {}).get("personaggio") is True:
             print("Allega assets/personaggio.jpg al messaggio.")
-        print()
-        print(testo)
+        print("Manda un messaggio alla volta nella stessa chat, aspettando ogni immagine.")
+        _, testi = messaggi(post)
+        for j, t in enumerate(testi, 1):
+            print(f"\n--- messaggio {j} ---\n{t}")
     return 0
 
 
