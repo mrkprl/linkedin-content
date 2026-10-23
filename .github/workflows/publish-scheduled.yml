@@ -1,0 +1,103 @@
+name: Pubblica i post programmati
+
+# I post preparati in anticipo stanno in programmati/AAAA-MM-GG.md, con le
+# illustrazioni in images/AAAA-MM-GG/. Ogni mattina questa Action pubblica il post
+# del giorno, dalle 8 ora di Roma in poi, e lo sposta in published/.
+#
+# Gli orari sono in UTC e GitHub può partire in ritardo: per questo ci sono tre
+# tentativi. Con l'ora legale le 6:30 UTC sono le 8:30, con l'ora solare le 7:30
+# UTC. Il primo tentativo valido pubblica e sposta il file; quelli dopo non trovano
+# più niente da fare.
+
+on:
+  schedule:
+    - cron: '30 6 * * *'
+    - cron: '30 7 * * *'
+    - cron: '30 9 * * *'
+  workflow_dispatch:
+    inputs:
+      data:
+        description: 'Data del post da pubblicare subito (AAAA-MM-GG). Vuoto = quello di oggi'
+        required: false
+
+permissions:
+  contents: write
+
+concurrency:
+  group: pubblica-programmati
+  cancel-in-progress: false
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Trova il post del giorno
+        id: post
+        env:
+          DATA_SCELTA: ${{ inputs.data }}
+          EVENTO: ${{ github.event_name }}
+        run: |
+          DATA="$DATA_SCELTA"
+          if [ -n "$DATA" ]; then
+            if ! [[ "$DATA" =~ ^[0-9]{4}-[0-9]{2}-[0-9]{2}$ ]]; then
+              echo "::error::Data non valida: usa AAAA-MM-GG"
+              exit 1
+            fi
+          else
+            DATA=$(TZ=Europe/Rome date +%F)
+            ORA=$((10#$(TZ=Europe/Rome date +%H)))
+            if [ "$EVENTO" = "schedule" ] && [ "$ORA" -lt 8 ]; then
+              echo "A Roma sono le $ORA: si pubblica dalle 8."
+              exit 0
+            fi
+          fi
+          FILE="programmati/${DATA}.md"
+          if [ -f "$FILE" ]; then
+            echo "file=$FILE" >> "$GITHUB_OUTPUT"
+            echo "data=$DATA" >> "$GITHUB_OUTPUT"
+            echo "Da pubblicare: $FILE"
+          else
+            echo "Nessun post programmato per il $DATA."
+          fi
+
+      - name: Set up Python
+        if: steps.post.outputs.file != ''
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install dependencies
+        if: steps.post.outputs.file != ''
+        run: pip install requests PyYAML Pillow
+
+      - name: Controlli
+        if: steps.post.outputs.file != ''
+        run: |
+          python scripts/test_publish.py
+          python scripts/test_image.py
+          python scripts/test_carousel.py
+          python scripts/readability.py "${{ steps.post.outputs.file }}" || true
+
+      - name: Pubblica su LinkedIn
+        if: steps.post.outputs.file != ''
+        env:
+          LINKEDIN_ACCESS_TOKEN: ${{ secrets.LINKEDIN_ACCESS_TOKEN }}
+          LINKEDIN_PERSON_ID: ${{ secrets.LINKEDIN_PERSON_ID }}
+          NEW_FILES: ${{ steps.post.outputs.file }}
+        run: python scripts/publish.py
+
+      - name: Sposta in published/
+        if: steps.post.outputs.file != ''
+        env:
+          DATA: ${{ steps.post.outputs.data }}
+        run: |
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git config user.name "GitHub Actions"
+          git mv "programmati/${DATA}.md" "published/${DATA}.md"
+          git add images/ 2>/dev/null || true
+          git commit -m "publish: post programmato del ${DATA} [skip ci]"
+          git push

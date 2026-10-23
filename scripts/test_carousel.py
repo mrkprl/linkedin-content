@@ -108,7 +108,7 @@ def ha_cubi(img: Image.Image) -> bool:
 def test_rendering(failures):
     repo = Path(__file__).parent.parent
     trovati = 0
-    for folder in ("published", "approved", "pending", "archive", "examples"):
+    for folder in ("published", "approved", "programmati", "pending", "archive", "examples"):
         for post in sorted((repo / folder).glob("*.md")):
             meta = parse_post_file(str(post))["meta"] or {}
             if "carosello" not in meta:
