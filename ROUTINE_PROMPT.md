@@ -95,7 +95,7 @@ Poi la coda:
 - esattamente 3 hashtag, ultima riga: #AI, il produttore o lo strumento del post (#Claude, #ChatGPT, #Gemini...) e uno sul tema.
 - Nessun URL nel corpo del post, nemmeno "Fonte: ...". Le fonti vanno nel frontmatter.
 
-Poi il carosello, nel frontmatter (STYLE.md, sezione "Il carosello"), al massimo 4 pagine: la copertina con la notizia, una o due parole chiave fra ** e la scena dell'illustrazione; di solito tre slide (cos'è e cosa fa, il dettaglio che conta, chi può usarlo), ognuna con un titoletto, un paragrafo di 25-40 parole nello stesso tono del post con 2-3 passaggi chiave fra **, e la scena della sua illustrazione. Le scene sono oggetti e luoghi concreti, senza scritte, persone riconoscibili o loghi. Chi sfoglia solo le slide deve capire la notizia. Niente dati che nel post non ci sono.
+Poi il carosello, nel frontmatter (STYLE.md, sezione "Il carosello"), al massimo 4 pagine: la copertina con la notizia, una o due parole chiave fra ** e la scena dell'illustrazione; di solito tre slide (cos'è e cosa fa, il dettaglio che conta, chi può usarlo), ognuna con un titoletto, un paragrafo di 25-40 parole nello stesso tono del post con 2-3 passaggi chiave fra **, e la scena della sua illustrazione. Le scene sono oggetti e luoghi concreti, senza scritte, persone riconoscibili o loghi. Se la notizia è un agente (un'AI che lavora da sola per conto tuo), metti personaggio: true nel blocco carosello e scrivi le scene con il fattorino che fa qualcosa: il suo aspetto lo fissa assets/personaggio.jpg, non descriverlo. Chi sfoglia solo le slide deve capire la notizia. Niente dati che nel post non ci sono.
 
 Step 5: salva il post e verificalo
 

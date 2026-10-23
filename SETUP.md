@@ -240,6 +240,12 @@ uniche fonti sono due blog SEO. Non inseguirle.
   usato: finché il prompt non cambia non la richiede, quindi un secondo push non
   paga le immagini due volte. Senza chiave o con un errore di OpenAI esce con 0 e
   quella pagina esce di solo testo.
+- Il personaggio degli agenti (dal 2026-10-23): con `personaggio: true` nel blocco
+  `carosello:` il prompt aggiunge il fattorino e la chiamata va all'endpoint
+  `/v1/images/edits` con `assets/personaggio.jpg` come immagine di riferimento,
+  così resta uguale da un post all'altro. Se OpenAI rifiuta il riferimento, lo
+  script riprova su `/v1/images/generations` con la sola descrizione (riga `~` nel
+  log). Per cambiare personaggio basta sostituire `assets/personaggio.jpg`.
 - `scripts/render_carousel.py` disegna le pagine 1080x1350 con Pillow e gli
   stessi font e colori dell'infografica: scrive le anteprime JPEG a 720 px in
   `images/DATA/slide-NN.jpg` e il PDF in `images/DATA.pdf` (in `.gitignore`).

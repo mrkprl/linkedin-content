@@ -203,6 +203,8 @@ def valida_carosello(dati) -> dict:
 
     if chiusura:
         parole_evidenziate(chiusura)
+    if "personaggio" in dati and not isinstance(dati["personaggio"], bool):
+        raise ErroreImmagine("«personaggio» è true o false: true solo nei post sugli agenti")
     alt = campo(dati, "alt")
     if len(alt) > ALT_MAX:
         raise ErroreImmagine(f"«alt» di {len(alt)} caratteri, il massimo è {ALT_MAX}")

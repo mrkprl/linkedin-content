@@ -207,6 +207,17 @@ di testo che ha il campo `illustrazione`. Se un'illustrazione non arriva, quella
 pagina esce con il solo testo, centrato, ed è normale. I cubi isometrici restano
 solo nelle slide `voci`, dove sono il grafico che confronta i valori.
 
+**Il personaggio degli agenti.** Quando la notizia è un agente (un'AI che lavora
+da sola per conto tuo: Claude Duet, Dots di OpenAI, Muse di Meta, gli agenti di
+Gemini o Copilot), metti `personaggio: true` nel blocco `carosello:`. Allora in
+tutte le illustrazioni compare il fattorino, il robottino scelto da Marco il
+2026-10-23: corpo tondo verde salvia, visiera bianca con due occhi neri,
+cappellino terracotta, borsa a tracolla. È il segno degli agenti, non una
+mascotte da mettere ovunque: nelle altre notizie non c'è. Il suo aspetto lo
+fissa l'immagine `assets/personaggio.jpg`, che lo script manda a ChatGPT come
+riferimento: nella scena non descriverlo, scrivi solo cosa fa il fattorino («il
+fattorino lascia sul comodino una busta con le priorità della giornata»).
+
 Le parti:
 
 - **copertina**: `titolo` dice la notizia con il nome del prodotto, non ripete
@@ -232,23 +243,26 @@ Le parti:
   piede dell'ultima pagina.
 - **alt**: cosa dice il carosello, in meno di 120 caratteri. Serve se LinkedIn
   rifiuta il documento e pubblica la sola copertina come immagine.
+- **personaggio**: `true` solo nei post sugli agenti (sopra). Altrimenti non
+  scriverlo.
 
 ```yaml
 carosello:
+  personaggio: true
   copertina:
     titolo: "Anthropic lancia Claude Duet, il suo **agente** personale"
     sottotitolo: Lavora per te anche a telefono spento. Per ora solo negli USA.
-    illustrazione: "Una scrivania di sera con un portatile chiuso e un telefono spento, mentre una piccola lampada resta accesa."
+    illustrazione: "Il fattorino seduto a una scrivania di sera che lavora a un portatile aperto, mentre accanto un telefono resta spento e una piccola lampada è accesa."
   slide:
     - titolo: Non devi chiedergli **niente**
       testo: "La mattina ti manda le **priorità**, poi ricontrolla le tue app **ogni poche ore**. I compiti se li porta avanti da solo, su un **computer virtuale tutto suo**."
-      illustrazione: "Un comodino all'alba con un telefono che si illumina per una notifica, accanto una tazza di caffè."
+      illustrazione: "Il fattorino che all'alba lascia sul comodino, accanto a un telefono e a una tazza di caffè, una busta con le priorità della giornata."
     - titolo: I **paletti**
       testo: "Prima di **mandare, pagare, firmare o cancellare** ti fa vedere cosa sta per fare e aspetta il tuo ok."
-      illustrazione: "Una mano con il dito fermo sopra un grande pulsante tondo, accanto un lucchetto chiuso."
+      illustrazione: "Il fattorino fermo davanti a un grande pulsante tondo, con una mano alzata come per chiedere il permesso, accanto un lucchetto chiuso."
     - titolo: Per ora **solo negli USA**
       testo: "È una **research preview**: lista d'attesa, solo Stati Uniti, solo per chi paga **Pro o Max**."
-      illustrazione: "Un mappamondo su una scrivania, accanto una clessidra e un blocco note con righe vuote."
+      illustrazione: "Il fattorino che aspetta il suo turno accanto a un mappamondo con l'America del Nord in vista e a una clessidra."
   fonte: claude.com
   alt: "Claude Duet, l'agente personale di Anthropic: cosa fa da solo, quali paletti ha e chi può usarlo"
 ```
