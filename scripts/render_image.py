@@ -274,7 +274,7 @@ def motivo(draw, x_destra: float, base_y: float, s: float) -> None:
 
 # --- modelli ----------------------------------------------------------------------
 
-def corpo_numero(draw, dati, y0: int, y1: int) -> None:
+def corpo_numero(draw, dati, y0: int, y1: int, cubi: bool = True) -> None:
     pad = 56
     draw.rounded_rectangle((MARGINE, y0, W - MARGINE, y1), radius=40,
                            fill=CARTA, outline=INCHIOSTRO, width=TRATTO)
@@ -291,9 +291,10 @@ def corpo_numero(draw, dati, y0: int, y1: int) -> None:
     y_num = y_did - 40 - alto_num
     draw.text((MARGINE + pad, y_num - bbox[1]), righe_num[0], font=f_num, fill=ARGILLA)
     scrivi(draw, (MARGINE + pad, y_did), righe_did, f_did, INCHIOSTRO, 1.25)
-    # Il motivo dei cubi in alto a destra, se c'è posto sopra il numero.
+    # Il motivo dei cubi in alto a destra, se c'è posto sopra il numero. Il
+    # carosello lo spegne: lì i cubi restano solo nei confronti.
     s = 54
-    if y_num - (y0 + pad) > 4 * s + 24:
+    if cubi and y_num - (y0 + pad) > 4 * s + 24:
         motivo(draw, W - MARGINE - pad, y0 + pad + 4 * s, s)
 
 

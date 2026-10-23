@@ -43,6 +43,21 @@
   tipo: feed
   ruolo: ufficiale
 
+- nome: OpenAI News
+  url: https://openai.com/news/rss.xml
+  tipo: feed
+  ruolo: ufficiale
+
+- nome: Gemini (blog di Google)
+  url: https://blog.google/products/gemini/rss/
+  tipo: feed
+  ruolo: ufficiale
+
+- nome: Google DeepMind
+  url: https://deepmind.google/blog/rss.xml
+  tipo: feed
+  ruolo: ufficiale
+
 - nome: GitHub Blog
   url: https://github.blog/feed/
   tipo: feed
@@ -80,6 +95,16 @@
 
 - nome: r/ClaudeAI, i più votati della settimana
   url: https://www.reddit.com/r/ClaudeAI/top/.rss?t=week
+  tipo: feed
+  ruolo: spunto
+
+- nome: r/ChatGPT, i più votati della settimana
+  url: https://www.reddit.com/r/ChatGPT/top/.rss?t=week
+  tipo: feed
+  ruolo: spunto
+
+- nome: r/GeminiAI, i più votati della settimana
+  url: https://www.reddit.com/r/GeminiAI/top/.rss?t=week
   tipo: feed
   ruolo: spunto
 

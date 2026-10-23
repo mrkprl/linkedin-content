@@ -1,0 +1,51 @@
+---
+date: 2026-10-23
+topic: CASO_D_USO
+sources:
+  - https://support.claude.com/en/articles/12111783-create-and-edit-files-with-claude
+  - https://support.claude.com/en/articles/8241126-upload-files-to-claude
+carosello:
+  copertina:
+    titolo: "Claude fa i **conti** sul tuo **Excel**"
+    sottotitolo: Carichi il file, scrivi una frase, ti ridà i totali.
+    illustrazione: "Un portatile aperto sul bancone di un ristorante, accanto una pila di scontrini e un raccoglitore ad anelli. Sullo schermo un grafico a barre."
+  slide:
+    - titolo: Carica il **file**
+      numero: 30 MB
+      testo: il file più grande che puoi caricare in chat, anche con l'account gratuito
+      fonte: support.claude.com
+    - titolo: Poi scrivi **così**
+      testo: Clicca il più in basso a sinistra, aggiungi il file e scrivi
+      frase: Dimmi quanto ho speso con ogni fornitore, fammi un grafico e ridammi un Excel con i totali e le formule.
+    - titolo: Prima di **fidarti**
+      testo: "Rifai a mano **un totale**. Se torna, Claude ha letto bene le colonne. Se il file non si carica, controlla nelle Impostazioni che l'**esecuzione del codice** sia attiva."
+      illustrazione: "Una calcolatrice da tavolo accanto a un foglio di conti stampato con una spunta a matita, e una tazza di caffè."
+  fonte: support.claude.com
+  alt: "Carosello: come far calcolare a Claude i totali di un file Excel, la frase da scrivere e il controllo da fare"
+status: example
+---
+
+Claude fa i conti sul tuo foglio Excel.
+
+Prendi un ristoratore con il file degli acquisti di settembre: centinaia di righe, una ventina di fornitori.
+Per sapere quanto ha speso con ciascuno gli servono filtri, somme e un pomeriggio.
+
+Quel file lo puoi caricare in chat, anche con l'account gratuito, fino a 30 MB.
+Per i conti Claude scrive ed esegue un piccolo programma sul file, e ti restituisce grafici e fogli nuovi da scaricare.
+
+Clicca il più in basso a sinistra, aggiungi il file e scrivi: "Dimmi quanto ho speso con ogni fornitore, fammi un grafico e ridammi un Excel con i totali e le formule."
+
+Al ristoratore torna un foglio con una riga per fornitore e le formule dentro le celle.
+Così vede da dove esce ogni totale e il mese dopo ci incolla i dati nuovi.
+
+Prima di usare i numeri, rifai a mano un totale: se torna, Claude ha letto bene le colonne.
+Lavorare sui file consuma più limite di una chat normale, e se l'Excel non si carica controlla nelle Impostazioni che l'esecuzione del codice sia attiva.
+
+Claude fa i conti sul tuo foglio Excel.
+A te resta da controllarne uno.
+
+Qual è il foglio Excel su cui rifai le stesse somme ogni mese?
+
+(Questo post l'ha scritto il mio agente di ricerca. Fonti nel primo commento.)
+
+#AI #Claude #Excel

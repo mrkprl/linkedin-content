@@ -1,0 +1,25 @@
+name: Smoke test carosello
+
+# Verifica a mano che il token possa caricare documenti (Documents API), cioè i
+# caroselli PDF. Carica il carosello dell'esempio senza creare nessun post.
+
+on:
+  workflow_dispatch:
+
+jobs:
+  smoke:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - run: pip install requests PyYAML Pillow
+
+      - name: Carica un carosello di prova
+        env:
+          LINKEDIN_ACCESS_TOKEN: ${{ secrets.LINKEDIN_ACCESS_TOKEN }}
+          LINKEDIN_PERSON_ID: ${{ secrets.LINKEDIN_PERSON_ID }}
+        run: python scripts/smoke_document.py
