@@ -2,7 +2,7 @@ Editorial illustration for a LinkedIn carousel about AI news.
 Scene (described in Italian): Il fattorino che all'alba appoggia sul comodino, accanto a un telefono e a una tazza di caffè fumante, una busta con le priorità della giornata.
 
 Style: clean flat vector look, confident black outlines, simple shapes, soft shading. Warm ivory background (#F4F2EC). Main accent terracotta (#D97757), with kraft beige (#D4B28C), cream (#FBF8F3), muted sage green and near-black ink (#141413). Draw the objects of the scene, not abstract decorations.
-Composition: landscape, the subject centered with generous empty margins, nothing important near the edges because the image will be cropped.
+Composition: wide panoramic landscape (2:1), the subject centered with generous empty margins, nothing important near the top, bottom or side edges because the image will be cropped.
 Strictly no text: no letters, words, numbers, labels or readable screens. No logos, brand marks or real products. No recognizable people: if people are needed, show only hands or figures seen from behind, without faces.
 
 Recurring character: the scene features "il fattorino", the mascot of this series. Draw it exactly as in the reference image: a small friendly robot with a rounded sage-green body and limbs, a big round head with a round ear disc on the side, a white oval face visor with two small black oval eyes and no mouth, a terracotta baseball cap and charcoal feet; when it fits the scene it carries a kraft-brown messenger bag with blank envelopes. Same proportions, colors and line style in every image. It is the only character in the scene.
