@@ -22,7 +22,7 @@ HOOK_MAX_CHARS = 60        # la prima riga è anche lo slug dell'URL del post
 HOOK_CONSIGLIATO = 40      # sotto i 40 caratteri l'engagement rate è ~25% più alto
 # Formato corto dal 2026-10-19 (scelta di Marco, vedi SETUP.md): prima 1600-2600
 # di tolleranza e almeno 20 paragrafi.
-CARATTERI_MIN = 900        # target di scrittura 1000-1400 coda compresa, qui la banda di tolleranza
+CARATTERI_MIN = 800        # target di scrittura 900-1300 coda compresa, qui la banda di tolleranza
 CARATTERI_MAX = 1500       # oltre i 3000 LinkedIn rifiuta il post
 BLOCCHI_MIN = 6            # sotto: 0-5 paragrafi valgono 0,70x reach
 BLOCCHI_MAX = 10           # sopra, in 1.200 caratteri, si torna a una frase per blocco

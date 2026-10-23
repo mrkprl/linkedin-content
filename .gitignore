@@ -1,1 +1,3 @@
 __pycache__/
+# Il PDF del carosello si ridisegna sempre dal frontmatter: non serve nel repo.
+images/*.pdf

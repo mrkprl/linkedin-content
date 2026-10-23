@@ -1,8 +1,9 @@
 # Idee per i post
 
-Qui Marco incolla gli spunti che trova in giro: un reel su Instagram, un video,
-un trucco visto da un amico. Si modifica anche dal telefono, dall'app GitHub
-(apri il file, matita, scrivi, Commit changes direttamente su main).
+Qui Marco incolla gli spunti che trova in giro: una notizia vista su un
+carosello di @ai__facile o @profession.ai, un video, un trucco visto da un
+amico. Si modifica anche dal telefono, dall'app GitHub (apri il file, matita,
+scrivi, Commit changes direttamente su main).
 
 Una riga per idea, con il trattino davanti, scritta come viene. Se c'è un link
 mettilo, se non c'è va bene lo stesso. La routine pesca da qui prima che dalle
