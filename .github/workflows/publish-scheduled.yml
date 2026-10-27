@@ -4,16 +4,21 @@ name: Pubblica i post programmati
 # illustrazioni in images/AAAA-MM-GG/. Ogni mattina questa Action pubblica il post
 # del giorno, dalle 8 ora di Roma in poi, e lo sposta in published/.
 #
-# Gli orari sono in UTC e GitHub può partire in ritardo: per questo ci sono tre
-# tentativi. Con l'ora legale le 6:30 UTC sono le 8:30, con l'ora solare le 7:30
-# UTC. Il primo tentativo valido pubblica e sposta il file; quelli dopo non trovano
-# più niente da fare.
+# Gli orari programmati di GitHub partono spesso con ore di ritardo (a ottobre
+# 2026 anche 5 ore). Per questo i primi tentativi sono di notte: se la corsa
+# parte prima delle 8 di Roma, aspetta le 8 e poi pubblica. Se parte tardi,
+# pubblica subito. Il primo tentativo valido pubblica e sposta il file; quelli
+# dopo non trovano più niente da fare. Il repo è pubblico, quindi l'attesa non
+# consuma minuti a pagamento.
 
 on:
   schedule:
-    - cron: '30 6 * * *'
-    - cron: '30 7 * * *'
-    - cron: '30 9 * * *'
+    - cron: '13 1 * * *'
+    - cron: '13 2 * * *'
+    - cron: '13 3 * * *'
+    - cron: '43 4 * * *'
+    - cron: '17 7 * * *'
+    - cron: '17 9 * * *'
   workflow_dispatch:
     inputs:
       data:
@@ -30,6 +35,7 @@ concurrency:
 jobs:
   publish:
     runs-on: ubuntu-latest
+    timeout-minutes: 355
 
     steps:
       - name: Checkout
@@ -51,8 +57,13 @@ jobs:
             DATA=$(TZ=Europe/Rome date +%F)
             ORA=$((10#$(TZ=Europe/Rome date +%H)))
             if [ "$EVENTO" = "schedule" ] && [ "$ORA" -lt 8 ]; then
-              echo "A Roma sono le $ORA: si pubblica dalle 8."
-              exit 0
+              ATTESA=$(( $(TZ=Europe/Rome date -d "$DATA 08:00" +%s) - $(date +%s) ))
+              if [ "$ATTESA" -gt 20400 ]; then
+                echo "A Roma sono le $ORA: troppo presto, ci pensa un tentativo dopo."
+                exit 0
+              fi
+              echo "A Roma sono le $ORA: aspetto le 8 ($ATTESA secondi)."
+              sleep "$ATTESA"
             fi
           fi
           FILE="programmati/${DATA}.md"
@@ -100,4 +111,5 @@ jobs:
           git mv "programmati/${DATA}.md" "published/${DATA}.md"
           git add images/ 2>/dev/null || true
           git commit -m "publish: post programmato del ${DATA} [skip ci]"
+          git pull --rebase origin main
           git push
