@@ -6,6 +6,18 @@ cambiarlo qui basta, senza toccare la routine.
 Le soglie numeriche sono in `SETUP.md`; qui c'è cosa si scrive e come deve suonare.
 `scripts/readability.py` verifica meccanicamente la forma.
 
+**Dal 2026-11-03: formato rivisto sui numeri.** I post solo testo stile tutorial
+(14-19 ottobre: 72-839 impression) hanno reso molto più delle infografiche
+(60-95) e dei caroselli (22-29 ottobre: 12-45). Quindi: niente carosello; per
+ora si alternano post solo testo e post con una sola illustrazione (blocco
+`foto:`) per confrontarli, e si pubblica solo dal lunedì al venerdì. La notizia resta il
+punto di partenza, ma va scelta tra quelle che chi legge **può provare o che lo
+toccano subito** (gratis, sugli strumenti che usa già, in Italia), e raccontata
+con lo schema dei post migliori: la scena in cui chi legge si riconosce, cosa è
+cambiato, "come si fa, in tre passi" con una frase da copiare, un paragone, un
+esempio da un mestiere, il limite, la chiusura che riprende l'hook, la domanda.
+Lunghezza di riferimento: 1.600-2.100 caratteri, come i post di metà ottobre.
+
 **Dal 2026-10-23 la linea è cambiata.** Il profilo racconta le **novità serie
 dell'AI** a chi lavora e l'AI la usa già: un modello nuovo, un agente, una
 funzione che cambia cosa si può fare. Ogni post esce con un carosello (sezione

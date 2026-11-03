@@ -75,7 +75,7 @@ def run():
 
     # Casi reali: ogni post nel repo deve produrre un commentary valido.
     repo = Path(__file__).parent.parent
-    for folder in ("published", "approved", "pending", "archive", "examples"):
+    for folder in ("published", "approved", "programmati", "pending", "archive", "examples"):
         for post in sorted((repo / folder).glob("*.md")):
             text = parse_post_file(str(post))["text"]
             problems = validate(escape_little_text(text))
@@ -85,6 +85,37 @@ def run():
                   f"{folder}/{post.name} — {len(text)} caratteri")
             for p in problems:
                 failures.append((f"{folder}/{post.name}", "commentary valido", p))
+
+    # Foto già pronta (blocco `foto:`): si carica il file giusto; se manca o il
+    # blocco è sbagliato si pubblica il solo testo con un avviso.
+    import tempfile
+    import publish
+    import render_carousel
+    caricate = []
+    originale_upload, originale_images = publish.upload_image, render_carousel.IMAGES
+    publish.upload_image = lambda percorso, *a: caricate.append(Path(percorso).name) or "urn:li:image:x"
+    try:
+        with tempfile.TemporaryDirectory() as tmp:
+            render_carousel.IMAGES = Path(tmp)
+            (Path(tmp) / "2026-11-05").mkdir()
+            (Path(tmp) / "2026-11-05" / "illustrazione.jpg").write_bytes(b"jpg")
+            casi_foto = [
+                ({"foto": {"file": "illustrazione.jpg", "alt": "Descrizione"}},
+                 {"id": "urn:li:image:x", "altText": "Descrizione"}, "foto caricata"),
+                ({"foto": {"file": "manca.jpg", "alt": "Descrizione"}}, None, "foto mancante"),
+                ({"foto": {"file": "illustrazione.jpg"}}, None, "foto senza alt"),
+            ]
+            for meta, atteso, label in casi_foto:
+                avvisi = []
+                media, _ = publish.prepare_media("programmati/2026-11-05.md", meta, "p", avvisi)
+                ok = media == atteso and (bool(avvisi) == (atteso is None))
+                print(f"  [{'OK ' if ok else 'FAIL'}] {label}")
+                if not ok:
+                    failures.append((label, atteso, media))
+            if caricate != ["illustrazione.jpg"]:
+                failures.append(("file caricati", ["illustrazione.jpg"], caricate))
+    finally:
+        publish.upload_image, render_carousel.IMAGES = originale_upload, originale_images
 
     if failures:
         print(f"\n{len(failures)} test falliti:")
