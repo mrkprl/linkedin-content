@@ -289,11 +289,36 @@ def prepare_carousel(filepath: str, meta: dict, person_id: str, warnings: list):
     return {"id": urn, "title": titolo}, {"tentativi": 8, "attesa": 10.0}
 
 
+def prepare_photo(filepath: str, meta: dict, person_id: str, warnings: list):
+    """Carica l'illustrazione già pronta indicata in `foto:` (per esempio una fatta
+    in ChatGPT), salvata in images/<data>/. Se il file manca o il blocco è
+    sbagliato, si pubblica il solo testo con un avviso; un errore di LinkedIn
+    blocca il post, così si può rilanciare."""
+    from render_carousel import cartella_post
+
+    foto = meta.get("foto")
+    if not isinstance(foto, dict) or not foto.get("file") or not str(foto.get("alt") or "").strip():
+        warnings.append(filepath)
+        print("  ! Blocco foto non valido (servono file e alt): pubblico solo il testo")
+        return None
+    percorso = cartella_post(Path(filepath)) / Path(str(foto["file"])).name
+    if not percorso.is_file():
+        warnings.append(filepath)
+        print(f"  ! Foto non trovata ({percorso}): pubblico solo il testo")
+        return None
+    urn = upload_image(percorso, person_id, ACCESS_TOKEN)
+    print(f"  ✓ Foto caricata: {urn}")
+    return {"id": urn, "altText": str(foto["alt"]).strip()}
+
+
 def prepare_media(filepath: str, meta: dict, person_id: str, warnings: list):
-    """Carosello se il post ne ha uno, altrimenti l'infografica singola dei post
-    precedenti, altrimenti niente."""
-    if "carosello" in (meta or {}):
+    """Carosello se il post ne ha uno, poi la foto già pronta, poi l'infografica
+    singola dei post precedenti, altrimenti niente (solo testo)."""
+    meta = meta or {}
+    if "carosello" in meta:
         return prepare_carousel(filepath, meta, person_id, warnings)
+    if "foto" in meta:
+        return prepare_photo(filepath, meta, person_id, warnings), {}
     return prepare_image(filepath, meta, person_id, warnings), {}
 
 
