@@ -316,6 +316,8 @@ La routine giornaliera è in pausa.
   successivo della stessa mattina riprova. Attenzione al caso raro in cui il post esce
   ma lo spostamento fallisce: il tentativo dopo lo ripubblicherebbe.
 
+**Orario.** Ogni post esce all'ora scritta in `orari.yaml` per il suo giorno della settimana (ora di Roma). Per un orario diverso su un solo post, aggiungi `ora: "HH:MM"` nel frontmatter. Senza indicazioni esce alle 8:00. Per controllare: `python scripts/orario.py AAAA-MM-GG`.
+
 ## Rinnovo token LinkedIn (ogni ~60 giorni!)
 
 1. Vai su https://www.linkedin.com/developers/tools/oauth/token-generator

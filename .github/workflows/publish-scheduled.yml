@@ -1,13 +1,14 @@
 name: Pubblica i post programmati
 
 # I post preparati in anticipo stanno in programmati/AAAA-MM-GG.md, con le
-# illustrazioni in images/AAAA-MM-GG/. Ogni mattina questa Action pubblica il post
-# del giorno, dalle 8 ora di Roma in poi, e lo sposta in published/.
+# illustrazioni in images/AAAA-MM-GG/. Ogni giorno questa Action pubblica il post
+# del giorno all'ora scritta in orari.yaml (o in `ora:` nel post, ora di Roma) e
+# lo sposta in published/.
 #
 # Gli orari programmati di GitHub partono spesso con ore di ritardo (a ottobre
-# 2026 anche 5 ore). Per questo i primi tentativi sono di notte: se la corsa
-# parte prima delle 8 di Roma, aspetta le 8 e poi pubblica. Se parte tardi,
-# pubblica subito. Il primo tentativo valido pubblica e sposta il file; quelli
+# 2026 anche 5 ore). Per questo i tentativi partono presto: se la corsa arriva
+# prima dell'ora del post, aspetta fino a quell'ora (al massimo 5 ore e 40) e poi
+# pubblica. Se arriva tardi, pubblica subito. Il primo tentativo valido pubblica e sposta il file; quelli
 # dopo non trovano più niente da fare. Il repo è pubblico, quindi l'attesa non
 # consuma minuti a pagamento.
 
@@ -17,8 +18,11 @@ on:
     - cron: '13 2 * * *'
     - cron: '13 3 * * *'
     - cron: '43 4 * * *'
+    - cron: '43 6 * * *'
     - cron: '17 7 * * *'
+    - cron: '13 8 * * *'
     - cron: '17 9 * * *'
+    - cron: '43 10 * * *'
   workflow_dispatch:
     inputs:
       data:
@@ -55,14 +59,14 @@ jobs:
             fi
           else
             DATA=$(TZ=Europe/Rome date +%F)
-            ORA=$((10#$(TZ=Europe/Rome date +%H)))
-            if [ "$EVENTO" = "schedule" ] && [ "$ORA" -lt 8 ]; then
-              ATTESA=$(( $(TZ=Europe/Rome date -d "$DATA 08:00" +%s) - $(date +%s) ))
+            ORARIO=$(python3 scripts/orario.py "$DATA")
+            ATTESA=$(( $(TZ=Europe/Rome date -d "$DATA $ORARIO" +%s) - $(date +%s) ))
+            if [ "$EVENTO" = "schedule" ] && [ "$ATTESA" -gt 0 ]; then
               if [ "$ATTESA" -gt 20400 ]; then
-                echo "A Roma sono le $ORA: troppo presto, ci pensa un tentativo dopo."
+                echo "Il post del $DATA esce alle $ORARIO: troppo presto, ci pensa un tentativo dopo."
                 exit 0
               fi
-              echo "A Roma sono le $ORA: aspetto le 8 ($ATTESA secondi)."
+              echo "Il post del $DATA esce alle $ORARIO: aspetto $ATTESA secondi."
               sleep "$ATTESA"
             fi
           fi
@@ -91,6 +95,7 @@ jobs:
           python scripts/test_publish.py
           python scripts/test_image.py
           python scripts/test_carousel.py
+          python scripts/test_orario.py
           python scripts/readability.py "${{ steps.post.outputs.file }}" || true
 
       - name: Pubblica su LinkedIn

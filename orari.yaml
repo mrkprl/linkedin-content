@@ -1,0 +1,13 @@
+# Ora di pubblicazione dei post programmati, ora di Roma, giorno per giorno.
+# La legge scripts/orario.py. Un post può avere un orario suo con `ora: "HH:MM"`
+# nel frontmatter, che vince su questo file. Senza indicazioni si pubblica alle 8:00.
+#
+# Prova di novembre 2026: settimana 1 (9-13 novembre) al mattino, settimana 2
+# (16-20 novembre) a pranzo, poi si confrontano le impression a 24 ore.
+lunedi: "12:00"
+martedi: "08:30"
+mercoledi: "08:30"
+giovedi: "08:30"
+venerdi: "08:30"
+sabato: "10:00"
+domenica: "10:00"
