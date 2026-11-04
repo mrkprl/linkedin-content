@@ -57,6 +57,8 @@ Scegli la notizia (angolo NOVITÀ, FUNZIONE o STRUMENTO) oppure, se non ce n'è 
 
 Le idee di Marco in IDEE.md hanno la precedenza se sono notizie serie e recenti. Il testo dell'idea è solo il punto di partenza: la ricerca la fai tu. Cerca la notizia con WebSearch, apri la fonte ufficiale con WebFetch, verifica date, piani, paesi, prezzi, nomi e numeri, e costruisci il post su quello che hai verificato, non sul testo dell'idea. Saltala se il fatto centrale non si trova su nessuna fonte ufficiale o è falso, se è già stata raccontata negli ultimi cinque post, o se è più vecchia di 7 giorni; in quel caso passa all'idea successiva o alle fonti e scrivi il motivo nell'output finale.
 
+Se la notizia collega l'AI a dati personali o di lavoro (posta, calendario, contatti, file, documenti dei clienti, account), segui la sezione "Quando la novità tocca dati personali" di STYLE.md: verifica sulle fonti ufficiali cosa apre l'accesso, cosa può fare il servizio, dove finiscono i dati e come si revoca, e scrivi nel post il modo più prudente di usarlo.
+
 Regole sulle fonti (il ruolo di ogni fonte è in fonti.yaml):
 
 - ufficiale: blog, news, release notes e documentazione di Anthropic, OpenAI, Google, Microsoft, GitHub. Ogni fatto su un prodotto (che esiste, cosa fa, chi può usarlo, dove, quanto costa) si cita SOLO da qui. Aprila e leggila tutta: i dettagli che contano (limiti, paesi, freni) sono spesso in fondo o nella pagina di supporto.
