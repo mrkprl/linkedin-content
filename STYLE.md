@@ -339,6 +339,34 @@ non la usano più.
   telefono. L'avviso di `readability.py` sui blocchi di una riga sola, nelle
   notizie, si può lasciare.
 
+## Quando la novità tocca dati personali
+
+Se la novità collega l'AI a dati personali o di lavoro (posta, calendario,
+contatti, file, foto, documenti dei clienti, conti, account, posizione), prima
+di scrivere si ragiona sulla sicurezza e il post lo dice. Nato dal commento
+al post del 4 novembre su ChatGPT e iCloud, che presentava la password per app
+come sicura senza dire che apre posta, contatti e calendari insieme.
+
+Le domande da farsi, e da verificare sulle pagine ufficiali:
+
+- **Cosa apre davvero.** Quali dati vede il servizio e se i permessi si possono
+  limitare (una sola casella, sola lettura) o è tutto o niente.
+- **Cosa può fare.** Leggere soltanto, o anche modificare, spostare, inviare,
+  cancellare. Se legge contenuti scritti da altri (mail, documenti condivisi,
+  pagine web) e può anche agire, c'è il rischio che istruzioni nascoste in quei
+  contenuti lo guidino (prompt injection).
+- **Dove finiscono i dati.** Se vengono usati per addestrare i modelli, se li
+  leggono revisori umani, quanto restano salvati, se cambia tra account
+  personale e di lavoro.
+- **Come si chiude.** Dove si revoca l'accesso o si spegne l'impostazione, con
+  il percorso preciso.
+
+Nel post entra almeno: cosa apre o dove vanno i dati, il modo più prudente di
+usarlo (accesso dedicato, sola lettura, togliere i dati dei clienti, spegnere
+il salvataggio) e come si revoca. Per la mail di lavoro o i dati dei clienti,
+il rimando a chi gestisce i dati in azienda. Se un dato non si trova sulla
+fonte ufficiale, si scrive che la fonte non lo dice.
+
 ## Cosa non si fa mai
 
 **La glossa didascalica.** «un classificatore, cioè un sistema che...». Vietati:
