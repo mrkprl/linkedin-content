@@ -44,6 +44,11 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          # Sempre l'ultimo main, non il commit di quando è scattato l'orario:
+          # una corsa rimasta in coda deve vedere il post già spostato da quella
+          # prima (il 9 novembre 2026 il post di Gemini è uscito due volte così).
+          ref: main
 
       - name: Trova il post del giorno
         id: post
@@ -98,8 +103,23 @@ jobs:
           python scripts/test_orario.py
           python scripts/readability.py "${{ steps.post.outputs.file }}" || true
 
-      - name: Pubblica su LinkedIn
+      - name: Controlla che non sia già uscito
+        id: ancora
         if: steps.post.outputs.file != ''
+        env:
+          FILE: ${{ steps.post.outputs.file }}
+        run: |
+          # Dopo l'attesa fino all'ora del post, un'altra corsa può averlo già
+          # pubblicato e spostato: si guarda main com'è adesso.
+          git fetch --quiet origin main
+          if git cat-file -e "origin/main:${FILE}" 2>/dev/null; then
+            echo "pubblica=si" >> "$GITHUB_OUTPUT"
+          else
+            echo "Il post ${FILE} non è più in main: l'ha già pubblicato un'altra corsa."
+          fi
+
+      - name: Pubblica su LinkedIn
+        if: steps.ancora.outputs.pubblica == 'si'
         env:
           LINKEDIN_ACCESS_TOKEN: ${{ secrets.LINKEDIN_ACCESS_TOKEN }}
           LINKEDIN_PERSON_ID: ${{ secrets.LINKEDIN_PERSON_ID }}
@@ -107,7 +127,7 @@ jobs:
         run: python scripts/publish.py
 
       - name: Sposta in published/
-        if: steps.post.outputs.file != ''
+        if: steps.ancora.outputs.pubblica == 'si'
         env:
           DATA: ${{ steps.post.outputs.data }}
         run: |
