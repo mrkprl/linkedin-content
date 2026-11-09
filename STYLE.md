@@ -369,6 +369,20 @@ il salvataggio) e come si revoca. Per la mail di lavoro o i dati dei clienti,
 il rimando a chi gestisce i dati in azienda. Se un dato non si trova sulla
 fonte ufficiale, si scrive che la fonte non lo dice.
 
+## Le fonti di ispirazione
+
+@ai__facile, @profession.ai e Datapizza servono a capire **di cosa** si parla
+in settimana, mai **come** dirlo. Dal loro post si prende solo l'argomento. Poi:
+
+- si va alla fonte primaria (annuncio, documentazione, studio, repository) e il
+  post nasce da lì, con i dati che loro non hanno riportato;
+- hook, chiusura, esempi e frasi da copiare sono nostri: se il nostro hook
+  somiglia al loro, si cambia angolo (un numero della fonte, un limite, quello
+  che nel loro post manca);
+- non si riprende la loro struttura slide per slide né le loro immagini;
+- si controlla accanto al loro post prima di consegnare: nessuna frase deve
+  suonare come una loro riformulata.
+
 ## Cosa non si fa mai
 
 **La glossa didascalica.** «un classificatore, cioè un sistema che...». Vietati:
