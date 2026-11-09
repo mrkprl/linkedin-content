@@ -59,6 +59,8 @@ Le idee di Marco in IDEE.md hanno la precedenza se sono notizie serie e recenti.
 
 Se la notizia collega l'AI a dati personali o di lavoro (posta, calendario, contatti, file, documenti dei clienti, account), segui la sezione "Quando la novità tocca dati personali" di STYLE.md: verifica sulle fonti ufficiali cosa apre l'accesso, cosa può fare il servizio, dove finiscono i dati e come si revoca, e scrivi nel post il modo più prudente di usarlo.
 
+Dai profili di ispirazione (@ai__facile, @profession.ai, Datapizza) prendi solo l'argomento: hook, frasi, esempi e struttura sono nostri e partono dalla fonte primaria (sezione "Le fonti di ispirazione" di STYLE.md).
+
 Regole sulle fonti (il ruolo di ogni fonte è in fonti.yaml):
 
 - ufficiale: blog, news, release notes e documentazione di Anthropic, OpenAI, Google, Microsoft, GitHub. Ogni fatto su un prodotto (che esiste, cosa fa, chi può usarlo, dove, quanto costa) si cita SOLO da qui. Aprila e leggila tutta: i dettagli che contano (limiti, paesi, freni) sono spesso in fondo o nella pagina di supporto.
