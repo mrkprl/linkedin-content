@@ -8,9 +8,11 @@ Le soglie numeriche sono in `SETUP.md`; qui c'è cosa si scrive e come deve suon
 
 **Dal 2026-11-03: formato rivisto sui numeri.** I post solo testo stile tutorial
 (14-19 ottobre: 72-839 impression) hanno reso molto più delle infografiche
-(60-95) e dei caroselli (22-29 ottobre: 12-45). Quindi: niente carosello; per
-ora si alternano post solo testo e post con una sola illustrazione (blocco
-`foto:`) per confrontarli, e si pubblica solo dal lunedì al venerdì. La notizia resta il
+(60-95) e dei caroselli (22-29 ottobre: 12-45). Quindi: niente carosello e,
+dal 9 novembre, solo testo: nella prova a settimane alterne i post con
+illustrazione hanno fatto 9-48 impression, quelli solo testo 57-400. Un'immagine
+(blocco `foto:`) solo quando porta un'informazione, per esempio lo screenshot di
+una funzione nuova. Si pubblica solo dal lunedì al venerdì. La notizia resta il
 punto di partenza, ma va scelta tra quelle che chi legge **può provare o che lo
 toccano subito** (gratis, sugli strumenti che usa già, in Italia), e raccontata
 con lo schema dei post migliori: la scena in cui chi legge si riconosce, cosa è
