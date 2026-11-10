@@ -8,9 +8,11 @@ Le soglie numeriche sono in `SETUP.md`; qui c'è cosa si scrive e come deve suon
 
 **Dal 2026-11-03: formato rivisto sui numeri.** I post solo testo stile tutorial
 (14-19 ottobre: 72-839 impression) hanno reso molto più delle infografiche
-(60-95) e dei caroselli (22-29 ottobre: 12-45). Quindi: niente carosello; per
-ora si alternano post solo testo e post con una sola illustrazione (blocco
-`foto:`) per confrontarli, e si pubblica solo dal lunedì al venerdì. La notizia resta il
+(60-95) e dei caroselli (22-29 ottobre: 12-45). Quindi: niente carosello e,
+dal 9 novembre, solo testo: nella prova a settimane alterne i post con
+illustrazione hanno fatto 9-48 impression, quelli solo testo 57-400. Un'immagine
+(blocco `foto:`) solo quando porta un'informazione, per esempio lo screenshot di
+una funzione nuova. Si pubblica solo dal lunedì al venerdì. La notizia resta il
 punto di partenza, ma va scelta tra quelle che chi legge **può provare o che lo
 toccano subito** (gratis, sugli strumenti che usa già, in Italia), e raccontata
 con lo schema dei post migliori: la scena in cui chi legge si riconosce, cosa è
@@ -366,6 +368,20 @@ usarlo (accesso dedicato, sola lettura, togliere i dati dei clienti, spegnere
 il salvataggio) e come si revoca. Per la mail di lavoro o i dati dei clienti,
 il rimando a chi gestisce i dati in azienda. Se un dato non si trova sulla
 fonte ufficiale, si scrive che la fonte non lo dice.
+
+## Le fonti di ispirazione
+
+@ai__facile, @profession.ai e Datapizza servono a capire **di cosa** si parla
+in settimana, mai **come** dirlo. Dal loro post si prende solo l'argomento. Poi:
+
+- si va alla fonte primaria (annuncio, documentazione, studio, repository) e il
+  post nasce da lì, con i dati che loro non hanno riportato;
+- hook, chiusura, esempi e frasi da copiare sono nostri: se il nostro hook
+  somiglia al loro, si cambia angolo (un numero della fonte, un limite, quello
+  che nel loro post manca);
+- non si riprende la loro struttura slide per slide né le loro immagini;
+- si controlla accanto al loro post prima di consegnare: nessuna frase deve
+  suonare come una loro riformulata.
 
 ## Cosa non si fa mai
 
